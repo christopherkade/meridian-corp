@@ -17,11 +17,10 @@ export function DifficultySelect() {
           <span>📋 New Employee Intake — Risk Assessment</span>
         </div>
         <div className={styles.windowContent}>
-          <p className={styles.heading}>
-            Select your contract terms:
-          </p>
+          <p className={styles.heading}>Select your contract terms:</p>
           <p className={styles.subtext}>
-            How many mistakes will Meridian Corp tolerate before your termination?
+            How many mistakes will Meridian Corp tolerate before your
+            termination?
           </p>
 
           <div className={styles.options}>
@@ -34,16 +33,15 @@ export function DifficultySelect() {
                   onClick={() => startRun(d)}
                 >
                   <span className={styles.optionLabel}>{config.label}</span>
-                  <span className={styles.optionDesc}>{config.description}</span>
+                  <span className={styles.optionDesc}>
+                    {config.description}
+                  </span>
                 </button>
               );
             })}
           </div>
 
-          <button
-            className={styles.backLink}
-            onClick={() => setScreen("menu")}
-          >
+          <button className={styles.backLink} onClick={() => setScreen("menu")}>
             ← Back to Main Menu
           </button>
         </div>
