@@ -9,8 +9,8 @@ Built with Next.js, React, and Zustand. Styled to look like a corporate desktop 
 ## Getting Started
 
 ```bash
-pnpm install
-pnpm dev
+yarn install
+yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) to play.
@@ -18,5 +18,5 @@ Open [http://localhost:3000](http://localhost:3000) to play.
 ## Testing
 
 ```bash
-pnpm test
+yarn test
 ```
