@@ -6,13 +6,7 @@ import styles from "./LeftPanel.module.css";
 export function LeftPanel() {
   const resumes = useGameStore((s) => s.resumes);
   const currentIndex = useGameStore((s) => s.currentResumeIndex);
-  const notes = useGameStore((s) => s.notes);
-  const setNote = useGameStore((s) => s.setNote);
   const caseNumber = useGameStore((s) => s.caseNumber);
-  const showNotepad = useGameStore((s) => s.showNotepad);
-
-  const currentResume = resumes[currentIndex];
-  const currentNote = currentResume ? notes[currentResume.id] || "" : "";
 
   return (
     <div className={`panel-raised ${styles.container}`}>
@@ -47,23 +41,6 @@ export function LeftPanel() {
             </div>
           </div>
         </div>
-
-        {/* Notepad */}
-        {showNotepad && (
-          <div className={styles.section}>
-            <div className={styles.sectionTitle}>📝 Notepad</div>
-            <textarea
-              className={`panel-sunken ${styles.notepad}`}
-              placeholder="Jot notes about this resume..."
-              value={currentNote}
-              onChange={(e) => {
-                if (currentResume) {
-                  setNote(currentResume.id, e.target.value);
-                }
-              }}
-            />
-          </div>
-        )}
       </div>
     </div>
   );

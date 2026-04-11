@@ -80,14 +80,3 @@
   color: var(--text-muted);
   margin-top: 4px;
 }
-
-.notepad {
-  width: 100%;
-  min-height: 120px;
-  flex: 1;
-  resize: none;
-  padding: 8px;
-  font-size: 12px;
-  line-height: 1.4;
-  font-family: "Courier New", monospace;
-}

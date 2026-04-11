@@ -12,10 +12,7 @@ interface DesktopShellProps {
 const fakeMenus: Record<string, string[]> = {
   File: ["__disabled:Print Resume"],
   Edit: ["__disabled:Undo Decision", "---", "__disabled:Find Anomaly"],
-  View: [
-    "__toggle:showSuspicionMeter:Suspicion Meter",
-    "__toggle:showNotepad:Notepad",
-  ],
+  View: ["__toggle:showSuspicionMeter:Suspicion Meter"],
   Help: ["__about:About TalentBridge Pro 3.2"],
 };
 
@@ -39,16 +36,13 @@ export function DesktopShell({ children }: DesktopShellProps) {
   const resetGame = useGameStore((s) => s.resetGame);
   const setScreen = useGameStore((s) => s.setScreen);
   const showSuspicionMeter = useGameStore((s) => s.showSuspicionMeter);
-  const showNotepad = useGameStore((s) => s.showNotepad);
   const toggleSuspicionMeter = useGameStore((s) => s.toggleSuspicionMeter);
-  const toggleNotepad = useGameStore((s) => s.toggleNotepad);
 
   const toggleMap: Record<string, { active: boolean; toggle: () => void }> = {
     showSuspicionMeter: {
       active: showSuspicionMeter,
       toggle: toggleSuspicionMeter,
     },
-    showNotepad: { active: showNotepad, toggle: toggleNotepad },
   };
 
   useEffect(() => {

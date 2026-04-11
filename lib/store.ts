@@ -26,9 +26,6 @@ interface GameState {
   // Suspicion meter
   suspicionLevel: SuspicionLevel;
 
-  // Notes (per resume ID)
-  notes: Record<string, string>;
-
   // Feedback (after decision)
   lastResult: ResumeResult | null;
 
@@ -40,7 +37,6 @@ interface GameState {
 
   // UI visibility toggles
   showSuspicionMeter: boolean;
-  showNotepad: boolean;
 
   // Actions
   startNewCase: () => void;
@@ -48,10 +44,8 @@ interface GameState {
   makeDecision: (decision: Decision) => void;
   nextResume: () => void;
   setSuspicionLevel: (level: SuspicionLevel) => void;
-  setNote: (resumeId: string, note: string) => void;
   setScreen: (screen: GameScreen) => void;
   toggleSuspicionMeter: () => void;
-  toggleNotepad: () => void;
   resetGame: () => void;
 }
 
@@ -75,12 +69,10 @@ export const useGameStore = create<GameState>()(
       currentResumeIndex: 0,
       caseResults: [],
       suspicionLevel: "unclear",
-      notes: {},
       lastResult: null,
       lastCaseResult: null,
       career: { ...initialCareer },
-      showSuspicionMeter: true,
-      showNotepad: true,
+      showSuspicionMeter: false,
 
       startNewCase: () => {
         const state = get();
@@ -117,7 +109,6 @@ export const useGameStore = create<GameState>()(
           lastResult: null,
           lastCaseResult: null,
           career: { ...initialCareer },
-          notes: {},
         });
       },
 
@@ -250,22 +241,12 @@ export const useGameStore = create<GameState>()(
         set({ suspicionLevel: level });
       },
 
-      setNote: (resumeId: string, note: string) => {
-        set((state) => ({
-          notes: { ...state.notes, [resumeId]: note },
-        }));
-      },
-
       setScreen: (screen: GameScreen) => {
         set({ screen });
       },
 
       toggleSuspicionMeter: () => {
         set((state) => ({ showSuspicionMeter: !state.showSuspicionMeter }));
-      },
-
-      toggleNotepad: () => {
-        set((state) => ({ showNotepad: !state.showNotepad }));
       },
 
       resetGame: () => {
@@ -278,12 +259,10 @@ export const useGameStore = create<GameState>()(
           currentResumeIndex: 0,
           caseResults: [],
           suspicionLevel: "unclear",
-          notes: {},
           lastResult: null,
           lastCaseResult: null,
           career: { ...initialCareer },
-          showSuspicionMeter: true,
-          showNotepad: true,
+          showSuspicionMeter: false,
         });
       },
     }),
@@ -291,7 +270,6 @@ export const useGameStore = create<GameState>()(
       name: "meridian-corp-game",
       partialize: (state) => ({
         career: state.career,
-        notes: state.notes,
         difficulty: state.difficulty,
         strikes: state.strikes,
       }),

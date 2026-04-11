@@ -156,8 +156,16 @@
 }
 
 @media (max-width: 768px) {
+  .content {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
   .decisions {
     flex-direction: row;
+    order: -1;
+    width: 100%;
+    margin-top: 0;
   }
 
   .hireButton,
