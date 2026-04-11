@@ -45,7 +45,7 @@ export function MainMenu() {
   }, [startNewCase, setScreen, career.casesCompleted.length]);
 
   useEffect(() => {
-    const interval = setInterval(addToast, 10000);
+    const interval = setInterval(addToast, 20000);
     return () => clearInterval(interval);
   }, [addToast]);
 

@@ -28,7 +28,7 @@
   }
 
   .centerPanel {
-    order: -1;
+    order: -2;
     width: 100%;
     flex-shrink: 0;
   }
@@ -38,5 +38,9 @@
     width: 100%;
     min-width: unset;
     flex-shrink: 0;
+  }
+
+  .rightPanel {
+    order: -1;
   }
 }
