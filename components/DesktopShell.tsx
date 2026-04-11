@@ -9,14 +9,7 @@ interface DesktopShellProps {
 }
 
 const fakeMenus: Record<string, string[]> = {
-  File: [
-    "New Hire Request...",
-    "Open Case File...",
-    "---",
-    "Print Resume",
-    "---",
-    "Exit (Just Kidding)",
-  ],
+  File: ["Print Resume", "---", "Exit (Just Kidding)"],
   Edit: [
     "Undo Decision (Not Available)",
     "---",
@@ -26,11 +19,7 @@ const fakeMenus: Record<string, string[]> = {
     "__toggle:showSuspicionMeter:Suspicion Meter",
     "__toggle:showNotepad:Notepad",
   ],
-  Help: [
-    "Have you tried being more human?",
-    "---",
-    "__about:About TalentBridge Pro 3.2",
-  ],
+  Help: ["__about:About TalentBridge Pro 3.2"],
 };
 
 const notifications = [
@@ -298,7 +287,7 @@ export function DesktopShell({ children }: DesktopShellProps) {
               </div>
               <div className={styles.dialogContent}>
                 <p style={{ fontWeight: "bold", marginBottom: "8px" }}>
-                  📋 How to Play
+                  How to Play
                 </p>
                 <p className={styles.dialogText} style={{ textAlign: "left" }}>
                   Welcome to TalentBridge Pro, Meridian Corp&apos;s cutting-edge
@@ -326,7 +315,7 @@ export function DesktopShell({ children }: DesktopShellProps) {
                   }}
                 />
                 <p className={styles.dialogText}>
-                  Made with ❤️ by <strong>Christopher Kade</strong>
+                  Made by <strong>Christopher Kade</strong>
                 </p>
                 <p className={styles.dialogText}>
                   <a
@@ -339,7 +328,7 @@ export function DesktopShell({ children }: DesktopShellProps) {
                   </a>
                   {" · "}
                   <a
-                    href="https://www.linkedin.com/in/music2music/"
+                    href="https://www.linkedin.com/in/christopher-kade/"
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{ color: "var(--color-link)" }}
