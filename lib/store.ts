@@ -4,7 +4,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import {
   Resume, ResumeResult, Decision, SuspicionLevel,
-  GameScreen, CareerStats, CaseResult, Rating,
+  GameScreen, CareerStats, CaseResult, Rating, Difficulty, DIFFICULTY_CONFIG,
 } from "./types";
 import { generateCase } from "./resume-generator";
 import { calculateScore, getExplanation, calculateRating } from "./scoring";
@@ -12,6 +12,10 @@ import { calculateScore, getExplanation, calculateRating } from "./scoring";
 interface GameState {
   // Navigation
   screen: GameScreen;
+
+  // Difficulty & strikes
+  difficulty: Difficulty | null;
+  strikes: number;
 
   // Current case
   caseNumber: number;
@@ -40,6 +44,7 @@ interface GameState {
 
   // Actions
   startNewCase: () => void;
+  startRun: (difficulty: Difficulty) => void;
   makeDecision: (decision: Decision) => void;
   nextResume: () => void;
   setSuspicionLevel: (level: SuspicionLevel) => void;
@@ -63,6 +68,8 @@ export const useGameStore = create<GameState>()(
   persist(
     (set, get) => ({
       screen: "menu",
+      difficulty: null,
+      strikes: 0,
       caseNumber: 0,
       resumes: [],
       currentResumeIndex: 0,
@@ -76,7 +83,13 @@ export const useGameStore = create<GameState>()(
       showNotepad: true,
 
       startNewCase: () => {
-        const nextCase = get().career.casesCompleted.length + 1;
+        const state = get();
+        // If no difficulty set (new run), go to difficulty selection
+        if (!state.difficulty) {
+          set({ screen: "difficulty" });
+          return;
+        }
+        const nextCase = state.career.casesCompleted.length + 1;
         const resumes = generateCase(nextCase);
         set({
           screen: "game",
@@ -87,6 +100,24 @@ export const useGameStore = create<GameState>()(
           suspicionLevel: "unclear",
           lastResult: null,
           lastCaseResult: null,
+        });
+      },
+
+      startRun: (difficulty: Difficulty) => {
+        const resumes = generateCase(1);
+        set({
+          difficulty,
+          strikes: 0,
+          screen: "game",
+          caseNumber: 1,
+          resumes,
+          currentResumeIndex: 0,
+          caseResults: [],
+          suspicionLevel: "unclear",
+          lastResult: null,
+          lastCaseResult: null,
+          career: { ...initialCareer },
+          notes: {},
         });
       },
 
@@ -122,11 +153,26 @@ export const useGameStore = create<GameState>()(
         };
 
         const newResults = [...state.caseResults, result];
+        const newStrikes = isCorrect ? state.strikes : state.strikes + 1;
+
+        // Check if strikes hit the limit
+        const maxStrikes = state.difficulty ? DIFFICULTY_CONFIG[state.difficulty].maxStrikes : Infinity;
+        if (newStrikes >= maxStrikes) {
+          set({
+            screen: "game-over",
+            lastResult: result,
+            caseResults: newResults,
+            strikes: newStrikes,
+            suspicionLevel: "unclear",
+          });
+          return;
+        }
 
         set({
           screen: "feedback",
           lastResult: result,
           caseResults: newResults,
+          strikes: newStrikes,
           suspicionLevel: "unclear",
         });
       },
@@ -225,6 +271,8 @@ export const useGameStore = create<GameState>()(
       resetGame: () => {
         set({
           screen: "menu",
+          difficulty: null,
+          strikes: 0,
           caseNumber: 0,
           resumes: [],
           currentResumeIndex: 0,
@@ -244,6 +292,8 @@ export const useGameStore = create<GameState>()(
       partialize: (state) => ({
         career: state.career,
         notes: state.notes,
+        difficulty: state.difficulty,
+        strikes: state.strikes,
       }),
     }
   )

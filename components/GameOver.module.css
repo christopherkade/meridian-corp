@@ -1,0 +1,70 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.window {
+  width: 500px;
+  max-width: 95%;
+}
+
+.windowTitle {
+  background: #8b0000;
+  color: #ffffff;
+  padding: 4px 8px;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.windowContent {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  background: var(--bg-panel);
+}
+
+.icon {
+  font-size: 48px;
+}
+
+.heading {
+  font-size: 22px;
+  font-weight: bold;
+  color: var(--color-flag);
+  letter-spacing: 2px;
+}
+
+.notice {
+  padding: 16px;
+  width: 100%;
+  text-align: center;
+  line-height: 1.6;
+  font-size: 13px;
+}
+
+.reason {
+  margin-top: 8px;
+  font-style: italic;
+  color: var(--text-secondary);
+}
+
+.stats {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.buttons button {
+  font-size: 14px;
+  padding: 8px 24px;
+}

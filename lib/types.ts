@@ -85,4 +85,12 @@ export interface CareerStats {
   casesCompleted: CaseResult[];
 }
 
-export type GameScreen = "menu" | "game" | "feedback" | "case-end" | "dashboard";
+export type GameScreen = "menu" | "difficulty" | "game" | "feedback" | "case-end" | "dashboard" | "game-over";
+
+export type Difficulty = "easy" | "medium" | "hard";
+
+export const DIFFICULTY_CONFIG: Record<Difficulty, { maxStrikes: number; label: string; description: string }> = {
+  easy: { maxStrikes: 10, label: "Easy", description: "10 strikes before termination" },
+  medium: { maxStrikes: 5, label: "Medium", description: "5 strikes before termination" },
+  hard: { maxStrikes: 3, label: "Hard", description: "3 strikes before termination" },
+};

@@ -45,6 +45,40 @@
   font-family: "Courier New", monospace;
 }
 
+/* Strikes */
+.strikesBox {
+  text-align: center;
+  padding: 8px;
+  border-width: 2px;
+  border-style: solid;
+  border-color: var(--border-sunken);
+  background: var(--bg-content);
+}
+
+.strikesVisual {
+  display: flex;
+  justify-content: center;
+  gap: 3px;
+  flex-wrap: wrap;
+  margin: 4px 0;
+}
+
+.strikeIcon {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.strikeUsed {
+  color: var(--color-flag);
+  font-weight: bold;
+}
+
+.strikesCount {
+  font-size: 12px;
+  font-family: "Courier New", monospace;
+  color: var(--text-secondary);
+}
+
 /* Section */
 .section {
   display: flex;

@@ -5,9 +5,27 @@
   height: 100%;
 }
 
+.containerSplit {
+  gap: 8px;
+  padding: 8px;
+}
+
+.resumePane {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
 .window {
   width: 540px;
   max-width: 95%;
+  flex-shrink: 0;
+}
+
+.containerSplit .window {
+  max-height: 100%;
+  overflow-y: auto;
 }
 
 .windowTitle {
@@ -108,4 +126,11 @@
 
 .pointsNegative {
   color: var(--color-flag);
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
 }

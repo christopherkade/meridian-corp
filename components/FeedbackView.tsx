@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useGameStore } from "@/lib/store";
+import { ResumeViewer } from "./ResumeViewer";
 import styles from "./FeedbackView.module.css";
 
 export function FeedbackView() {
@@ -9,21 +10,31 @@ export function FeedbackView() {
   const nextResume = useGameStore((s) => s.nextResume);
   const resumes = useGameStore((s) => s.resumes);
   const currentIndex = useGameStore((s) => s.currentResumeIndex);
-
-  if (!lastResult) return null;
+  const [showResume, setShowResume] = useState(false);
 
   const isLastResume = currentIndex >= resumes.length - 1;
+  const currentResume = resumes[currentIndex];
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Enter") nextResume();
+      if (e.key === "r" || e.key === "R") setShowResume((v) => !v);
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [nextResume]);
 
+  if (!lastResult) return null;
+
   return (
-    <div className={styles.container}>
+    <div
+      className={`${styles.container} ${showResume ? styles.containerSplit : ""}`}
+    >
+      {showResume && currentResume && (
+        <div className={styles.resumePane}>
+          <ResumeViewer resume={currentResume} />
+        </div>
+      )}
       <div className={`panel-raised ${styles.window}`}>
         <div className={styles.windowTitle}>
           <span>📋 Decision Result</span>
@@ -80,11 +91,20 @@ export function FeedbackView() {
             </span>
           </div>
 
-          {/* Next button */}
-          <button className="btn-raised" onClick={nextResume}>
-            {isLastResume ? "View Case Results" : "Next Resume"}{" "}
-            <span className="shortcut-hint">[Enter]</span>
-          </button>
+          {/* Action buttons */}
+          <div className={styles.actions}>
+            <button
+              className="btn-raised"
+              onClick={() => setShowResume((v) => !v)}
+            >
+              {showResume ? "Hide Resume" : "View Resume"}{" "}
+              <span className="shortcut-hint">[R]</span>
+            </button>
+            <button className="btn-raised" onClick={nextResume}>
+              {isLastResume ? "View Case Results" : "Next Resume"}{" "}
+              <span className="shortcut-hint">[Enter]</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>

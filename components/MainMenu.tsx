@@ -101,7 +101,6 @@ export function MainMenu() {
 
           <div className={styles.buttons}>
             <button className="btn-raised" onClick={startNewCase}>
-              📂{" "}
               {nextCaseNumber === 1
                 ? "Start First Case"
                 : `Start Case ${nextCaseNumber}`}{" "}

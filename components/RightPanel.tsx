@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useGameStore } from "@/lib/store";
-import { SuspicionLevel } from "@/lib/types";
+import { SuspicionLevel, DIFFICULTY_CONFIG } from "@/lib/types";
 import styles from "./RightPanel.module.css";
 
 const suspicionLevels: { level: SuspicionLevel; label: string }[] = [
@@ -21,7 +21,10 @@ export function RightPanel() {
   const currentIndex = useGameStore((s) => s.currentResumeIndex);
   const caseResults = useGameStore((s) => s.caseResults);
   const showSuspicionMeter = useGameStore((s) => s.showSuspicionMeter);
+  const strikes = useGameStore((s) => s.strikes);
+  const difficulty = useGameStore((s) => s.difficulty);
 
+  const maxStrikes = difficulty ? DIFFICULTY_CONFIG[difficulty].maxStrikes : 0;
   const correctCount = caseResults.filter((r) => r.correct).length;
 
   useEffect(() => {
@@ -54,6 +57,26 @@ export function RightPanel() {
               : "—"}
           </div>
         </div>
+
+        {/* Strikes */}
+        {difficulty && (
+          <div className={styles.strikesBox}>
+            <div className={styles.scoreLabel}>Strikes</div>
+            <div className={styles.strikesVisual}>
+              {Array.from({ length: maxStrikes }).map((_, i) => (
+                <span
+                  key={i}
+                  className={`${styles.strikeIcon} ${i < strikes ? styles.strikeUsed : ""}`}
+                >
+                  {i < strikes ? "✕" : "○"}
+                </span>
+              ))}
+            </div>
+            <div className={styles.strikesCount}>
+              {strikes}/{maxStrikes}
+            </div>
+          </div>
+        )}
 
         {/* Suspicion Meter */}
         {showSuspicionMeter && (
