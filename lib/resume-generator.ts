@@ -91,7 +91,7 @@ function generateBaseResume(): ResumeData {
   };
 }
 
-// Red herrings — suspicious-sounding but human-normal content
+// Red herrings - suspicious-sounding but human-normal content
 const redHerringContent = [
   "competitive cheese rolling",
   "amateur UFO photography",

@@ -13,7 +13,7 @@ export function ResumeViewer({ resume }: ResumeViewerProps) {
   return (
     <div className={`panel-raised ${styles.container}`}>
       <div className={styles.header}>
-        <span>📄 Resume — {contact.name}</span>
+        <span>📄 Resume - {contact.name}</span>
       </div>
       <div className={`panel-sunken ${styles.scrollArea}`}>
         <div className={styles.resume}>
@@ -39,7 +39,7 @@ export function ResumeViewer({ resume }: ResumeViewerProps) {
                 <div className={styles.experienceHeader}>
                   <div>
                     <span className={styles.jobTitle}>{exp.title}</span>
-                    <span className={styles.company}> — {exp.company}</span>
+                    <span className={styles.company}> - {exp.company}</span>
                   </div>
                   <span className={styles.dates}>
                     {exp.startYear} – {exp.endYear}
@@ -66,7 +66,7 @@ export function ResumeViewer({ resume }: ResumeViewerProps) {
                     <span className={styles.degree}>{edu.degree}</span>
                     <span className={styles.institution}>
                       {" "}
-                      — {edu.institution}
+                      - {edu.institution}
                     </span>
                   </div>
                   <span className={styles.dates}>{edu.graduationYear}</span>

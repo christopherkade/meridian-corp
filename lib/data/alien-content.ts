@@ -29,7 +29,7 @@ export interface AlienClueApplication {
   interests?: string[];
 }
 
-// ============ CATEGORY A — Identity Tells ============
+// ============ CATEGORY A - Identity Tells ============
 
 export const categoryAClues: AlienClue[] = [
   {
@@ -61,7 +61,7 @@ export const categoryAClues: AlienClue[] = [
   },
 ];
 
-// ============ CATEGORY B — Career Tells ============
+// ============ CATEGORY B - Career Tells ============
 
 export const categoryBClues: AlienClue[] = [
   {
@@ -87,7 +87,7 @@ export const categoryBClues: AlienClue[] = [
   },
 ];
 
-// ============ CATEGORY C — Education Tells ============
+// ============ CATEGORY C - Education Tells ============
 
 export const categoryCClues: AlienClue[] = [
   {
@@ -104,7 +104,7 @@ export const categoryCClues: AlienClue[] = [
   },
 ];
 
-// ============ CATEGORY D — Skill & Language Tells ============
+// ============ CATEGORY D - Skill & Language Tells ============
 
 export const categoryDClues: AlienClue[] = [
   {
@@ -136,7 +136,7 @@ export const categoryDClues: AlienClue[] = [
   },
 ];
 
-// ============ CATEGORY E — Soft Tells ============
+// ============ CATEGORY E - Soft Tells ============
 
 export const categoryEClues: AlienClue[] = [
   {
@@ -191,7 +191,7 @@ const alienJobTitles = [
 ];
 
 const alienCompanies = [
-  "Galactic Resources Inc.", "Earth Branch Office — TBD",
+  "Galactic Resources Inc.", "Earth Branch Office - TBD",
   "Xelnar Consolidated", "Human-Observing Solutions Ltd.",
   "Proxima Ventures Earth Division", "Terran Assessment Bureau",
 ];

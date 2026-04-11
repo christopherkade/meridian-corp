@@ -14,7 +14,7 @@ export function DifficultySelect() {
     <div className={styles.container}>
       <div className={`panel-raised ${styles.window}`}>
         <div className={styles.windowTitle}>
-          <span>📋 New Employee Intake — Risk Assessment</span>
+          <span>📋 New Employee Intake - Risk Assessment</span>
         </div>
         <div className={styles.windowContent}>
           <p className={styles.heading}>Select your contract terms:</p>

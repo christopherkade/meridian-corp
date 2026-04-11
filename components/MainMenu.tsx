@@ -117,7 +117,7 @@ export function MainMenu() {
           </div>
 
           <p className={styles.version}>
-            TalentBridge Pro v3.2.1 — Build 20260411
+            TalentBridge Pro v3.2.1 - Build 20260411
           </p>
         </div>
       </div>

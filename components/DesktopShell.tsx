@@ -87,7 +87,7 @@ export function DesktopShell({ children }: DesktopShellProps) {
         <div className={styles.titleLeft}>
           <span className={styles.appIcon}>📋</span>
           <span className={styles.appTitle}>
-            TalentBridge Pro 3.2 — Meridian Solutions HR Portal
+            TalentBridge Pro 3.2 - Meridian Solutions HR Portal
           </span>
         </div>
         <div className={styles.menuBar}>

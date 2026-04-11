@@ -22,7 +22,7 @@ export function DashboardView() {
     <div className={styles.container}>
       <div className={`panel-raised ${styles.window}`}>
         <div className={styles.windowTitle}>
-          <span>📊 Career Dashboard — Employee Performance Record</span>
+          <span>📊 Career Dashboard - Employee Performance Record</span>
         </div>
         <div className={styles.windowContent}>
           <h2 className={styles.heading}>Performance Summary</h2>
@@ -95,7 +95,7 @@ export function DashboardView() {
               Your continued employment is appreciated (and under review).
             </p>
             <p className={styles.reviewSignature}>
-              — Department of Human Resources
+              - Department of Human Resources
               <br />
               Meridian Solutions™
             </p>

@@ -34,7 +34,7 @@ export function CaseEndView() {
     <div className={styles.container}>
       <div className={`panel-raised ${styles.window}`}>
         <div className={styles.windowTitle}>
-          <span>📊 End of Day Report — Case #{caseNumber}</span>
+          <span>📊 End of Day Report - Case #{caseNumber}</span>
         </div>
         <div className={styles.windowContent}>
           <div className={styles.ratingBox}>
@@ -87,13 +87,13 @@ export function CaseEndView() {
           {/* Corporate review */}
           <div className={`panel-sunken ${styles.review}`}>
             <p className={styles.reviewHeader}>
-              <strong>PERFORMANCE REVIEW — INTERNAL MEMO</strong>
+              <strong>PERFORMANCE REVIEW - INTERNAL MEMO</strong>
             </p>
             <p className={styles.reviewText}>
               {getPerformanceReview(rating, caseNumber)}
             </p>
             <p className={styles.reviewSignature}>
-              — HR Performance Review Bot v2.4
+              - HR Performance Review Bot v2.4
             </p>
           </div>
 
@@ -120,7 +120,7 @@ export function CaseEndView() {
 function getPerformanceReview(rating: string, caseNumber: number): string {
   const reviews: Record<string, string[]> = {
     S: [
-      "Exceptional work. Your attention to detail is noted and will be filed accordingly. Keep it up — the company is watching.",
+      "Exceptional work. Your attention to detail is noted and will be filed accordingly. Keep it up - the company is watching.",
       "Outstanding performance. Management is impressed, though they would never say so directly.",
       "Flawless execution. HR is considering naming a conference room after you. (Pending budget approval.)",
     ],

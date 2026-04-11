@@ -173,7 +173,7 @@ export const useGameStore = create<GameState>()(
         const nextIndex = state.currentResumeIndex + 1;
 
         if (nextIndex >= state.resumes.length) {
-          // Case complete — calculate case results
+          // Case complete - calculate case results
           const results = state.caseResults;
           const correctCount = results.filter((r) => r.correct).length;
           const accuracy = correctCount / results.length;

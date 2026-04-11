@@ -54,7 +54,7 @@ export function RightPanel() {
           <div className={styles.scoreValue}>
             {currentIndex > 0
               ? `${correctCount}/${currentIndex} (${Math.round((correctCount / currentIndex) * 100)}%)`
-              : "—"}
+              : "-"}
           </div>
         </div>
 
