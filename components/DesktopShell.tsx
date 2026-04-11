@@ -10,7 +10,7 @@ interface DesktopShellProps {
 }
 
 const fakeMenus: Record<string, string[]> = {
-  File: ["__disabled:Print Resume", "---", "__nav:menu:Main Menu"],
+  File: ["__disabled:Print Resume"],
   Edit: ["__disabled:Undo Decision", "---", "__disabled:Find Anomaly"],
   View: [
     "__toggle:showSuspicionMeter:Suspicion Meter",

@@ -1,14 +1,38 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useGameStore } from "@/lib/store";
 import styles from "./MainMenu.module.css";
+
+const easterEggs = [
+  "⚠️ Alien detected in break room. HR has been notified.",
+  "📎 It looks like you're procrastinating. Would you like help?",
+  "🔒 Your session will expire in ∞ minutes.",
+  '📡 Signal received from Sector 7G: "Please hire me."',
+  "📋 New policy: All résumés must be reviewed upside down on Tuesdays.",
+  "☕ Break room microwave has achieved self-awareness. Avoid Floor 3.",
+  '📦 Dwight has submitted a résumé listing "Assistant Regional Manager" as his current title. Again.',
+  "🍲 Kevin spilled his famous chili in Server Room B. All systems nominal, surprisingly.",
+  "📝 HR Notice: Jim has placed another applicant's stapler in Jell-O. Please disregard.",
+  "🎉 Party Planning Committee conflict: Angela vs. Phyllis. Conference Room C is off-limits.",
+];
 
 export function MainMenu() {
   const startNewCase = useGameStore((s) => s.startNewCase);
   const setScreen = useGameStore((s) => s.setScreen);
   const career = useGameStore((s) => s.career);
   const nextCaseNumber = career.casesCompleted.length + 1;
+  const [toasts, setToasts] = useState<string[]>([]);
+
+  const addToast = useCallback(() => {
+    setToasts((prev) => {
+      if (prev.length >= 4) return prev;
+      const remaining = easterEggs.filter((e) => !prev.includes(e));
+      if (remaining.length === 0) return prev;
+      const pick = remaining[Math.floor(Math.random() * remaining.length)];
+      return [...prev, pick];
+    });
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -20,8 +44,33 @@ export function MainMenu() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [startNewCase, setScreen, career.casesCompleted.length]);
 
+  useEffect(() => {
+    const interval = setInterval(addToast, 10000);
+    return () => clearInterval(interval);
+  }, [addToast]);
+
   return (
     <div className={styles.container}>
+      {toasts.length > 0 && (
+        <div className={styles.toastStack}>
+          {toasts.map((msg, i) => (
+            <div key={i} className={`panel-raised ${styles.toast}`}>
+              <div className={styles.toastTitle}>
+                <span>💬 System Notification</span>
+                <button
+                  className={styles.toastClose}
+                  onClick={() =>
+                    setToasts((prev) => prev.filter((_, j) => j !== i))
+                  }
+                >
+                  ✕
+                </button>
+              </div>
+              <div className={styles.toastBody}>{msg}</div>
+            </div>
+          ))}
+        </div>
+      )}
       <div className={`panel-raised ${styles.window}`}>
         <div className={styles.windowTitle}>
           <span>📋 TalentBridge Pro 3.2</span>
