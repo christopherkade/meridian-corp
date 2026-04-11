@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useGameStore } from "@/lib/store";
 import styles from "./CaseEndView.module.css";
 
@@ -18,6 +19,16 @@ export function CaseEndView() {
   const falseNegatives = results.filter(
     (r) => !r.correct && r.decision === "hire",
   ).length;
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "s" || e.key === "S") startNewCase();
+      if (e.key === "d" || e.key === "D") setScreen("dashboard");
+      if (e.key === "m" || e.key === "M") setScreen("menu");
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [startNewCase, setScreen]);
 
   return (
     <div className={styles.container}>
@@ -88,16 +99,16 @@ export function CaseEndView() {
 
           <div className={styles.buttons}>
             <button className="btn-raised" onClick={startNewCase}>
-              📂 Start Next Case
+              📂 Start Next Case <span className="shortcut-hint">[S]</span>
             </button>
             <button
               className="btn-raised"
               onClick={() => setScreen("dashboard")}
             >
-              📊 Career Dashboard
+              📊 Career Dashboard <span className="shortcut-hint">[D]</span>
             </button>
             <button className="btn-raised" onClick={() => setScreen("menu")}>
-              🏠 Main Menu
+              🏠 Main Menu <span className="shortcut-hint">[M]</span>
             </button>
           </div>
         </div>

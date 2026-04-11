@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useGameStore } from "@/lib/store";
 import { SuspicionLevel } from "@/lib/types";
 import styles from "./RightPanel.module.css";
@@ -19,8 +20,23 @@ export function RightPanel() {
   const resumes = useGameStore((s) => s.resumes);
   const currentIndex = useGameStore((s) => s.currentResumeIndex);
   const caseResults = useGameStore((s) => s.caseResults);
+  const showSuspicionMeter = useGameStore((s) => s.showSuspicionMeter);
 
   const correctCount = caseResults.filter((r) => r.correct).length;
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (
+        e.target instanceof HTMLTextAreaElement ||
+        e.target instanceof HTMLInputElement
+      )
+        return;
+      if (e.key === "h" || e.key === "H") makeDecision("hire");
+      if (e.key === "f" || e.key === "F") makeDecision("flag");
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [makeDecision]);
 
   return (
     <div className={`panel-raised ${styles.container}`}>
@@ -40,29 +56,31 @@ export function RightPanel() {
         </div>
 
         {/* Suspicion Meter */}
-        <div className={styles.section}>
-          <div className={styles.sectionTitle}>Suspicion Meter</div>
-          <div className={`panel-sunken ${styles.meter}`}>
-            {suspicionLevels.map(({ level, label }) => (
-              <button
-                key={level}
-                className={`${styles.meterLevel} ${
-                  suspicionLevel === level ? styles.meterLevelActive : ""
-                } ${
-                  level.includes("alien")
-                    ? styles.meterAlien
-                    : level.includes("human")
-                      ? styles.meterHuman
-                      : styles.meterNeutral
-                }`}
-                onClick={() => setSuspicionLevel(level)}
-              >
-                {suspicionLevel === level && "▸ "}
-                {label}
-              </button>
-            ))}
+        {showSuspicionMeter && (
+          <div className={styles.section}>
+            <div className={styles.sectionTitle}>Suspicion Meter</div>
+            <div className={`panel-sunken ${styles.meter}`}>
+              {suspicionLevels.map(({ level, label }) => (
+                <button
+                  key={level}
+                  className={`${styles.meterLevel} ${
+                    suspicionLevel === level ? styles.meterLevelActive : ""
+                  } ${
+                    level.includes("alien")
+                      ? styles.meterAlien
+                      : level.includes("human")
+                        ? styles.meterHuman
+                        : styles.meterNeutral
+                  }`}
+                  onClick={() => setSuspicionLevel(level)}
+                >
+                  {suspicionLevel === level && "▸ "}
+                  {label}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Decision Buttons */}
         <div className={styles.decisions}>
@@ -70,13 +88,13 @@ export function RightPanel() {
             className={`${styles.hireButton}`}
             onClick={() => makeDecision("hire")}
           >
-            HIRE
+            HIRE <span className="shortcut-hint">[H]</span>
           </button>
           <button
             className={`${styles.flagButton}`}
             onClick={() => makeDecision("flag")}
           >
-            FLAG AS ALIEN
+            FLAG AS ALIEN <span className="shortcut-hint">[F]</span>
           </button>
         </div>
 

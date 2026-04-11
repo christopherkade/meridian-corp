@@ -34,6 +34,12 @@
   white-space: nowrap;
 }
 
+@media (max-width: 768px) {
+  .appTitle {
+    display: none;
+  }
+}
+
 .menuBar {
   display: flex;
   gap: 0;
@@ -215,6 +221,16 @@
   font-size: 12px;
 }
 
+@media (max-width: 768px) {
+  .taskbarNotification {
+    display: none;
+  }
+
+  .trayIcon {
+    display: none;
+  }
+}
+
 /* Reset Confirmation Dialog */
 .dialogOverlay {
   position: fixed;
@@ -231,12 +247,18 @@
   max-width: 90%;
 }
 
+.aboutDialog {
+  width: 440px;
+}
+
 .dialogTitle {
   background: var(--bg-titlebar);
   color: var(--bg-titlebar-text);
   padding: 4px 8px;
   font-weight: bold;
   font-size: 12px;
+  display: flex;
+  align-items: center;
 }
 
 .dialogContent {

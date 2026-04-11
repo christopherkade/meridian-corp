@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useGameStore } from "@/lib/store";
 import styles from "./MainMenu.module.css";
 
@@ -8,6 +9,16 @@ export function MainMenu() {
   const setScreen = useGameStore((s) => s.setScreen);
   const career = useGameStore((s) => s.career);
   const nextCaseNumber = career.casesCompleted.length + 1;
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "s" || e.key === "S") startNewCase();
+      if ((e.key === "d" || e.key === "D") && career.casesCompleted.length > 0)
+        setScreen("dashboard");
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [startNewCase, setScreen, career.casesCompleted.length]);
 
   return (
     <div className={styles.container}>
@@ -44,14 +55,15 @@ export function MainMenu() {
               📂{" "}
               {nextCaseNumber === 1
                 ? "Start First Case"
-                : `Start Case ${nextCaseNumber}`}
+                : `Start Case ${nextCaseNumber}`}{" "}
+              <span className="shortcut-hint">[S]</span>
             </button>
             {career.casesCompleted.length > 0 && (
               <button
                 className="btn-raised"
                 onClick={() => setScreen("dashboard")}
               >
-                📊 Career Dashboard
+                📊 Career Dashboard <span className="shortcut-hint">[D]</span>
               </button>
             )}
           </div>

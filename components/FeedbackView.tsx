@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useGameStore } from "@/lib/store";
 import styles from "./FeedbackView.module.css";
 
@@ -12,6 +13,14 @@ export function FeedbackView() {
   if (!lastResult) return null;
 
   const isLastResume = currentIndex >= resumes.length - 1;
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Enter") nextResume();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [nextResume]);
 
   return (
     <div className={styles.container}>
@@ -73,7 +82,8 @@ export function FeedbackView() {
 
           {/* Next button */}
           <button className="btn-raised" onClick={nextResume}>
-            {isLastResume ? "📊 View Case Results" : "📄 Next Resume →"}
+            {isLastResume ? "📊 View Case Results" : "📄 Next Resume →"}{" "}
+            <span className="shortcut-hint">[Enter]</span>
           </button>
         </div>
       </div>

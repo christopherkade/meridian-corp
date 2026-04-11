@@ -20,3 +20,23 @@
   min-width: 200px;
   flex-shrink: 0;
 }
+
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .centerPanel {
+    order: -1;
+    width: 100%;
+    flex-shrink: 0;
+  }
+
+  .leftPanel,
+  .rightPanel {
+    width: 100%;
+    min-width: unset;
+    flex-shrink: 0;
+  }
+}

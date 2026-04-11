@@ -15,6 +15,8 @@
   --color-flag: #cc2200;
   --color-accent: #000080;
   --color-amber: #ffbf00;
+  --color-link: #0000ee;
+  --color-border-dark: #808080;
 }
 
 html {
@@ -97,4 +99,11 @@ textarea {
   border-style: solid;
   border-color: var(--border-raised);
   background: var(--bg-panel);
+}
+
+/* Keyboard shortcut hints */
+.shortcut-hint {
+  font-size: 11px;
+  opacity: 0.7;
+  font-weight: normal;
 }

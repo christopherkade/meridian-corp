@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useGameStore } from "@/lib/store";
 import styles from "./DashboardView.module.css";
 
@@ -7,6 +8,15 @@ export function DashboardView() {
   const career = useGameStore((s) => s.career);
   const setScreen = useGameStore((s) => s.setScreen);
   const startNewCase = useGameStore((s) => s.startNewCase);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "s" || e.key === "S") startNewCase();
+      if (e.key === "m" || e.key === "M") setScreen("menu");
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [startNewCase, setScreen]);
 
   return (
     <div className={styles.container}>
@@ -93,10 +103,10 @@ export function DashboardView() {
 
           <div className={styles.buttons}>
             <button className="btn-raised" onClick={startNewCase}>
-              📂 Start Next Case
+              📂 Start Next Case <span className="shortcut-hint">[S]</span>
             </button>
             <button className="btn-raised" onClick={() => setScreen("menu")}>
-              🏠 Main Menu
+              🏠 Main Menu <span className="shortcut-hint">[M]</span>
             </button>
           </div>
         </div>

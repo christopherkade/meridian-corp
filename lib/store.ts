@@ -34,6 +34,10 @@ interface GameState {
   // Career stats (persisted)
   career: CareerStats;
 
+  // UI visibility toggles
+  showSuspicionMeter: boolean;
+  showNotepad: boolean;
+
   // Actions
   startNewCase: () => void;
   makeDecision: (decision: Decision) => void;
@@ -41,6 +45,8 @@ interface GameState {
   setSuspicionLevel: (level: SuspicionLevel) => void;
   setNote: (resumeId: string, note: string) => void;
   setScreen: (screen: GameScreen) => void;
+  toggleSuspicionMeter: () => void;
+  toggleNotepad: () => void;
   resetGame: () => void;
 }
 
@@ -66,6 +72,8 @@ export const useGameStore = create<GameState>()(
       lastResult: null,
       lastCaseResult: null,
       career: { ...initialCareer },
+      showSuspicionMeter: true,
+      showNotepad: true,
 
       startNewCase: () => {
         const nextCase = get().career.casesCompleted.length + 1;
@@ -206,6 +214,14 @@ export const useGameStore = create<GameState>()(
         set({ screen });
       },
 
+      toggleSuspicionMeter: () => {
+        set((state) => ({ showSuspicionMeter: !state.showSuspicionMeter }));
+      },
+
+      toggleNotepad: () => {
+        set((state) => ({ showNotepad: !state.showNotepad }));
+      },
+
       resetGame: () => {
         set({
           screen: "menu",
@@ -218,6 +234,8 @@ export const useGameStore = create<GameState>()(
           lastResult: null,
           lastCaseResult: null,
           career: { ...initialCareer },
+          showSuspicionMeter: true,
+          showNotepad: true,
         });
       },
     }),

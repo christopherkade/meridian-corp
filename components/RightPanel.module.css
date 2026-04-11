@@ -121,6 +121,17 @@
   transition: filter 0.1s;
 }
 
+@media (max-width: 768px) {
+  .decisions {
+    flex-direction: row;
+  }
+
+  .hireButton,
+  .flagButton {
+    flex: 1;
+  }
+}
+
 .hireButton {
   background: #228B22;
   color: white;

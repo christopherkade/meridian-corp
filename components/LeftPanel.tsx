@@ -9,6 +9,7 @@ export function LeftPanel() {
   const notes = useGameStore((s) => s.notes);
   const setNote = useGameStore((s) => s.setNote);
   const caseNumber = useGameStore((s) => s.caseNumber);
+  const showNotepad = useGameStore((s) => s.showNotepad);
 
   const currentResume = resumes[currentIndex];
   const currentNote = currentResume ? notes[currentResume.id] || "" : "";
@@ -48,19 +49,21 @@ export function LeftPanel() {
         </div>
 
         {/* Notepad */}
-        <div className={styles.section}>
-          <div className={styles.sectionTitle}>📝 Notepad</div>
-          <textarea
-            className={`panel-sunken ${styles.notepad}`}
-            placeholder="Jot notes about this resume..."
-            value={currentNote}
-            onChange={(e) => {
-              if (currentResume) {
-                setNote(currentResume.id, e.target.value);
-              }
-            }}
-          />
-        </div>
+        {showNotepad && (
+          <div className={styles.section}>
+            <div className={styles.sectionTitle}>📝 Notepad</div>
+            <textarea
+              className={`panel-sunken ${styles.notepad}`}
+              placeholder="Jot notes about this resume..."
+              value={currentNote}
+              onChange={(e) => {
+                if (currentResume) {
+                  setNote(currentResume.id, e.target.value);
+                }
+              }}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

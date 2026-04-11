@@ -26,6 +26,12 @@
   min-height: 100%;
 }
 
+@media (max-width: 768px) {
+  .resume {
+    padding: 16px;
+  }
+}
+
 /* Contact */
 .contactSection {
   text-align: center;
@@ -137,10 +143,11 @@
   font-family: "Courier New", Courier, monospace;
   font-size: 12px;
   line-height: 1.6;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .skillItem {
-  white-space: nowrap;
 }
 
 /* Interests */
