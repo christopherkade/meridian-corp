@@ -1,0 +1,111 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.window {
+  width: 540px;
+  max-width: 95%;
+}
+
+.windowTitle {
+  background: var(--bg-titlebar);
+  color: var(--bg-titlebar-text);
+  padding: 4px 8px;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.windowContent {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  background: var(--bg-panel);
+}
+
+.resultIcon {
+  font-size: 48px;
+}
+
+.resultBanner {
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 4px;
+  padding: 4px 16px;
+}
+
+.correctBanner {
+  color: var(--color-hire);
+}
+
+.incorrectBanner {
+  color: var(--color-flag);
+}
+
+.explanation {
+  padding: 16px;
+  width: 100%;
+  line-height: 1.6;
+  font-size: 13px;
+}
+
+.cluesSection {
+  width: 100%;
+}
+
+.cluesTitle {
+  font-weight: bold;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.cluesList {
+  list-style: none;
+  padding: 0;
+}
+
+.cluesList li {
+  font-size: 12px;
+  padding: 3px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.clueCategory {
+  font-weight: bold;
+  color: var(--color-accent);
+  font-family: "Courier New", monospace;
+}
+
+.clueSection {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.points {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.pointsLabel {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.pointsValue {
+  font-size: 24px;
+  font-weight: bold;
+  font-family: "Courier New", monospace;
+}
+
+.pointsPositive {
+  color: var(--color-hire);
+}
+
+.pointsNegative {
+  color: var(--color-flag);
+}

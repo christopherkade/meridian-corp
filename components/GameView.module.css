@@ -1,0 +1,22 @@
+.layout {
+  display: flex;
+  height: 100%;
+  gap: 4px;
+}
+
+.leftPanel {
+  width: 20%;
+  min-width: 180px;
+  flex-shrink: 0;
+}
+
+.centerPanel {
+  flex: 1;
+  min-width: 0;
+}
+
+.rightPanel {
+  width: 20%;
+  min-width: 200px;
+  flex-shrink: 0;
+}

@@ -1,0 +1,161 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.header {
+  background: var(--bg-titlebar);
+  color: var(--bg-titlebar-text);
+  padding: 4px 8px;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.content {
+  flex: 1;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  background: var(--bg-panel);
+}
+
+/* Score */
+.scoreBox {
+  text-align: center;
+  padding: 8px;
+  border-width: 2px;
+  border-style: solid;
+  border-color: var(--border-sunken);
+  background: var(--bg-content);
+}
+
+.scoreLabel {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+}
+
+.scoreValue {
+  font-size: 16px;
+  font-weight: bold;
+  font-family: "Courier New", monospace;
+}
+
+/* Section */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sectionTitle {
+  font-weight: bold;
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Meter */
+.meter {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.meterLevel {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 6px 10px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: inherit;
+  transition: background 0.1s;
+}
+
+.meterLevel:hover {
+  filter: brightness(0.95);
+}
+
+.meterLevelActive.meterHuman {
+  background: #d4edda;
+  font-weight: bold;
+}
+
+.meterLevelActive.meterNeutral {
+  background: #fff3cd;
+  font-weight: bold;
+}
+
+.meterLevelActive.meterAlien {
+  background: #f8d7da;
+  font-weight: bold;
+}
+
+/* Decisions */
+.decisions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.hireButton,
+.flagButton {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 15px;
+  font-weight: bold;
+  border: 3px solid;
+  cursor: pointer;
+  font-family: inherit;
+  transition: filter 0.1s;
+}
+
+.hireButton {
+  background: #228B22;
+  color: white;
+  border-color: #2db82d #166016 #166016 #2db82d;
+}
+
+.hireButton:hover {
+  filter: brightness(1.1);
+}
+
+.hireButton:active {
+  border-color: #166016 #2db82d #2db82d #166016;
+}
+
+.flagButton {
+  background: #cc2200;
+  color: white;
+  border-color: #ff4422 #881100 #881100 #ff4422;
+}
+
+.flagButton:hover {
+  filter: brightness(1.1);
+}
+
+.flagButton:active {
+  border-color: #881100 #ff4422 #ff4422 #881100;
+}
+
+/* Progress */
+.progress {
+  text-align: center;
+  padding-top: 4px;
+}
+
+.progressLabel {
+  font-size: 11px;
+  color: var(--text-muted);
+}
