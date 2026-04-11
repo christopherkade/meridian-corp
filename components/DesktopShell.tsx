@@ -2,6 +2,7 @@
 
 import { ReactNode, useEffect, useState } from "react";
 import { useGameStore } from "@/lib/store";
+import { GameScreen } from "@/lib/types";
 import styles from "./DesktopShell.module.css";
 
 interface DesktopShellProps {
@@ -9,12 +10,8 @@ interface DesktopShellProps {
 }
 
 const fakeMenus: Record<string, string[]> = {
-  File: ["Print Resume", "---", "Exit (Just Kidding)"],
-  Edit: [
-    "Undo Decision (Not Available)",
-    "---",
-    "Find Anomaly (Not Available)",
-  ],
+  File: ["__disabled:Print Resume", "---", "__nav:menu:Main Menu"],
+  Edit: ["__disabled:Undo Decision", "---", "__disabled:Find Anomaly"],
   View: [
     "__toggle:showSuspicionMeter:Suspicion Meter",
     "__toggle:showNotepad:Notepad",
@@ -136,6 +133,17 @@ export function DesktopShell({ children }: DesktopShellProps) {
                           </button>
                         );
                       })()
+                    ) : item.startsWith("__nav:") ? (
+                      <button
+                        key={i}
+                        className={styles.menuItem}
+                        onClick={() => {
+                          setScreen(item.split(":")[1] as GameScreen);
+                          setOpenMenu(null);
+                        }}
+                      >
+                        {item.split(":")[2]}
+                      </button>
                     ) : item.startsWith("__about:") ? (
                       <button
                         key={i}
@@ -158,6 +166,14 @@ export function DesktopShell({ children }: DesktopShellProps) {
                       >
                         {item.split(":")[1]}
                       </a>
+                    ) : item.startsWith("__disabled:") ? (
+                      <button
+                        key={i}
+                        className={`${styles.menuItem} ${styles.menuItemDisabled}`}
+                        disabled
+                      >
+                        {item.split(":")[1]}
+                      </button>
                     ) : (
                       <button
                         key={i}

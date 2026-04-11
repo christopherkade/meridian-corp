@@ -82,7 +82,7 @@ export function FeedbackView() {
 
           {/* Next button */}
           <button className="btn-raised" onClick={nextResume}>
-            {isLastResume ? "📊 View Case Results" : "📄 Next Resume →"}{" "}
+            {isLastResume ? "View Case Results" : "Next Resume"}{" "}
             <span className="shortcut-hint">[Enter]</span>
           </button>
         </div>

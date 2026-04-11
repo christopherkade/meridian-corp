@@ -94,6 +94,16 @@
   color: var(--bg-titlebar-text);
 }
 
+.menuItemDisabled {
+  color: var(--text-muted);
+  cursor: default;
+}
+
+.menuItemDisabled:hover {
+  background: transparent;
+  color: var(--text-muted);
+}
+
 .menuDivider {
   height: 1px;
   background: #808080;
