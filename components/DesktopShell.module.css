@@ -301,3 +301,41 @@
   min-width: 90px;
   padding: 6px 16px;
 }
+
+/* Admin Dialog */
+.adminInput {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  padding: 4px 6px;
+  font-family: inherit;
+  font-size: 13px;
+  border: 2px solid;
+  border-color: var(--border-sunken);
+  background: #fff;
+}
+
+.adminInputError {
+  border-color: #cc0000;
+  background: #fff0f0;
+  animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-6px);
+  }
+  40% {
+    transform: translateX(6px);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(4px);
+  }
+}

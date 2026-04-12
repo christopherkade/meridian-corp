@@ -33,6 +33,9 @@ export function DesktopShell({ children }: DesktopShellProps) {
   const [notification, setNotification] = useState(notifications[0]);
   const [showResetDialog, setShowResetDialog] = useState(false);
   const [showAboutDialog, setShowAboutDialog] = useState(false);
+  const [showAdminDialog, setShowAdminDialog] = useState(false);
+  const [adminPassword, setAdminPassword] = useState("");
+  const [adminError, setAdminError] = useState(false);
   const resetGame = useGameStore((s) => s.resetGame);
   const setScreen = useGameStore((s) => s.setScreen);
   const showSuspicionMeter = useGameStore((s) => s.showSuspicionMeter);
@@ -226,6 +229,18 @@ export function DesktopShell({ children }: DesktopShellProps) {
                   >
                     🗑️ Reset Progress
                   </button>
+                  <div className={styles.menuDivider} />
+                  <button
+                    className={styles.startMenuItem}
+                    onClick={() => {
+                      setShowAdminDialog(true);
+                      setAdminPassword("");
+                      setAdminError(false);
+                      setStartMenuOpen(false);
+                    }}
+                  >
+                    🔒 Access Admin Mode
+                  </button>
                 </div>
               </div>
             )}
@@ -358,6 +373,86 @@ export function DesktopShell({ children }: DesktopShellProps) {
             </div>
           </div>
         )}
+        {/* Admin Login Dialog */}
+        {showAdminDialog && (
+          <div
+            className={styles.dialogOverlay}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={`panel-raised ${styles.dialog}`}>
+              <div className={styles.dialogTitle}>
+                <span>🔒 Admin Login</span>
+                <button
+                  className="btn-raised"
+                  style={{
+                    padding: "0 4px",
+                    fontSize: "10px",
+                    marginLeft: "auto",
+                  }}
+                  onClick={() => setShowAdminDialog(false)}
+                >
+                  ✕
+                </button>
+              </div>
+              <div className={styles.dialogContent}>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    setAdminError(true);
+                  }}
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "10px",
+                  }}
+                >
+                  <label
+                    className={styles.dialogText}
+                    style={{ textAlign: "left" }}
+                  >
+                    Username:
+                    <input
+                      type="text"
+                      defaultValue="admin"
+                      className={styles.adminInput}
+                      readOnly
+                    />
+                  </label>
+                  <label
+                    className={styles.dialogText}
+                    style={{ textAlign: "left" }}
+                  >
+                    Password:
+                    <input
+                      type="password"
+                      value={adminPassword}
+                      onChange={(e) => {
+                        setAdminPassword(e.target.value);
+                        setAdminError(false);
+                      }}
+                      className={`${styles.adminInput} ${adminError ? styles.adminInputError : ""}`}
+                      autoFocus
+                    />
+                  </label>
+                  <div className={styles.dialogButtons}>
+                    <button className="btn-raised" type="submit">
+                      Login
+                    </button>
+                    <button
+                      className="btn-raised"
+                      type="button"
+                      onClick={() => setShowAdminDialog(false)}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className={styles.taskbarRight}>
           <span className={styles.trayIcon} title="MeridianGuard Antivirus">
             🛡️

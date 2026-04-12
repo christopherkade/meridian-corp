@@ -8,6 +8,7 @@
   width: 20%;
   min-width: 180px;
   flex-shrink: 0;
+  align-self: flex-start;
 }
 
 .centerPanel {
@@ -19,6 +20,7 @@
   width: 20%;
   min-width: 200px;
   flex-shrink: 0;
+  align-self: flex-start;
 }
 
 @media (max-width: 768px) {

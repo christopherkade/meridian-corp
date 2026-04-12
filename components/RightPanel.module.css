@@ -1,7 +1,6 @@
 .container {
   display: flex;
   flex-direction: column;
-  height: 100%;
 }
 
 .header {
@@ -175,7 +174,7 @@
 }
 
 .hireButton {
-  background: #228B22;
+  background: #228b22;
   color: white;
   border-color: #2db82d #166016 #166016 #2db82d;
 }
