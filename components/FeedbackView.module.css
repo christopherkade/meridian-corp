@@ -65,10 +65,6 @@
   background: var(--bg-panel);
 }
 
-.resultIcon {
-  font-size: 48px;
-}
-
 .resultBanner {
   font-size: 20px;
   font-weight: bold;
