@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useGameStore } from "@/lib/store";
 import { SuspicionLevel, DIFFICULTY_CONFIG } from "@/lib/types";
+import { Sprite } from "./Sprite";
 import styles from "./RightPanel.module.css";
 
 const suspicionLevels: { level: SuspicionLevel; label: string }[] = [
@@ -44,7 +45,9 @@ export function RightPanel() {
   return (
     <div className={`panel-raised ${styles.container}`}>
       <div className={styles.header}>
-        <span>⚖️ Decision Panel</span>
+        <span>
+          <Sprite name="scales" /> Decision Panel
+        </span>
       </div>
 
       <div className={styles.content}>

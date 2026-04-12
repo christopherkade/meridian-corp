@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" shape-rendering="crispEdges">
+  <!-- Door frame -->
+  <rect x="4" y="1" width="10" height="14" fill="#808080"/>
+  <!-- Door -->
+  <rect x="5" y="2" width="8" height="12" fill="#8B6914"/>
+  <rect x="5" y="2" width="8" height="1" fill="#C49A6C"/>
+  <rect x="5" y="2" width="1" height="12" fill="#C49A6C"/>
+  <rect x="12" y="2" width="1" height="12" fill="#5A4000"/>
+  <rect x="5" y="13" width="8" height="1" fill="#5A4000"/>
+  <!-- Handle -->
+  <rect x="11" y="7" width="1" height="2" fill="#DFCF4F"/>
+  <!-- Opening gap -->
+  <rect x="2" y="2" width="3" height="12" fill="#000040"/>
+  <rect x="4" y="2" width="1" height="12" fill="#000020"/>
+</svg>

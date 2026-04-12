@@ -3,8 +3,16 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import {
-  Resume, ResumeResult, Decision, SuspicionLevel,
-  GameScreen, CareerStats, CaseResult, Rating, Difficulty, DIFFICULTY_CONFIG,
+  Resume,
+  ResumeResult,
+  Decision,
+  SuspicionLevel,
+  GameScreen,
+  CareerStats,
+  CaseResult,
+  Rating,
+  Difficulty,
+  DIFFICULTY_CONFIG,
 } from "./types";
 import { generateCase } from "./resume-generator";
 import { calculateScore, getExplanation, calculateRating } from "./scoring";
@@ -37,6 +45,7 @@ interface GameState {
 
   // UI visibility toggles
   showSuspicionMeter: boolean;
+  showHourglassAnimation: boolean;
 
   // Actions
   startNewCase: () => void;
@@ -46,6 +55,8 @@ interface GameState {
   setSuspicionLevel: (level: SuspicionLevel) => void;
   setScreen: (screen: GameScreen) => void;
   toggleSuspicionMeter: () => void;
+  toggleHourglassAnimation: () => void;
+  timerExpired: () => void;
   resetGame: () => void;
 }
 
@@ -73,6 +84,7 @@ export const useGameStore = create<GameState>()(
       lastCaseResult: null,
       career: { ...initialCareer },
       showSuspicionMeter: false,
+      showHourglassAnimation: true,
 
       startNewCase: () => {
         const state = get();
@@ -131,7 +143,7 @@ export const useGameStore = create<GameState>()(
         const explanation = getExplanation(
           resume.isAlien,
           decision,
-          resume.clues
+          resume.clues,
         );
 
         const result: ResumeResult = {
@@ -147,7 +159,9 @@ export const useGameStore = create<GameState>()(
         const newStrikes = isCorrect ? state.strikes : state.strikes + 1;
 
         // Check if strikes hit the limit
-        const maxStrikes = state.difficulty ? DIFFICULTY_CONFIG[state.difficulty].maxStrikes : Infinity;
+        const maxStrikes = state.difficulty
+          ? DIFFICULTY_CONFIG[state.difficulty].maxStrikes
+          : Infinity;
         if (newStrikes >= maxStrikes) {
           set({
             screen: "game-over",
@@ -178,9 +192,12 @@ export const useGameStore = create<GameState>()(
           const correctCount = results.filter((r) => r.correct).length;
           const accuracy = correctCount / results.length;
           const hasFalseNegatives = results.some(
-            (r) => !r.correct && r.decision === "hire"
+            (r) => !r.correct && r.decision === "hire",
           );
-          const totalScore = results.reduce((sum, r) => sum + r.pointsEarned, 0);
+          const totalScore = results.reduce(
+            (sum, r) => sum + r.pointsEarned,
+            0,
+          );
           const rating: Rating = calculateRating(accuracy, hasFalseNegatives);
 
           const caseResult: CaseResult = {
@@ -200,9 +217,7 @@ export const useGameStore = create<GameState>()(
           // Calculate aggregate detection rates
           const allResults = career.casesCompleted.flatMap((c) => c.results);
           const alienResumes = allResults.filter((r) => {
-            const resume = state.resumes.find(
-              (res) => res.id === r.resumeId
-            );
+            const resume = state.resumes.find((res) => res.id === r.resumeId);
             return resume?.isAlien;
           });
           // For detection rate we look at all correct flags
@@ -211,10 +226,12 @@ export const useGameStore = create<GameState>()(
           const incorrectFlags = totalFlags.filter((r) => !r.correct);
 
           if (alienResumes.length > 0) {
-            career.alienDetectionRate = correctFlags.length / Math.max(alienResumes.length, 1);
+            career.alienDetectionRate =
+              correctFlags.length / Math.max(alienResumes.length, 1);
           }
           if (totalFlags.length > 0) {
-            career.falsePositiveRate = incorrectFlags.length / totalFlags.length;
+            career.falsePositiveRate =
+              incorrectFlags.length / totalFlags.length;
           }
 
           if (accuracy >= 0.7) {
@@ -249,6 +266,55 @@ export const useGameStore = create<GameState>()(
         set((state) => ({ showSuspicionMeter: !state.showSuspicionMeter }));
       },
 
+      toggleHourglassAnimation: () => {
+        set((state) => ({
+          showHourglassAnimation: !state.showHourglassAnimation,
+        }));
+      },
+
+      timerExpired: () => {
+        const state = get();
+        const resume = state.resumes[state.currentResumeIndex];
+        if (!resume) return;
+
+        const newStrikes = state.strikes + 1;
+        const maxStrikes = state.difficulty
+          ? DIFFICULTY_CONFIG[state.difficulty].maxStrikes
+          : Infinity;
+
+        const explanation =
+          "⏰ Time ran out! The resume was not reviewed in time.";
+        const result: ResumeResult = {
+          resumeId: resume.id,
+          decision: "hire",
+          correct: false,
+          pointsEarned: -200,
+          explanation,
+          clues: resume.clues,
+        };
+
+        const newResults = [...state.caseResults, result];
+
+        if (newStrikes >= maxStrikes) {
+          set({
+            screen: "game-over",
+            lastResult: result,
+            caseResults: newResults,
+            strikes: newStrikes,
+            suspicionLevel: "unclear",
+          });
+          return;
+        }
+
+        set({
+          screen: "feedback",
+          lastResult: result,
+          caseResults: newResults,
+          strikes: newStrikes,
+          suspicionLevel: "unclear",
+        });
+      },
+
       resetGame: () => {
         set({
           screen: "menu",
@@ -273,6 +339,6 @@ export const useGameStore = create<GameState>()(
         difficulty: state.difficulty,
         strikes: state.strikes,
       }),
-    }
-  )
+    },
+  ),
 );

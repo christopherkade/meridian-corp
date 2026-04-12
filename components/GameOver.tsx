@@ -2,6 +2,7 @@
 
 import { useGameStore } from "@/lib/store";
 import { DIFFICULTY_CONFIG } from "@/lib/types";
+import { Sprite } from "./Sprite";
 import styles from "./GameOver.module.css";
 
 const firingReasons = [
@@ -26,10 +27,14 @@ export function GameOver() {
     <div className={styles.container}>
       <div className={`panel-raised ${styles.window}`}>
         <div className={styles.windowTitle}>
-          <span>⚠️ NOTICE OF TERMINATION</span>
+          <span>
+            <Sprite name="warning" /> NOTICE OF TERMINATION
+          </span>
         </div>
         <div className={styles.windowContent}>
-          <div className={styles.icon}>🚪</div>
+          <div className={styles.icon}>
+            <Sprite name="door" size={32} />
+          </div>
 
           <h2 className={styles.heading}>You&apos;ve Been Fired</h2>
 

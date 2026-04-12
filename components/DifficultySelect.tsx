@@ -2,6 +2,7 @@
 
 import { useGameStore } from "@/lib/store";
 import { Difficulty, DIFFICULTY_CONFIG } from "@/lib/types";
+import { Sprite } from "./Sprite";
 import styles from "./DifficultySelect.module.css";
 
 const difficulties: Difficulty[] = ["easy", "medium", "hard"];
@@ -14,7 +15,9 @@ export function DifficultySelect() {
     <div className={styles.container}>
       <div className={`panel-raised ${styles.window}`}>
         <div className={styles.windowTitle}>
-          <span>📋 New Employee Intake - Risk Assessment</span>
+          <span>
+            <Sprite name="clipboard" /> New Employee Intake - Risk Assessment
+          </span>
         </div>
         <div className={styles.windowContent}>
           <p className={styles.heading}>Select your contract terms:</p>

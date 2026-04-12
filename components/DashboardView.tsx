@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useGameStore } from "@/lib/store";
+import { Sprite } from "./Sprite";
 import styles from "./DashboardView.module.css";
 
 export function DashboardView() {
@@ -22,7 +23,10 @@ export function DashboardView() {
     <div className={styles.container}>
       <div className={`panel-raised ${styles.window}`}>
         <div className={styles.windowTitle}>
-          <span>📊 Career Dashboard - Employee Performance Record</span>
+          <span>
+            <Sprite name="chart" /> Career Dashboard - Employee Performance
+            Record
+          </span>
         </div>
         <div className={styles.windowContent}>
           <h2 className={styles.heading}>Performance Summary</h2>
@@ -103,10 +107,12 @@ export function DashboardView() {
 
           <div className={styles.buttons}>
             <button className="btn-raised" onClick={startNewCase}>
-              📂 Start Next Case <span className="shortcut-hint">[S]</span>
+              <Sprite name="folder-open" /> Start Next Case{" "}
+              <span className="shortcut-hint">[S]</span>
             </button>
             <button className="btn-raised" onClick={() => setScreen("menu")}>
-              🏠 Main Menu <span className="shortcut-hint">[M]</span>
+              <Sprite name="home" /> Main Menu{" "}
+              <span className="shortcut-hint">[M]</span>
             </button>
           </div>
         </div>

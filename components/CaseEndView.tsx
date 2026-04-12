@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useGameStore } from "@/lib/store";
+import { Sprite } from "./Sprite";
 import styles from "./CaseEndView.module.css";
 
 export function CaseEndView() {
@@ -34,7 +35,9 @@ export function CaseEndView() {
     <div className={styles.container}>
       <div className={`panel-raised ${styles.window}`}>
         <div className={styles.windowTitle}>
-          <span>📊 End of Day Report - Case #{caseNumber}</span>
+          <span>
+            <Sprite name="chart" /> End of Day Report - Case #{caseNumber}
+          </span>
         </div>
         <div className={styles.windowContent}>
           <div className={styles.ratingBox}>
@@ -99,16 +102,19 @@ export function CaseEndView() {
 
           <div className={styles.buttons}>
             <button className="btn-raised" onClick={startNewCase}>
-              📂 Start Next Case <span className="shortcut-hint">[S]</span>
+              <Sprite name="folder-open" /> Start Next Case{" "}
+              <span className="shortcut-hint">[S]</span>
             </button>
             <button
               className="btn-raised"
               onClick={() => setScreen("dashboard")}
             >
-              📊 Career Dashboard <span className="shortcut-hint">[D]</span>
+              <Sprite name="chart" /> Career Dashboard{" "}
+              <span className="shortcut-hint">[D]</span>
             </button>
             <button className="btn-raised" onClick={() => setScreen("menu")}>
-              🏠 Main Menu <span className="shortcut-hint">[M]</span>
+              <Sprite name="home" /> Main Menu{" "}
+              <span className="shortcut-hint">[M]</span>
             </button>
           </div>
         </div>

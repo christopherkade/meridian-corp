@@ -2,19 +2,53 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useGameStore } from "@/lib/store";
+import { Sprite } from "./Sprite";
+import { SpriteName } from "./Sprite";
 import styles from "./MainMenu.module.css";
 
-const easterEggs = [
-  "⚠️ Alien detected in break room. HR has been notified.",
-  "📎 It looks like you're procrastinating. Would you like help?",
-  "🔒 Your session will expire in ∞ minutes.",
-  '📡 Signal received from Sector 7G: "Please hire me."',
-  "📋 New policy: All résumés must be reviewed upside down on Tuesdays.",
-  "☕ Break room microwave has achieved self-awareness. Avoid Floor 3.",
-  '📦 Dwight has submitted a résumé listing "Assistant Regional Manager" as his current title. Again.',
-  "🍲 Kevin spilled his famous chili in Server Room B. All systems nominal, surprisingly.",
-  "📝 HR Notice: Jim has placed another applicant's stapler in Jell-O. Please disregard.",
-  "🎉 Party Planning Committee conflict: Angela vs. Phyllis. Conference Room C is off-limits.",
+interface EasterEgg {
+  icon: SpriteName;
+  text: string;
+}
+
+const easterEggs: EasterEgg[] = [
+  {
+    icon: "warning",
+    text: "Alien detected in break room. HR has been notified.",
+  },
+  {
+    icon: "paperclip",
+    text: "It looks like you're procrastinating. Would you like help?",
+  },
+  { icon: "lock", text: "Your session will expire in ∞ minutes." },
+  {
+    icon: "satellite",
+    text: 'Signal received from Sector 7G: "Please hire me."',
+  },
+  {
+    icon: "clipboard",
+    text: "New policy: All résumés must be reviewed upside down on Tuesdays.",
+  },
+  {
+    icon: "coffee",
+    text: "Break room microwave has achieved self-awareness. Avoid Floor 3.",
+  },
+  {
+    icon: "package",
+    text: 'Dwight has submitted a résumé listing "Assistant Regional Manager" as his current title. Again.',
+  },
+  {
+    icon: "stew",
+    text: "Kevin spilled his famous chili in Server Room B. All systems nominal, surprisingly.",
+  },
+  {
+    icon: "notepad",
+    text: "HR Notice: Jim has placed another applicant's stapler in Jell-O. Please disregard.",
+  },
+  {
+    icon: "party",
+    text: "Party Planning Committee conflict: Angela vs. Phyllis. Conference Room C is off-limits.",
+  },
 ];
 
 export function MainMenu() {
@@ -22,12 +56,14 @@ export function MainMenu() {
   const setScreen = useGameStore((s) => s.setScreen);
   const career = useGameStore((s) => s.career);
   const nextCaseNumber = career.casesCompleted.length + 1;
-  const [toasts, setToasts] = useState<string[]>([]);
+  const [toasts, setToasts] = useState<number[]>([]);
 
   const addToast = useCallback(() => {
     setToasts((prev) => {
       if (prev.length >= 4) return prev;
-      const remaining = easterEggs.filter((e) => !prev.includes(e));
+      const remaining = easterEggs
+        .map((_, i) => i)
+        .filter((i) => !prev.includes(i));
       if (remaining.length === 0) return prev;
       const pick = remaining[Math.floor(Math.random() * remaining.length)];
       return [...prev, pick];
@@ -45,7 +81,7 @@ export function MainMenu() {
   }, [startNewCase, setScreen, career.casesCompleted.length]);
 
   useEffect(() => {
-    const interval = setInterval(addToast, 20000);
+    const interval = setInterval(addToast, 10000);
     return () => clearInterval(interval);
   }, [addToast]);
 
@@ -53,10 +89,12 @@ export function MainMenu() {
     <div className={styles.container}>
       {toasts.length > 0 && (
         <div className={styles.toastStack}>
-          {toasts.map((msg, i) => (
-            <div key={i} className={`panel-raised ${styles.toast}`}>
+          {toasts.map((eggIndex, i) => (
+            <div key={eggIndex} className={`panel-raised ${styles.toast}`}>
               <div className={styles.toastTitle}>
-                <span>💬 System Notification</span>
+                <span>
+                  <Sprite name="speech-bubble" /> System Notification
+                </span>
                 <button
                   className={styles.toastClose}
                   onClick={() =>
@@ -66,14 +104,19 @@ export function MainMenu() {
                   ✕
                 </button>
               </div>
-              <div className={styles.toastBody}>{msg}</div>
+              <div className={styles.toastBody}>
+                <Sprite name={easterEggs[eggIndex].icon} />{" "}
+                {easterEggs[eggIndex].text}
+              </div>
             </div>
           ))}
         </div>
       )}
       <div className={`panel-raised ${styles.window}`}>
         <div className={styles.windowTitle}>
-          <span>📋 TalentBridge Pro 3.2</span>
+          <span>
+            <Sprite name="clipboard" /> TalentBridge Pro 3.2
+          </span>
         </div>
         <div className={styles.windowContent}>
           <div className={styles.logo}>
@@ -111,7 +154,8 @@ export function MainMenu() {
                 className="btn-raised"
                 onClick={() => setScreen("dashboard")}
               >
-                📊 Career Dashboard <span className="shortcut-hint">[D]</span>
+                <Sprite name="chart" /> Career Dashboard{" "}
+                <span className="shortcut-hint">[D]</span>
               </button>
             )}
           </div>

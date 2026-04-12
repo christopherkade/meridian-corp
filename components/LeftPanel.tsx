@@ -1,6 +1,7 @@
 "use client";
 
 import { useGameStore } from "@/lib/store";
+import { Sprite } from "./Sprite";
 import styles from "./LeftPanel.module.css";
 
 export function LeftPanel() {
@@ -11,7 +12,9 @@ export function LeftPanel() {
   return (
     <div className={`panel-raised ${styles.container}`}>
       <div className={styles.header}>
-        <span>📁 Case #{caseNumber}</span>
+        <span>
+          <Sprite name="folder" /> Case #{caseNumber}
+        </span>
       </div>
 
       <div className={styles.content}>

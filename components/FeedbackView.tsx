@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useGameStore } from "@/lib/store";
+import { Sprite } from "./Sprite";
 import { ResumeViewer } from "./ResumeViewer";
 import styles from "./FeedbackView.module.css";
 
@@ -37,14 +38,20 @@ export function FeedbackView() {
       )}
       <div className={`panel-raised ${styles.window}`}>
         <div className={styles.windowTitle}>
-          <span>📋 Decision Result</span>
+          <span>
+            <Sprite name="clipboard" /> Decision Result
+          </span>
         </div>
         <div className={styles.windowContent}>
           {/* Result icon */}
           <div
             className={`${styles.resultIcon} ${lastResult.correct ? styles.correct : styles.incorrect}`}
           >
-            {lastResult.correct ? "✅" : "❌"}
+            {lastResult.correct ? (
+              <Sprite name="checkmark" size={32} />
+            ) : (
+              <Sprite name="cross-mark" size={32} />
+            )}
           </div>
 
           {/* Result text */}

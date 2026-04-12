@@ -3,6 +3,7 @@
 import { ReactNode, useEffect, useState } from "react";
 import { useGameStore } from "@/lib/store";
 import { GameScreen } from "@/lib/types";
+import { Sprite } from "./Sprite";
 import styles from "./DesktopShell.module.css";
 
 interface DesktopShellProps {
@@ -12,7 +13,10 @@ interface DesktopShellProps {
 const fakeMenus: Record<string, string[]> = {
   File: ["__disabled:Print Resume"],
   Edit: ["__disabled:Undo Decision", "---", "__disabled:Find Anomaly"],
-  View: ["__toggle:showSuspicionMeter:Suspicion Meter"],
+  View: [
+    "__toggle:showSuspicionMeter:Suspicion Meter",
+    "__toggle:showHourglassAnimation:Hourglass Animation",
+  ],
   Help: ["__about:About TalentBridge Pro 3.2"],
 };
 
@@ -40,11 +44,19 @@ export function DesktopShell({ children }: DesktopShellProps) {
   const setScreen = useGameStore((s) => s.setScreen);
   const showSuspicionMeter = useGameStore((s) => s.showSuspicionMeter);
   const toggleSuspicionMeter = useGameStore((s) => s.toggleSuspicionMeter);
+  const showHourglassAnimation = useGameStore((s) => s.showHourglassAnimation);
+  const toggleHourglassAnimation = useGameStore(
+    (s) => s.toggleHourglassAnimation,
+  );
 
   const toggleMap: Record<string, { active: boolean; toggle: () => void }> = {
     showSuspicionMeter: {
       active: showSuspicionMeter,
       toggle: toggleSuspicionMeter,
+    },
+    showHourglassAnimation: {
+      active: showHourglassAnimation,
+      toggle: toggleHourglassAnimation,
     },
   };
 
@@ -88,7 +100,9 @@ export function DesktopShell({ children }: DesktopShellProps) {
       {/* Title Bar / Menu Bar */}
       <div className={styles.titlebar}>
         <div className={styles.titleLeft}>
-          <span className={styles.appIcon}>📋</span>
+          <span className={styles.appIcon}>
+            <Sprite name="clipboard" />
+          </span>
           <span className={styles.appTitle}>
             TalentBridge Pro 3.2 - Meridian Solutions HR Portal
           </span>
@@ -202,7 +216,7 @@ export function DesktopShell({ children }: DesktopShellProps) {
                 setStartMenuOpen(!startMenuOpen);
               }}
             >
-              🏢 Meridian
+              <Sprite name="building" /> Meridian
             </button>
             {startMenuOpen && (
               <div className={styles.startMenu}>
@@ -217,7 +231,7 @@ export function DesktopShell({ children }: DesktopShellProps) {
                       setStartMenuOpen(false);
                     }}
                   >
-                    🏠 Main Menu
+                    <Sprite name="home" /> Main Menu
                   </button>
                   <div className={styles.menuDivider} />
                   <button
@@ -227,7 +241,7 @@ export function DesktopShell({ children }: DesktopShellProps) {
                       setStartMenuOpen(false);
                     }}
                   >
-                    🗑️ Reset Progress
+                    <Sprite name="trash" /> Reset Progress
                   </button>
                   <div className={styles.menuDivider} />
                   <button
@@ -239,14 +253,16 @@ export function DesktopShell({ children }: DesktopShellProps) {
                       setStartMenuOpen(false);
                     }}
                   >
-                    🔒 Access Admin Mode
+                    <Sprite name="lock" /> Access Admin Mode
                   </button>
                 </div>
               </div>
             )}
           </div>
         </div>
-        <div className={styles.taskbarNotification}>💬 {notification}</div>
+        <div className={styles.taskbarNotification}>
+          <Sprite name="speech-bubble" /> {notification}
+        </div>
 
         {/* Reset Confirmation Dialog */}
         {showResetDialog && (
@@ -256,10 +272,14 @@ export function DesktopShell({ children }: DesktopShellProps) {
           >
             <div className={`panel-raised ${styles.dialog}`}>
               <div className={styles.dialogTitle}>
-                <span>⚠️ Confirm Reset</span>
+                <span>
+                  <Sprite name="warning" /> Confirm Reset
+                </span>
               </div>
               <div className={styles.dialogContent}>
-                <p className={styles.dialogIcon}>⚠️</p>
+                <p className={styles.dialogIcon}>
+                  <Sprite name="warning" size={32} />
+                </p>
                 <p className={styles.dialogText}>
                   Are you sure you want to reset all career progress?
                   <br />
@@ -297,7 +317,9 @@ export function DesktopShell({ children }: DesktopShellProps) {
               className={`panel-raised ${styles.dialog} ${styles.aboutDialog}`}
             >
               <div className={styles.dialogTitle}>
-                <span>ℹ️ About TalentBridge Pro 3.2</span>
+                <span>
+                  <Sprite name="info" /> About TalentBridge Pro 3.2
+                </span>
                 <button
                   className="btn-raised"
                   style={{
@@ -381,7 +403,9 @@ export function DesktopShell({ children }: DesktopShellProps) {
           >
             <div className={`panel-raised ${styles.dialog}`}>
               <div className={styles.dialogTitle}>
-                <span>🔒 Admin Login</span>
+                <span>
+                  <Sprite name="lock" /> Admin Login
+                </span>
                 <button
                   className="btn-raised"
                   style={{
@@ -455,7 +479,7 @@ export function DesktopShell({ children }: DesktopShellProps) {
 
         <div className={styles.taskbarRight}>
           <span className={styles.trayIcon} title="MeridianGuard Antivirus">
-            🛡️
+            <Sprite name="shield" />
           </span>
           <span className={styles.clock}>{time}</span>
         </div>

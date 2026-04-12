@@ -1,0 +1,87 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 4px;
+}
+
+.header {
+  background: var(--bg-titlebar);
+  color: var(--bg-titlebar-text);
+  padding: 4px 8px;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.content {
+  padding: 12px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-panel);
+}
+
+.timerDisplay {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hourglass {
+  font-size: 20px;
+  display: inline-block;
+  animation: flip 2s ease-in-out infinite;
+}
+
+.hourglassStatic {
+  animation: none;
+}
+
+.seconds {
+  font-family: "Courier New", monospace;
+  font-size: 28px;
+  font-weight: bold;
+  min-width: 48px;
+  text-align: center;
+}
+
+.secondsLow {
+  color: #cc0000;
+}
+
+.label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+@keyframes flip {
+  0% {
+    transform: rotate(0deg);
+  }
+  8% {
+    transform: rotate(140deg);
+  }
+  15% {
+    transform: rotate(172deg);
+  }
+  20% {
+    transform: rotate(180deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  58% {
+    transform: rotate(320deg);
+  }
+  65% {
+    transform: rotate(352deg);
+  }
+  70% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

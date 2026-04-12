@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" shape-rendering="crispEdges">
+  <!-- Back of folder -->
+  <rect x="1" y="1" width="6" height="2" fill="#DFCF4F"/>
+  <rect x="1" y="3" width="14" height="1" fill="#DFCF4F"/>
+  <!-- Open front -->
+  <rect x="0" y="5" width="15" height="10" fill="#FFF080"/>
+  <rect x="0" y="5" width="15" height="1" fill="#FFFF9F"/>
+  <rect x="0" y="5" width="1" height="10" fill="#FFFF9F"/>
+  <rect x="14" y="5" width="1" height="10" fill="#808000"/>
+  <rect x="0" y="14" width="15" height="1" fill="#808000"/>
+  <!-- Paper peeking -->
+  <rect x="3" y="4" width="10" height="1" fill="#FFFFFF"/>
+</svg>

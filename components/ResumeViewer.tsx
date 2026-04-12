@@ -1,6 +1,7 @@
 "use client";
 
 import { Resume } from "@/lib/types";
+import { Sprite } from "./Sprite";
 import styles from "./ResumeViewer.module.css";
 
 interface ResumeViewerProps {
@@ -13,7 +14,9 @@ export function ResumeViewer({ resume }: ResumeViewerProps) {
   return (
     <div className={`panel-raised ${styles.container}`}>
       <div className={styles.header}>
-        <span>📄 Resume - {contact.name}</span>
+        <span>
+          <Sprite name="document" /> Resume - {contact.name}
+        </span>
       </div>
       <div className={`panel-sunken ${styles.scrollArea}`}>
         <div className={styles.resume}>
