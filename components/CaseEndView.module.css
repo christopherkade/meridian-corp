@@ -49,25 +49,36 @@
   line-height: 1;
 }
 
-.ratingS { color: #ffd700; }
-.ratingA { color: #228b22; }
-.ratingB { color: #4169e1; }
-.ratingC { color: #cc8800; }
-.ratingF { color: #cc2200; }
+.ratingS {
+  color: #ffd700;
+}
+.ratingA {
+  color: #228b22;
+}
+.ratingB {
+  color: #4169e1;
+}
+.ratingC {
+  color: #cc8800;
+}
+.ratingF {
+  color: #cc2200;
+}
 
 /* Stats */
 .statsGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 1px;
-  background: #cccccc;
+  display: flex;
+  flex-wrap: wrap;
   width: 100%;
 }
 
 .stat {
+  flex: 1 1 calc(33.333% - 2px);
+  min-width: calc(33.333% - 2px);
   background: var(--bg-content);
   padding: 10px;
   text-align: center;
+  outline: 1px solid #cccccc;
 }
 
 .statLabel {
@@ -86,6 +97,18 @@
 
 .danger {
   color: var(--color-flag);
+}
+
+.fullWidth {
+  flex: 1 1 100%;
+  min-width: 100%;
+}
+
+@media (max-width: 500px) {
+  .stat {
+    flex: 1 1 100%;
+    min-width: 100%;
+  }
 }
 
 /* Review */

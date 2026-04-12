@@ -43,6 +43,9 @@ interface GameState {
   // Career stats (persisted)
   career: CareerStats;
 
+  // Run timer
+  runStartedAt: number | null;
+
   // UI visibility toggles
   showSuspicionMeter: boolean;
   showHourglassAnimation: boolean;
@@ -67,6 +70,7 @@ const initialCareer: CareerStats = {
   currentCaseStreak: 0,
   totalScore: 0,
   casesCompleted: [],
+  runElapsedMs: null,
 };
 
 export const useGameStore = create<GameState>()(
@@ -83,6 +87,7 @@ export const useGameStore = create<GameState>()(
       lastResult: null,
       lastCaseResult: null,
       career: { ...initialCareer },
+      runStartedAt: null,
       showSuspicionMeter: false,
       showHourglassAnimation: true,
 
@@ -121,6 +126,7 @@ export const useGameStore = create<GameState>()(
           lastResult: null,
           lastCaseResult: null,
           career: { ...initialCareer },
+          runStartedAt: Date.now(),
         });
       },
 
@@ -163,12 +169,16 @@ export const useGameStore = create<GameState>()(
           ? DIFFICULTY_CONFIG[state.difficulty].maxStrikes
           : Infinity;
         if (newStrikes >= maxStrikes) {
+          const elapsed = state.runStartedAt
+            ? Date.now() - state.runStartedAt
+            : null;
           set({
             screen: "game-over",
             lastResult: result,
             caseResults: newResults,
             strikes: newStrikes,
             suspicionLevel: "unclear",
+            career: { ...state.career, runElapsedMs: elapsed },
           });
           return;
         }
@@ -213,6 +223,9 @@ export const useGameStore = create<GameState>()(
           career.totalResumesProcessed += results.length;
           career.totalScore += totalScore;
           career.casesCompleted = [...career.casesCompleted, caseResult];
+          career.runElapsedMs = state.runStartedAt
+            ? Date.now() - state.runStartedAt
+            : null;
 
           // Calculate aggregate detection rates
           const allResults = career.casesCompleted.flatMap((c) => c.results);
@@ -296,12 +309,16 @@ export const useGameStore = create<GameState>()(
         const newResults = [...state.caseResults, result];
 
         if (newStrikes >= maxStrikes) {
+          const elapsed = state.runStartedAt
+            ? Date.now() - state.runStartedAt
+            : null;
           set({
             screen: "game-over",
             lastResult: result,
             caseResults: newResults,
             strikes: newStrikes,
             suspicionLevel: "unclear",
+            career: { ...state.career, runElapsedMs: elapsed },
           });
           return;
         }
@@ -328,6 +345,7 @@ export const useGameStore = create<GameState>()(
           lastResult: null,
           lastCaseResult: null,
           career: { ...initialCareer },
+          runStartedAt: null,
           showSuspicionMeter: false,
         });
       },
@@ -338,6 +356,7 @@ export const useGameStore = create<GameState>()(
         career: state.career,
         difficulty: state.difficulty,
         strikes: state.strikes,
+        runStartedAt: state.runStartedAt,
       }),
     },
   ),

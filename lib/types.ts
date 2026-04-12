@@ -83,6 +83,7 @@ export interface CareerStats {
   currentCaseStreak: number;
   totalScore: number;
   casesCompleted: CaseResult[];
+  runElapsedMs: number | null;
 }
 
 export type GameScreen =

@@ -22,6 +22,7 @@ export function GameOver() {
   const maxStrikes = difficulty ? DIFFICULTY_CONFIG[difficulty].maxStrikes : 0;
   const firingReason =
     firingReasons[Math.floor(Math.random() * firingReasons.length)];
+  const elapsed = formatElapsed(career.runElapsedMs);
 
   return (
     <div className={styles.container}>
@@ -53,6 +54,11 @@ export function GameOver() {
             <p>Cases completed: {career.casesCompleted.length}</p>
             <p>Total score: {career.totalScore.toLocaleString()}</p>
             <p>Resumes processed: {career.totalResumesProcessed}</p>
+            {elapsed && (
+              <p>
+                <Sprite name="stopwatch" /> Run time: {elapsed}
+              </p>
+            )}
           </div>
 
           <div className={styles.buttons}>
@@ -64,4 +70,15 @@ export function GameOver() {
       </div>
     </div>
   );
+}
+
+function formatElapsed(ms: number | null): string | null {
+  if (ms == null) return null;
+  const totalSeconds = Math.floor(ms / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  if (minutes > 0) {
+    return `${minutes}m ${seconds.toString().padStart(2, "0")}s`;
+  }
+  return `${seconds}s`;
 }

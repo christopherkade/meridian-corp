@@ -7,6 +7,7 @@ import styles from "./CaseEndView.module.css";
 
 export function CaseEndView() {
   const lastCaseResult = useGameStore((s) => s.lastCaseResult);
+  const career = useGameStore((s) => s.career);
   const startNewCase = useGameStore((s) => s.startNewCase);
   const setScreen = useGameStore((s) => s.setScreen);
 
@@ -20,6 +21,7 @@ export function CaseEndView() {
   const falseNegatives = results.filter(
     (r) => !r.correct && r.decision === "hire",
   ).length;
+  const elapsed = formatElapsed(career.runElapsedMs);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -85,6 +87,14 @@ export function CaseEndView() {
                 {falseNegatives}
               </div>
             </div>
+            {elapsed && (
+              <div className={`${styles.stat} ${styles.fullWidth}`}>
+                <div className={styles.statLabel}>
+                  <Sprite name="stopwatch" /> Run Time
+                </div>
+                <div className={styles.statValue}>{elapsed}</div>
+              </div>
+            )}
           </div>
 
           {/* Corporate review */}
@@ -154,4 +164,15 @@ function getPerformanceReview(rating: string, caseNumber: number): string {
 
   const options = reviews[rating] || reviews["C"];
   return options[Math.floor(Math.random() * options.length)];
+}
+
+function formatElapsed(ms: number | null): string | null {
+  if (ms == null) return null;
+  const totalSeconds = Math.floor(ms / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  if (minutes > 0) {
+    return `${minutes}m ${seconds.toString().padStart(2, "0")}s`;
+  }
+  return `${seconds}s`;
 }
