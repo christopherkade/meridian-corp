@@ -43,17 +43,6 @@ export function FeedbackView() {
           </span>
         </div>
         <div className={styles.windowContent}>
-          {/* Result icon */}
-          <div
-            className={`${styles.resultIcon} ${lastResult.correct ? styles.correct : styles.incorrect}`}
-          >
-            {lastResult.correct ? (
-              <Sprite name="checkmark" size={32} />
-            ) : (
-              <Sprite name="cross-mark" size={32} />
-            )}
-          </div>
-
           {/* Result text */}
           <div
             className={`${styles.resultBanner} ${lastResult.correct ? styles.correctBanner : styles.incorrectBanner}`}

@@ -13,8 +13,6 @@ export type SpriteName =
   | "hourglass"
   | "scales"
   | "warning"
-  | "checkmark"
-  | "cross-mark"
   | "home"
   | "building"
   | "trash"
