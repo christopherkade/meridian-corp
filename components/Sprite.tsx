@@ -35,6 +35,7 @@ interface SpriteProps {
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 export function Sprite({ name, size = 16, className }: SpriteProps) {
+  console.log("basePath", basePath);
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
