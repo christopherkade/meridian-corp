@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 export type SpriteName =
   | "clipboard"
   | "folder"
@@ -34,10 +32,13 @@ interface SpriteProps {
   className?: string;
 }
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+
 export function Sprite({ name, size = 16, className }: SpriteProps) {
   return (
-    <Image
-      src={`/sprites/${name}.svg`}
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={`${basePath}/sprites/${name}.svg`}
       alt={name}
       width={size}
       height={size}
