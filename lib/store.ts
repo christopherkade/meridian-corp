@@ -304,7 +304,7 @@ export const useGameStore = create<GameState>()(
           : Infinity;
 
         const explanation =
-          "⏰ Time ran out! The resume was not reviewed in time.";
+          "⏰ Time ran out! The resume was not reviewed in time. At Meridian Corp, we value efficiency. Please try to make your decisions faster to avoid penalties.";
         const result: ResumeResult = {
           resumeId: resume.id,
           decision: "hire",
