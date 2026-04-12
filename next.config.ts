@@ -1,16 +1,13 @@
 import type { NextConfig } from "next";
 
-const isProd = process.env.NODE_ENV === "production";
-const basePath = isProd ? "/meridian-corp" : "";
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 const nextConfig: NextConfig = {
-  basePath,
+  basePath: basePath || undefined,
+  assetPrefix: basePath || undefined,
   output: "export",
   images: {
     unoptimized: true,
-  },
-  env: {
-    NEXT_PUBLIC_BASE_PATH: basePath,
   },
 };
 
