@@ -73,6 +73,13 @@ jobs:
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
+      - name: Verify env vars
+        run: |
+          if [ -z "$NEXT_PUBLIC_SUPABASE_URL" ]; then echo "❌ NEXT_PUBLIC_SUPABASE_URL is empty"; else echo "✅ NEXT_PUBLIC_SUPABASE_URL is set (${#NEXT_PUBLIC_SUPABASE_URL} chars)"; fi
+          if [ -z "$NEXT_PUBLIC_SUPABASE_ANON_KEY" ]; then echo "❌ NEXT_PUBLIC_SUPABASE_ANON_KEY is empty"; else echo "✅ NEXT_PUBLIC_SUPABASE_ANON_KEY is set (${#NEXT_PUBLIC_SUPABASE_ANON_KEY} chars)"; fi
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
       - name: Build with Next.js
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
         env:
