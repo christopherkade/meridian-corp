@@ -1,6 +1,6 @@
 .container {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   height: 100%;
   overflow-y: auto;
@@ -95,6 +95,31 @@
 .cardBronze {
   border-color: #cd7f32;
   box-shadow: 0 0 8px rgba(205, 127, 50, 0.25);
+}
+
+@media (max-width: 600px) {
+  .podium {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .card {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .cardGold {
+    max-width: 100%;
+    order: -1;
+  }
+
+  .cardSilver {
+    order: 0;
+  }
+
+  .cardBronze {
+    order: 1;
+  }
 }
 
 .difficultyBadge {

@@ -11,7 +11,7 @@
   --text-primary: #000000;
   --text-secondary: #444444;
   --text-muted: #808080;
-  --color-hire: #228B22;
+  --color-hire: #228b22;
   --color-flag: #cc2200;
   --color-accent: #000080;
   --color-amber: #ffbf00;
@@ -66,6 +66,10 @@ textarea {
 
 /* Retro raised button style */
 .btn-raised {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
   background: var(--bg-button);
   border-width: 2px;
   border-style: solid;

@@ -188,7 +188,9 @@
 }
 
 .startMenuItem {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 4px;
   width: 100%;
   text-align: left;
   background: transparent;
