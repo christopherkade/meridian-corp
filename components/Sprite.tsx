@@ -31,9 +31,7 @@ interface SpriteProps {
   className?: string;
 }
 
-const basePath =
-  process.env.NEXT_PUBLIC_BASE_PATH ||
-  (process.env.NODE_ENV === "production" ? "/meridian-corp" : "");
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 export function Sprite({ name, size = 16, className }: SpriteProps) {
   return (
