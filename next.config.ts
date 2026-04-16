@@ -5,7 +5,6 @@ const basePath = isProd ? "/meridian-corp" : "";
 
 const nextConfig: NextConfig = {
   basePath: basePath || undefined,
-  assetPrefix: basePath || undefined,
   output: "export",
   images: {
     unoptimized: true,
