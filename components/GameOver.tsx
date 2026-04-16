@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useGameStore } from "@/lib/store";
 import { DIFFICULTY_CONFIG } from "@/lib/types";
 import { submitScore } from "@/lib/leaderboard";
+import { validateName } from "@/lib/name-filter";
 import { Sprite } from "./Sprite";
 import styles from "./GameOver.module.css";
 
@@ -27,17 +28,19 @@ export function GameOver() {
   const markScoreSubmitted = useGameStore((s) => s.markScoreSubmitted);
 
   const [submitting, setSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState(false);
+  const [submitError, setSubmitError] = useState<string | false>(false);
   const firingReasonRef = useRef(
     firingReasons[Math.floor(Math.random() * firingReasons.length)],
   );
 
   const maxStrikes = difficulty ? DIFFICULTY_CONFIG[difficulty].maxStrikes : 0;
   const elapsed = formatElapsed(career.runElapsedMs);
+  const nameError = validateName(playerName.trim());
   const canSubmit =
     !scoreSubmitted &&
     !submitting &&
     playerName.trim().length > 0 &&
+    !nameError &&
     career.runElapsedMs != null &&
     difficulty != null;
 
@@ -56,7 +59,9 @@ export function GameOver() {
       markScoreSubmitted();
     } catch (err) {
       console.error("Submit failed:", err);
-      setSubmitError(true);
+      setSubmitError(
+        err instanceof Error ? err.message : "Failed to submit. Try again.",
+      );
     } finally {
       setSubmitting(false);
     }
@@ -112,6 +117,9 @@ export function GameOver() {
                   placeholder="Enter your name"
                 />
               </label>
+              {nameError && playerName.trim().length > 0 && (
+                <p className={styles.submitError}>{nameError}</p>
+              )}
               <button
                 className="btn-raised"
                 disabled={!canSubmit}
@@ -120,9 +128,7 @@ export function GameOver() {
                 {submitting ? "Submitting..." : "Submit Score"}
               </button>
               {submitError && (
-                <p className={styles.submitError}>
-                  Failed to submit. Try again.
-                </p>
+                <p className={styles.submitError}>{submitError}</p>
               )}
             </div>
           )}

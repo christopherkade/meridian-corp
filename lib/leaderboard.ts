@@ -1,5 +1,6 @@
 import { getSupabase } from "./supabase";
 import { Difficulty } from "./types";
+import { validateName } from "./name-filter";
 
 export interface LeaderboardEntry {
   id: string;
@@ -24,7 +25,7 @@ export async function fetchLeaderboard(
       "id, player_name, difficulty, run_elapsed_ms, cases_completed, total_score, created_at",
     )
     .eq("difficulty", difficulty)
-    .order("run_elapsed_ms", { ascending: true })
+    .order("total_score", { ascending: false })
     .limit(100);
 
   if (error) {
@@ -58,6 +59,10 @@ export async function submitScore(params: {
   const trimmed = playerName.trim();
   if (trimmed.length === 0 || trimmed.length > MAX_NAME_LENGTH) {
     throw new Error(`Name must be 1-${MAX_NAME_LENGTH} characters.`);
+  }
+  const nameError = validateName(trimmed);
+  if (nameError) {
+    throw new Error(nameError);
   }
   if (!VALID_DIFFICULTIES.includes(difficulty)) {
     throw new Error("Invalid difficulty.");

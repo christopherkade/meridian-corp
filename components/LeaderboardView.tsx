@@ -68,11 +68,11 @@ export function LeaderboardView() {
       <div className={`panel-raised ${styles.window}`}>
         <div className={styles.windowTitle}>
           <span>
-            <Sprite name="chart" /> Global Leaderboard - Fastest Runs
+            <Sprite name="chart" /> Global Leaderboard - Top Scores
           </span>
         </div>
         <div className={styles.windowContent}>
-          <h2 className={styles.heading}>Top 100 Fastest Runs</h2>
+          <h2 className={styles.heading}>Top 100 Highest Scores</h2>
 
           <div className={styles.tabs}>
             {DIFFICULTIES.map((d) => (
@@ -90,8 +90,8 @@ export function LeaderboardView() {
             <div className={styles.tableHeader}>
               <span>#</span>
               <span>Name</span>
-              <span>Time</span>
-              <span>Score</span>
+              <span className={styles.time}>Time</span>
+              <span className={styles.score}>Score</span>
             </div>
 
             {loading && <div className={styles.loading}>Loading...</div>}
