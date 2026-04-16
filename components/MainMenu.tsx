@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useGameStore } from "@/lib/store";
-import { playClick } from "@/lib/sounds";
+import { playClick, playNotification } from "@/lib/sounds";
 import { Sprite } from "./Sprite";
 import { SpriteName } from "./Sprite";
 import styles from "./MainMenu.module.css";
@@ -100,6 +100,14 @@ export function MainMenu() {
     const interval = setInterval(addToast, 10000);
     return () => clearInterval(interval);
   }, [addToast]);
+
+  const prevToastCount = useRef(toasts.length);
+  useEffect(() => {
+    if (toasts.length > prevToastCount.current) {
+      playNotification();
+    }
+    prevToastCount.current = toasts.length;
+  }, [toasts.length]);
 
   return (
     <div className={styles.container}>

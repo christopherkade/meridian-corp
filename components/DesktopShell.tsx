@@ -16,8 +16,8 @@ const fakeMenus: Record<string, string[]> = {
   File: ["__disabled:Print Resume"],
   Edit: ["__disabled:Undo Decision", "---", "__disabled:Find Anomaly"],
   View: [
-    "__toggle:showSuspicionMeter:Suspicion Meter",
     "__toggle:showHourglassAnimation:Hourglass Animation",
+    "__toggle:soundEnabled:Sound Effects",
   ],
   Help: ["__about:About TalentBridge Pro 3.2"],
 };
@@ -47,21 +47,21 @@ export function DesktopShell({ children }: DesktopShellProps) {
   const resetAllProgress = useGameStore((s) => s.resetAllProgress);
   const setScreen = useGameStore((s) => s.setScreen);
   const router = useRouter();
-  const showSuspicionMeter = useGameStore((s) => s.showSuspicionMeter);
-  const toggleSuspicionMeter = useGameStore((s) => s.toggleSuspicionMeter);
   const showHourglassAnimation = useGameStore((s) => s.showHourglassAnimation);
   const toggleHourglassAnimation = useGameStore(
     (s) => s.toggleHourglassAnimation,
   );
+  const soundEnabled = useGameStore((s) => s.soundEnabled);
+  const toggleSound = useGameStore((s) => s.toggleSound);
 
   const toggleMap: Record<string, { active: boolean; toggle: () => void }> = {
-    showSuspicionMeter: {
-      active: showSuspicionMeter,
-      toggle: toggleSuspicionMeter,
-    },
     showHourglassAnimation: {
       active: showHourglassAnimation,
       toggle: toggleHourglassAnimation,
+    },
+    soundEnabled: {
+      active: soundEnabled,
+      toggle: toggleSound,
     },
   };
 
@@ -453,6 +453,15 @@ export function DesktopShell({ children }: DesktopShellProps) {
                     style={{ color: "var(--color-link)" }}
                   >
                     LinkedIn
+                  </a>
+                  {" · "}
+                  <a
+                    href="https://ko-fi.com/christopherkade"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: "var(--color-link)" }}
+                  >
+                    Buy me a coffee
                   </a>
                 </p>
                 <div className={styles.dialogButtons}>

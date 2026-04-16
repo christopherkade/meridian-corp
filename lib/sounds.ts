@@ -1,6 +1,8 @@
 // Synthesized Windows 95-style sound effects using Web Audio API.
 // All sounds are generated programmatically — no external files needed.
 
+import { useGameStore } from "./store";
+
 let audioCtx: AudioContext | null = null;
 
 function getCtx(): AudioContext {
@@ -10,8 +12,14 @@ function getCtx(): AudioContext {
   return audioCtx;
 }
 
+/** Check if sounds are muted via the store. */
+function isMuted(): boolean {
+  return !useGameStore.getState().soundEnabled;
+}
+
 /** Ensure AudioContext is resumed (must be called from a user gesture). */
 function unlock() {
+  if (isMuted()) return;
   const ctx = getCtx();
   if (ctx.state === "suspended") {
     ctx.resume();
@@ -71,6 +79,7 @@ function playNoise(duration: number, volume = 0.08) {
 
 /** Short, crisp UI button click — reminiscent of a Win95 button press. */
 export function playClick() {
+  if (isMuted()) return;
   unlock();
   playNoise(0.04, 0.1);
   playTone(800, 0.05, "square", 0.06);
@@ -78,6 +87,7 @@ export function playClick() {
 
 /** Positive ding for correct decisions during gameplay. */
 export function playCorrect() {
+  if (isMuted()) return;
   unlock();
   playTone(660, 0.12, "square", 0.12);
   playTone(880, 0.15, "square", 0.12, 0.08);
@@ -85,6 +95,7 @@ export function playCorrect() {
 
 /** Negative buzz for incorrect decisions. */
 export function playIncorrect() {
+  if (isMuted()) return;
   unlock();
   playTone(280, 0.15, "square", 0.12);
   playTone(220, 0.2, "sawtooth", 0.08, 0.1);
@@ -92,6 +103,7 @@ export function playIncorrect() {
 
 /** Triumphant ascending chime — case completed successfully. */
 export function playSuccess() {
+  if (isMuted()) return;
   unlock();
   playTone(523, 0.15, "square", 0.12); // C5
   playTone(659, 0.15, "square", 0.12, 0.12); // E5
@@ -101,6 +113,7 @@ export function playSuccess() {
 
 /** Descending game-over chord — you've been fired. */
 export function playGameOver() {
+  if (isMuted()) return;
   unlock();
   playTone(440, 0.2, "square", 0.12); // A4
   playTone(370, 0.2, "square", 0.12, 0.18); // F#4
@@ -110,7 +123,16 @@ export function playGameOver() {
 
 /** Quick alert beep — timer running out. */
 export function playTimerWarning() {
+  if (isMuted()) return;
   unlock();
   playTone(1000, 0.08, "square", 0.1);
   playTone(1000, 0.08, "square", 0.1, 0.12);
+}
+
+/** Short notification blip — toast / system message appearing. */
+export function playNotification() {
+  if (isMuted()) return;
+  unlock();
+  playTone(600, 0.08, "square", 0.08);
+  playTone(900, 0.1, "square", 0.08, 0.07);
 }

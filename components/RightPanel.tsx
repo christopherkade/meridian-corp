@@ -17,12 +17,9 @@ const suspicionLevels: { level: SuspicionLevel; label: string }[] = [
 
 export function RightPanel() {
   const makeDecision = useGameStore((s) => s.makeDecision);
-  const suspicionLevel = useGameStore((s) => s.suspicionLevel);
-  const setSuspicionLevel = useGameStore((s) => s.setSuspicionLevel);
   const resumes = useGameStore((s) => s.resumes);
   const currentIndex = useGameStore((s) => s.currentResumeIndex);
   const caseResults = useGameStore((s) => s.caseResults);
-  const showSuspicionMeter = useGameStore((s) => s.showSuspicionMeter);
   const strikes = useGameStore((s) => s.strikes);
   const difficulty = useGameStore((s) => s.difficulty);
 
@@ -84,36 +81,6 @@ export function RightPanel() {
             </div>
             <div className={styles.strikesCount}>
               {strikes}/{maxStrikes}
-            </div>
-          </div>
-        )}
-
-        {/* Suspicion Meter */}
-        {showSuspicionMeter && (
-          <div className={styles.section}>
-            <div className={styles.sectionTitle}>Suspicion Meter</div>
-            <div className={`panel-sunken ${styles.meter}`}>
-              {suspicionLevels.map(({ level, label }) => (
-                <button
-                  key={level}
-                  className={`${styles.meterLevel} ${
-                    suspicionLevel === level ? styles.meterLevelActive : ""
-                  } ${
-                    level.includes("alien")
-                      ? styles.meterAlien
-                      : level.includes("human")
-                        ? styles.meterHuman
-                        : styles.meterNeutral
-                  }`}
-                  onClick={() => {
-                    playClick();
-                    setSuspicionLevel(level);
-                  }}
-                >
-                  {suspicionLevel === level && "▸ "}
-                  {label}
-                </button>
-              ))}
             </div>
           </div>
         )}
