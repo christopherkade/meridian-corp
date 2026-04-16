@@ -1,4 +1,4 @@
-import { supabase } from "./supabase";
+import { getSupabase } from "./supabase";
 import { Difficulty } from "./types";
 
 export interface LeaderboardEntry {
@@ -18,7 +18,7 @@ const MIN_PLAUSIBLE_MS = 5000;
 export async function fetchLeaderboard(
   difficulty: Difficulty,
 ): Promise<LeaderboardEntry[]> {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from("leaderboard")
     .select(
       "id, player_name, difficulty, run_elapsed_ms, cases_completed, total_score, created_at",
@@ -58,7 +58,7 @@ export async function submitScore(params: {
     throw new Error("Invalid score.");
   }
 
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from("leaderboard")
     .insert({
       player_name: trimmed,
