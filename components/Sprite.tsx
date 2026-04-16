@@ -23,7 +23,10 @@ export type SpriteName =
   | "stew"
   | "party"
   | "briefcase"
-  | "info";
+  | "info"
+  | "trophy-gold"
+  | "trophy-silver"
+  | "trophy-bronze";
 
 interface SpriteProps {
   name: SpriteName;

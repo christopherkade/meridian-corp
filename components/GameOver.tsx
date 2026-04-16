@@ -6,6 +6,7 @@ import { useGameStore } from "@/lib/store";
 import { DIFFICULTY_CONFIG } from "@/lib/types";
 import { submitScore } from "@/lib/leaderboard";
 import { validateName } from "@/lib/name-filter";
+import { playGameOver, playClick } from "@/lib/sounds";
 import { Sprite } from "./Sprite";
 import styles from "./GameOver.module.css";
 
@@ -32,6 +33,13 @@ export function GameOver() {
   const firingReasonRef = useRef(
     firingReasons[Math.floor(Math.random() * firingReasons.length)],
   );
+  const didPlayRef = useRef(false);
+
+  // Play game-over sound once on mount
+  if (!didPlayRef.current) {
+    didPlayRef.current = true;
+    playGameOver();
+  }
 
   const maxStrikes = difficulty ? DIFFICULTY_CONFIG[difficulty].maxStrikes : 0;
   const elapsed = formatElapsed(career.runElapsedMs);
@@ -123,7 +131,10 @@ export function GameOver() {
               <button
                 className="btn-raised"
                 disabled={!canSubmit}
-                onClick={handleSubmit}
+                onClick={() => {
+                  playClick();
+                  handleSubmit();
+                }}
               >
                 {submitting ? "Submitting..." : "Submit Score"}
               </button>
@@ -138,7 +149,13 @@ export function GameOver() {
           )}
 
           <div className={styles.buttons}>
-            <button className="btn-raised" onClick={resetRun}>
+            <button
+              className="btn-raised"
+              onClick={() => {
+                playClick();
+                resetRun();
+              }}
+            >
               Try Again
             </button>
             <Link href="/leaderboard" className="btn-raised">

@@ -104,14 +104,21 @@ export function DesktopShell({ children }: DesktopShellProps) {
     >
       {/* Title Bar / Menu Bar */}
       <div className={styles.titlebar}>
-        <div className={styles.titleLeft}>
+        <button
+          className={styles.titleLeft}
+          onClick={() => {
+            setScreen("menu");
+            router.push("/");
+          }}
+          type="button"
+        >
           <span className={styles.appIcon}>
             <Sprite name="clipboard" />
           </span>
           <span className={styles.appTitle}>
             TalentBridge Pro 3.2 - Meridian Solutions HR Portal
           </span>
-        </div>
+        </button>
         <div className={styles.menuBar}>
           {Object.entries(fakeMenus).map(([label, items]) => (
             <div key={label} className={styles.menuWrapper}>
@@ -254,7 +261,7 @@ export function DesktopShell({ children }: DesktopShellProps) {
                       setStartMenuOpen(false);
                     }}
                   >
-                    <Sprite name="door" /> File Resignation
+                    <Sprite name="door" /> Reset Run
                   </button>
                   <button
                     className={styles.startMenuItem}

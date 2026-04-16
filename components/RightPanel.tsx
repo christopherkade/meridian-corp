@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useGameStore } from "@/lib/store";
 import { SuspicionLevel, DIFFICULTY_CONFIG } from "@/lib/types";
+import { playClick } from "@/lib/sounds";
 import { Sprite } from "./Sprite";
 import styles from "./RightPanel.module.css";
 
@@ -35,8 +36,14 @@ export function RightPanel() {
         e.target instanceof HTMLInputElement
       )
         return;
-      if (e.key === "h" || e.key === "H") makeDecision("hire");
-      if (e.key === "f" || e.key === "F") makeDecision("flag");
+      if (e.key === "h" || e.key === "H") {
+        playClick();
+        makeDecision("hire");
+      }
+      if (e.key === "f" || e.key === "F") {
+        playClick();
+        makeDecision("flag");
+      }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
@@ -112,13 +119,19 @@ export function RightPanel() {
         <div className={styles.decisions}>
           <button
             className={`${styles.hireButton}`}
-            onClick={() => makeDecision("hire")}
+            onClick={() => {
+              playClick();
+              makeDecision("hire");
+            }}
           >
             HIRE <span className="shortcut-hint">[H]</span>
           </button>
           <button
             className={`${styles.flagButton}`}
-            onClick={() => makeDecision("flag")}
+            onClick={() => {
+              playClick();
+              makeDecision("flag");
+            }}
           >
             FLAG AS ALIEN <span className="shortcut-hint">[F]</span>
           </button>

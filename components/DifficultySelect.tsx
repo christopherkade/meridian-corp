@@ -2,6 +2,7 @@
 
 import { useGameStore } from "@/lib/store";
 import { Difficulty, DIFFICULTY_CONFIG } from "@/lib/types";
+import { playClick } from "@/lib/sounds";
 import { Sprite } from "./Sprite";
 import styles from "./DifficultySelect.module.css";
 
@@ -33,7 +34,10 @@ export function DifficultySelect() {
                 <button
                   key={d}
                   className={`btn-raised ${styles.option}`}
-                  onClick={() => startRun(d)}
+                  onClick={() => {
+                    playClick();
+                    startRun(d);
+                  }}
                 >
                   <span className={styles.optionLabel}>{config.label}</span>
                   <span className={styles.optionDesc}>
@@ -44,7 +48,13 @@ export function DifficultySelect() {
             })}
           </div>
 
-          <button className={styles.backLink} onClick={() => setScreen("menu")}>
+          <button
+            className={styles.backLink}
+            onClick={() => {
+              playClick();
+              setScreen("menu");
+            }}
+          >
             ← Back to Main Menu
           </button>
         </div>

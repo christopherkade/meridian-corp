@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useGameStore } from "@/lib/store";
+import { playSuccess, playClick } from "@/lib/sounds";
 import { Sprite } from "./Sprite";
 import styles from "./CaseEndView.module.css";
 
@@ -10,6 +11,30 @@ export function CaseEndView() {
   const career = useGameStore((s) => s.career);
   const startNewCase = useGameStore((s) => s.startNewCase);
   const setScreen = useGameStore((s) => s.setScreen);
+
+  // Play success chime when case end screen appears
+  useEffect(() => {
+    if (lastCaseResult) playSuccess();
+  }, [lastCaseResult]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "s" || e.key === "S") {
+        playClick();
+        startNewCase();
+      }
+      if (e.key === "d" || e.key === "D") {
+        playClick();
+        setScreen("dashboard");
+      }
+      if (e.key === "m" || e.key === "M") {
+        playClick();
+        setScreen("menu");
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [startNewCase, setScreen]);
 
   if (!lastCaseResult) return null;
 
@@ -22,16 +47,6 @@ export function CaseEndView() {
     (r) => !r.correct && r.decision === "hire",
   ).length;
   const elapsed = formatElapsed(career.runElapsedMs);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "s" || e.key === "S") startNewCase();
-      if (e.key === "d" || e.key === "D") setScreen("dashboard");
-      if (e.key === "m" || e.key === "M") setScreen("menu");
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [startNewCase, setScreen]);
 
   return (
     <div className={styles.container}>
@@ -111,18 +126,33 @@ export function CaseEndView() {
           </div>
 
           <div className={styles.buttons}>
-            <button className="btn-raised" onClick={startNewCase}>
+            <button
+              className="btn-raised"
+              onClick={() => {
+                playClick();
+                startNewCase();
+              }}
+            >
               <Sprite name="folder-open" /> Start Next Case{" "}
               <span className="shortcut-hint">[S]</span>
             </button>
             <button
               className="btn-raised"
-              onClick={() => setScreen("dashboard")}
+              onClick={() => {
+                playClick();
+                setScreen("dashboard");
+              }}
             >
               <Sprite name="briefcase" /> Career Dashboard{" "}
               <span className="shortcut-hint">[D]</span>
             </button>
-            <button className="btn-raised" onClick={() => setScreen("menu")}>
+            <button
+              className="btn-raised"
+              onClick={() => {
+                playClick();
+                setScreen("menu");
+              }}
+            >
               <Sprite name="home" /> Main Menu{" "}
               <span className="shortcut-hint">[M]</span>
             </button>

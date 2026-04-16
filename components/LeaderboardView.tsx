@@ -8,6 +8,7 @@ import {
   fetchLeaderboard as fetchLeaderboardData,
   LeaderboardEntry,
 } from "@/lib/leaderboard";
+import { playClick } from "@/lib/sounds";
 import { Sprite } from "./Sprite";
 import styles from "./LeaderboardView.module.css";
 
@@ -132,6 +133,13 @@ export function LeaderboardView() {
           </div>
 
           <div className={styles.buttons}>
+            <Link
+              href="/employee-of-the-day"
+              className="btn-raised"
+              onClick={() => playClick()}
+            >
+              <Sprite name="party" /> Employee of the Day
+            </Link>
             <Link href="/" className="btn-raised">
               Back to Menu <span className="shortcut-hint">[M]</span>
             </Link>

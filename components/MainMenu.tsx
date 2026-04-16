@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useGameStore } from "@/lib/store";
+import { playClick } from "@/lib/sounds";
 import { Sprite } from "./Sprite";
 import { SpriteName } from "./Sprite";
 import styles from "./MainMenu.module.css";
@@ -78,10 +79,18 @@ export function MainMenu() {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "s" || e.key === "S") startNewCase();
-      if ((e.key === "d" || e.key === "D") && hasDashboardData)
+      if (e.key === "s" || e.key === "S") {
+        playClick();
+        startNewCase();
+      }
+      if ((e.key === "d" || e.key === "D") && hasDashboardData) {
+        playClick();
         setScreen("dashboard");
-      if (e.key === "l" || e.key === "L") router.push("/leaderboard");
+      }
+      if (e.key === "l" || e.key === "L") {
+        playClick();
+        router.push("/leaderboard");
+      }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
@@ -150,7 +159,13 @@ export function MainMenu() {
           )}
 
           <div className={styles.buttons}>
-            <button className="btn-raised" onClick={startNewCase}>
+            <button
+              className="btn-raised"
+              onClick={() => {
+                playClick();
+                startNewCase();
+              }}
+            >
               {nextCaseNumber === 1
                 ? "Start First Case"
                 : `Start Case ${nextCaseNumber}`}{" "}
@@ -159,7 +174,10 @@ export function MainMenu() {
             {hasDashboardData && (
               <button
                 className="btn-raised"
-                onClick={() => setScreen("dashboard")}
+                onClick={() => {
+                  playClick();
+                  setScreen("dashboard");
+                }}
               >
                 <Sprite name="briefcase" /> Career Dashboard{" "}
                 <span className="shortcut-hint">[D]</span>

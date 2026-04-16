@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useGameStore } from "@/lib/store";
 import { DIFFICULTY_CONFIG } from "@/lib/types";
+import { playTimerWarning } from "@/lib/sounds";
 import { Sprite } from "./Sprite";
 import styles from "./TimerPanel.module.css";
 
@@ -41,6 +42,7 @@ function TimerPanelInner({ totalSeconds }: { totalSeconds: number }) {
           }
           return 0;
         }
+        if (prev === 4) playTimerWarning();
         return prev - 1;
       });
     }, 1000);

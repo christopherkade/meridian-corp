@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useGameStore } from "@/lib/store";
 import { CareerStats, RunRecord, DIFFICULTY_CONFIG } from "@/lib/types";
+import { playClick } from "@/lib/sounds";
 import { Sprite } from "./Sprite";
 import styles from "./DashboardView.module.css";
 
@@ -54,11 +55,22 @@ export function DashboardView() {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "s" || e.key === "S") startNewCase();
-      if (e.key === "m" || e.key === "M") setScreen("menu");
-      if (e.key === "ArrowLeft") setSelectedIndex((i) => Math.max(0, i - 1));
-      if (e.key === "ArrowRight")
+      if (e.key === "s" || e.key === "S") {
+        playClick();
+        startNewCase();
+      }
+      if (e.key === "m" || e.key === "M") {
+        playClick();
+        setScreen("menu");
+      }
+      if (e.key === "ArrowLeft") {
+        playClick();
+        setSelectedIndex((i) => Math.max(0, i - 1));
+      }
+      if (e.key === "ArrowRight") {
+        playClick();
         setSelectedIndex((i) => Math.min(totalEntries - 1, i + 1));
+      }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
@@ -79,7 +91,13 @@ export function DashboardView() {
               Complete a run to see your performance history here.
             </p>
             <div className={styles.buttons}>
-              <button className="btn-raised" onClick={() => setScreen("menu")}>
+              <button
+                className="btn-raised"
+                onClick={() => {
+                  playClick();
+                  setScreen("menu");
+                }}
+              >
                 <Sprite name="home" /> Main Menu{" "}
                 <span className="shortcut-hint">[M]</span>
               </button>
@@ -240,12 +258,24 @@ export function DashboardView() {
 
           <div className={styles.buttons}>
             {isCurrentRun && (
-              <button className="btn-raised" onClick={startNewCase}>
+              <button
+                className="btn-raised"
+                onClick={() => {
+                  playClick();
+                  startNewCase();
+                }}
+              >
                 <Sprite name="folder-open" /> Start Next Case{" "}
                 <span className="shortcut-hint">[S]</span>
               </button>
             )}
-            <button className="btn-raised" onClick={() => setScreen("menu")}>
+            <button
+              className="btn-raised"
+              onClick={() => {
+                playClick();
+                setScreen("menu");
+              }}
+            >
               <Sprite name="home" /> Main Menu{" "}
               <span className="shortcut-hint">[M]</span>
             </button>

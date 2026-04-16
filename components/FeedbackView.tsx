@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useGameStore } from "@/lib/store";
+import { playCorrect, playIncorrect, playClick } from "@/lib/sounds";
 import { Sprite } from "./Sprite";
 import { ResumeViewer } from "./ResumeViewer";
 import styles from "./FeedbackView.module.css";
@@ -13,13 +14,27 @@ export function FeedbackView() {
   const currentIndex = useGameStore((s) => s.currentResumeIndex);
   const [showResume, setShowResume] = useState(false);
 
+  // Play correct/incorrect sound when feedback is shown
+  useEffect(() => {
+    if (lastResult) {
+      if (lastResult.correct) playCorrect();
+      else playIncorrect();
+    }
+  }, [lastResult]);
+
   const isLastResume = currentIndex >= resumes.length - 1;
   const currentResume = resumes[currentIndex];
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Enter") nextResume();
-      if (e.key === "r" || e.key === "R") setShowResume((v) => !v);
+      if (e.key === "Enter") {
+        playClick();
+        nextResume();
+      }
+      if (e.key === "r" || e.key === "R") {
+        playClick();
+        setShowResume((v) => !v);
+      }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
@@ -91,12 +106,21 @@ export function FeedbackView() {
           <div className={styles.actions}>
             <button
               className="btn-raised"
-              onClick={() => setShowResume((v) => !v)}
+              onClick={() => {
+                playClick();
+                setShowResume((v) => !v);
+              }}
             >
               {showResume ? "Hide Resume" : "View Resume"}{" "}
               <span className="shortcut-hint">[R]</span>
             </button>
-            <button className="btn-raised" onClick={nextResume}>
+            <button
+              className="btn-raised"
+              onClick={() => {
+                playClick();
+                nextResume();
+              }}
+            >
               {isLastResume ? "View Case Results" : "Next Resume"}{" "}
               <span className="shortcut-hint">[Enter]</span>
             </button>
