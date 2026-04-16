@@ -20,13 +20,14 @@ export function GameOver() {
   const career = useGameStore((s) => s.career);
   const strikes = useGameStore((s) => s.strikes);
   const difficulty = useGameStore((s) => s.difficulty);
-  const resetGame = useGameStore((s) => s.resetGame);
+  const resetRun = useGameStore((s) => s.resetRun);
   const playerName = useGameStore((s) => s.playerName);
   const setPlayerName = useGameStore((s) => s.setPlayerName);
+  const scoreSubmitted = useGameStore((s) => s.scoreSubmitted);
+  const markScoreSubmitted = useGameStore((s) => s.markScoreSubmitted);
 
-  const [submitState, setSubmitState] = useState<
-    "idle" | "submitting" | "submitted" | "error"
-  >("idle");
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
   const firingReasonRef = useRef(
     firingReasons[Math.floor(Math.random() * firingReasons.length)],
   );
@@ -34,14 +35,16 @@ export function GameOver() {
   const maxStrikes = difficulty ? DIFFICULTY_CONFIG[difficulty].maxStrikes : 0;
   const elapsed = formatElapsed(career.runElapsedMs);
   const canSubmit =
-    submitState === "idle" &&
+    !scoreSubmitted &&
+    !submitting &&
     playerName.trim().length > 0 &&
     career.runElapsedMs != null &&
     difficulty != null;
 
   async function handleSubmit() {
     if (!canSubmit) return;
-    setSubmitState("submitting");
+    setSubmitting(true);
+    setSubmitError(false);
     try {
       await submitScore({
         playerName: playerName.trim(),
@@ -50,9 +53,12 @@ export function GameOver() {
         casesCompleted: career.casesCompleted.length,
         totalScore: career.totalScore,
       });
-      setSubmitState("submitted");
-    } catch {
-      setSubmitState("error");
+      markScoreSubmitted();
+    } catch (err) {
+      console.error("Submit failed:", err);
+      setSubmitError(true);
+    } finally {
+      setSubmitting(false);
     }
   }
 
@@ -93,7 +99,7 @@ export function GameOver() {
             )}
           </div>
 
-          {submitState !== "submitted" && (
+          {!scoreSubmitted && (
             <div className={styles.submitSection}>
               <label className={styles.nameLabel}>
                 Name for leaderboard:
@@ -111,11 +117,9 @@ export function GameOver() {
                 disabled={!canSubmit}
                 onClick={handleSubmit}
               >
-                {submitState === "submitting"
-                  ? "Submitting..."
-                  : "Submit Score"}
+                {submitting ? "Submitting..." : "Submit Score"}
               </button>
-              {submitState === "error" && (
+              {submitError && (
                 <p className={styles.submitError}>
                   Failed to submit. Try again.
                 </p>
@@ -123,12 +127,12 @@ export function GameOver() {
             </div>
           )}
 
-          {submitState === "submitted" && (
+          {scoreSubmitted && (
             <p className={styles.submitSuccess}>Score submitted!</p>
           )}
 
           <div className={styles.buttons}>
-            <button className="btn-raised" onClick={resetGame}>
+            <button className="btn-raised" onClick={resetRun}>
               Try Again
             </button>
             <Link href="/leaderboard" className="btn-raised">

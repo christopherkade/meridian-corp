@@ -57,7 +57,10 @@ export function MainMenu() {
   const startNewCase = useGameStore((s) => s.startNewCase);
   const setScreen = useGameStore((s) => s.setScreen);
   const career = useGameStore((s) => s.career);
+  const runHistory = useGameStore((s) => s.runHistory);
   const nextCaseNumber = career.casesCompleted.length + 1;
+  const hasDashboardData =
+    career.casesCompleted.length > 0 || runHistory.length > 0;
   const [toasts, setToasts] = useState<number[]>([]);
   const router = useRouter();
 
@@ -76,13 +79,13 @@ export function MainMenu() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "s" || e.key === "S") startNewCase();
-      if ((e.key === "d" || e.key === "D") && career.casesCompleted.length > 0)
+      if ((e.key === "d" || e.key === "D") && hasDashboardData)
         setScreen("dashboard");
       if (e.key === "l" || e.key === "L") router.push("/leaderboard");
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [startNewCase, setScreen, career.casesCompleted.length, router]);
+  }, [startNewCase, setScreen, hasDashboardData, router]);
 
   useEffect(() => {
     const interval = setInterval(addToast, 10000);
@@ -153,12 +156,12 @@ export function MainMenu() {
                 : `Start Case ${nextCaseNumber}`}{" "}
               <span className="shortcut-hint">[S]</span>
             </button>
-            {career.casesCompleted.length > 0 && (
+            {hasDashboardData && (
               <button
                 className="btn-raised"
                 onClick={() => setScreen("dashboard")}
               >
-                <Sprite name="chart" /> Career Dashboard{" "}
+                <Sprite name="briefcase" /> Career Dashboard{" "}
                 <span className="shortcut-hint">[D]</span>
               </button>
             )}

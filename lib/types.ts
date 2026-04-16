@@ -86,6 +86,15 @@ export interface CareerStats {
   runElapsedMs: number | null;
 }
 
+export interface RunRecord {
+  id: number;
+  difficulty: Difficulty;
+  career: CareerStats;
+  strikes: number;
+  maxStrikes: number;
+  completedAt: string; // ISO timestamp
+}
+
 export type GameScreen =
   | "menu"
   | "difficulty"

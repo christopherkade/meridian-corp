@@ -1,6 +1,8 @@
 "use client";
 
 import { ReactNode, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useGameStore } from "@/lib/store";
 import { GameScreen } from "@/lib/types";
 import { Sprite } from "./Sprite";
@@ -36,12 +38,15 @@ export function DesktopShell({ children }: DesktopShellProps) {
   const [startMenuOpen, setStartMenuOpen] = useState(false);
   const [notification, setNotification] = useState(notifications[0]);
   const [showResetDialog, setShowResetDialog] = useState(false);
+  const [showResetAllDialog, setShowResetAllDialog] = useState(false);
   const [showAboutDialog, setShowAboutDialog] = useState(false);
   const [showAdminDialog, setShowAdminDialog] = useState(false);
   const [adminPassword, setAdminPassword] = useState("");
   const [adminError, setAdminError] = useState(false);
-  const resetGame = useGameStore((s) => s.resetGame);
+  const resetRun = useGameStore((s) => s.resetRun);
+  const resetAllProgress = useGameStore((s) => s.resetAllProgress);
   const setScreen = useGameStore((s) => s.setScreen);
+  const router = useRouter();
   const showSuspicionMeter = useGameStore((s) => s.showSuspicionMeter);
   const toggleSuspicionMeter = useGameStore((s) => s.toggleSuspicionMeter);
   const showHourglassAnimation = useGameStore((s) => s.showHourglassAnimation);
@@ -228,16 +233,33 @@ export function DesktopShell({ children }: DesktopShellProps) {
                     className={styles.startMenuItem}
                     onClick={() => {
                       setScreen("menu");
+                      router.push("/");
                       setStartMenuOpen(false);
                     }}
                   >
                     <Sprite name="home" /> Main Menu
                   </button>
+                  <Link
+                    className={styles.startMenuItem}
+                    href="/leaderboard"
+                    onClick={() => setStartMenuOpen(false)}
+                  >
+                    <Sprite name="chart" /> Leaderboard
+                  </Link>
                   <div className={styles.menuDivider} />
                   <button
                     className={styles.startMenuItem}
                     onClick={() => {
                       setShowResetDialog(true);
+                      setStartMenuOpen(false);
+                    }}
+                  >
+                    <Sprite name="door" /> File Resignation
+                  </button>
+                  <button
+                    className={styles.startMenuItem}
+                    onClick={() => {
+                      setShowResetAllDialog(true);
                       setStartMenuOpen(false);
                     }}
                   >
@@ -264,7 +286,7 @@ export function DesktopShell({ children }: DesktopShellProps) {
           <Sprite name="speech-bubble" /> {notification}
         </div>
 
-        {/* Reset Confirmation Dialog */}
+        {/* Reset Run Dialog */}
         {showResetDialog && (
           <div
             className={styles.dialogOverlay}
@@ -273,7 +295,7 @@ export function DesktopShell({ children }: DesktopShellProps) {
             <div className={`panel-raised ${styles.dialog}`}>
               <div className={styles.dialogTitle}>
                 <span>
-                  <Sprite name="warning" /> Confirm Reset
+                  <Sprite name="warning" /> Resignation Notice
                 </span>
               </div>
               <div className={styles.dialogContent}>
@@ -281,7 +303,50 @@ export function DesktopShell({ children }: DesktopShellProps) {
                   <Sprite name="warning" size={32} />
                 </p>
                 <p className={styles.dialogText}>
-                  Are you sure you want to reset all career progress?
+                  Are you sure you want to resign from your current position?
+                  <br />
+                  Your run history will be preserved.
+                </p>
+                <div className={styles.dialogButtons}>
+                  <button
+                    className="btn-raised"
+                    onClick={() => {
+                      resetRun();
+                      setShowResetDialog(false);
+                    }}
+                  >
+                    Yes, Resign
+                  </button>
+                  <button
+                    className="btn-raised"
+                    onClick={() => setShowResetDialog(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Reset All Progress Dialog */}
+        {showResetAllDialog && (
+          <div
+            className={styles.dialogOverlay}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={`panel-raised ${styles.dialog}`}>
+              <div className={styles.dialogTitle}>
+                <span>
+                  <Sprite name="warning" /> Confirm Full Reset
+                </span>
+              </div>
+              <div className={styles.dialogContent}>
+                <p className={styles.dialogIcon}>
+                  <Sprite name="warning" size={32} />
+                </p>
+                <p className={styles.dialogText}>
+                  This will erase all career progress and run history.
                   <br />
                   This action cannot be undone.
                 </p>
@@ -289,15 +354,15 @@ export function DesktopShell({ children }: DesktopShellProps) {
                   <button
                     className="btn-raised"
                     onClick={() => {
-                      resetGame();
-                      setShowResetDialog(false);
+                      resetAllProgress();
+                      setShowResetAllDialog(false);
                     }}
                   >
-                    Yes, Reset
+                    Yes, Reset Everything
                   </button>
                   <button
                     className="btn-raised"
-                    onClick={() => setShowResetDialog(false)}
+                    onClick={() => setShowResetAllDialog(false)}
                   >
                     Cancel
                   </button>

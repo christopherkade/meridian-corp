@@ -192,6 +192,7 @@
   font-size: 12px;
   font-family: inherit;
   color: var(--text-primary);
+  text-decoration: none;
 }
 
 .startMenuItem:hover {

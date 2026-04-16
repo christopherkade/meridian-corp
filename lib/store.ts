@@ -12,6 +12,7 @@ import {
   CaseResult,
   Rating,
   Difficulty,
+  RunRecord,
   DIFFICULTY_CONFIG,
 } from "./types";
 import { generateCase } from "./resume-generator";
@@ -54,6 +55,12 @@ interface GameState {
   // Player identity (persisted)
   playerName: string;
 
+  // Run history (persisted)
+  runHistory: RunRecord[];
+
+  // Score submission tracking
+  scoreSubmitted: boolean;
+
   // Actions
   startNewCase: () => void;
   startRun: (difficulty: Difficulty) => void;
@@ -65,7 +72,9 @@ interface GameState {
   toggleSuspicionMeter: () => void;
   toggleHourglassAnimation: () => void;
   timerExpired: () => void;
-  resetGame: () => void;
+  resetRun: () => void;
+  resetAllProgress: () => void;
+  markScoreSubmitted: () => void;
 }
 
 const initialCareer: CareerStats = {
@@ -97,6 +106,8 @@ export const useGameStore = create<GameState>()(
       showSuspicionMeter: false,
       showHourglassAnimation: true,
       playerName: "",
+      runHistory: [],
+      scoreSubmitted: false,
 
       startNewCase: () => {
         const state = get();
@@ -182,6 +193,15 @@ export const useGameStore = create<GameState>()(
           : state.runActiveMs;
 
         if (newStrikes >= maxStrikes) {
+          const updatedCareer = { ...state.career, runElapsedMs: activeMs };
+          const runRecord: RunRecord = {
+            id: state.runHistory.length + 1,
+            difficulty: state.difficulty!,
+            career: updatedCareer,
+            strikes: newStrikes,
+            maxStrikes,
+            completedAt: new Date().toISOString(),
+          };
           set({
             screen: "game-over",
             lastResult: result,
@@ -190,7 +210,8 @@ export const useGameStore = create<GameState>()(
             suspicionLevel: "unclear",
             runActiveMs: activeMs,
             _gameEnteredAt: null,
-            career: { ...state.career, runElapsedMs: activeMs },
+            career: updatedCareer,
+            runHistory: [...state.runHistory, runRecord],
           });
           return;
         }
@@ -330,6 +351,15 @@ export const useGameStore = create<GameState>()(
           : state.runActiveMs;
 
         if (newStrikes >= maxStrikes) {
+          const updatedCareer = { ...state.career, runElapsedMs: activeMs };
+          const runRecord: RunRecord = {
+            id: state.runHistory.length + 1,
+            difficulty: state.difficulty!,
+            career: updatedCareer,
+            strikes: newStrikes,
+            maxStrikes,
+            completedAt: new Date().toISOString(),
+          };
           set({
             screen: "game-over",
             lastResult: result,
@@ -338,7 +368,8 @@ export const useGameStore = create<GameState>()(
             suspicionLevel: "unclear",
             runActiveMs: activeMs,
             _gameEnteredAt: null,
-            career: { ...state.career, runElapsedMs: activeMs },
+            career: updatedCareer,
+            runHistory: [...state.runHistory, runRecord],
           });
           return;
         }
@@ -354,7 +385,7 @@ export const useGameStore = create<GameState>()(
         });
       },
 
-      resetGame: () => {
+      resetRun: () => {
         set({
           screen: "menu",
           difficulty: null,
@@ -370,17 +401,41 @@ export const useGameStore = create<GameState>()(
           runActiveMs: 0,
           _gameEnteredAt: null,
           showSuspicionMeter: false,
+          scoreSubmitted: false,
         });
+      },
+
+      resetAllProgress: () => {
+        set({
+          screen: "menu",
+          difficulty: null,
+          strikes: 0,
+          caseNumber: 0,
+          resumes: [],
+          currentResumeIndex: 0,
+          caseResults: [],
+          suspicionLevel: "unclear",
+          lastResult: null,
+          lastCaseResult: null,
+          career: { ...initialCareer },
+          runActiveMs: 0,
+          _gameEnteredAt: null,
+          showSuspicionMeter: false,
+          scoreSubmitted: false,
+          runHistory: [],
+          playerName: "",
+        });
+      },
+
+      markScoreSubmitted: () => {
+        set({ scoreSubmitted: true });
       },
     }),
     {
       name: "meridian-corp-game",
       partialize: (state) => ({
-        career: state.career,
-        difficulty: state.difficulty,
-        strikes: state.strikes,
-        runActiveMs: state.runActiveMs,
-        _gameEnteredAt: state._gameEnteredAt,
+        runHistory: state.runHistory,
+        playerName: state.playerName,
       }),
     },
   ),

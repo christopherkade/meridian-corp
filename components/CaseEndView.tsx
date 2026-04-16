@@ -119,7 +119,7 @@ export function CaseEndView() {
               className="btn-raised"
               onClick={() => setScreen("dashboard")}
             >
-              <Sprite name="chart" /> Career Dashboard{" "}
+              <Sprite name="briefcase" /> Career Dashboard{" "}
               <span className="shortcut-hint">[D]</span>
             </button>
             <button className="btn-raised" onClick={() => setScreen("menu")}>

@@ -1,63 +1,193 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useGameStore } from "@/lib/store";
+import { CareerStats, RunRecord, DIFFICULTY_CONFIG } from "@/lib/types";
 import { Sprite } from "./Sprite";
 import styles from "./DashboardView.module.css";
 
+function formatElapsed(ms: number | null): string | null {
+  if (ms == null) return null;
+  const totalSeconds = Math.floor(ms / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  if (minutes > 0) return `${minutes}m ${seconds.toString().padStart(2, "0")}s`;
+  return `${seconds}s`;
+}
+
 export function DashboardView() {
-  const career = useGameStore((s) => s.career);
+  const currentCareer = useGameStore((s) => s.career);
+  const runHistory = useGameStore((s) => s.runHistory);
   const setScreen = useGameStore((s) => s.setScreen);
   const startNewCase = useGameStore((s) => s.startNewCase);
+
+  // If there's an active run (cases completed > 0), show it as "Current Run"
+  const hasActiveRun = currentCareer.casesCompleted.length > 0;
+  const totalEntries = runHistory.length + (hasActiveRun ? 1 : 0);
+
+  // Chronological order: oldest run first, current run last
+  // Start at the latest entry (rightmost)
+  const [selectedIndex, setSelectedIndex] = useState(totalEntries - 1);
+
+  const isCurrentRun = hasActiveRun && selectedIndex === totalEntries - 1;
+  const historyIndex = selectedIndex;
+
+  let displayCareer: CareerStats;
+  let displayRun: RunRecord | null = null;
+
+  if (isCurrentRun) {
+    displayCareer = currentCareer;
+  } else if (historyIndex >= 0 && historyIndex < runHistory.length) {
+    displayRun = runHistory[historyIndex];
+    displayCareer = displayRun.career;
+  } else {
+    displayCareer = currentCareer;
+  }
+
+  const runLabel = isCurrentRun
+    ? "Current Run"
+    : displayRun
+      ? `Run #${displayRun.id} — ${DIFFICULTY_CONFIG[displayRun.difficulty].label}`
+      : "No runs yet";
+
+  const elapsed = formatElapsed(displayCareer.runElapsedMs);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "s" || e.key === "S") startNewCase();
       if (e.key === "m" || e.key === "M") setScreen("menu");
+      if (e.key === "ArrowLeft") setSelectedIndex((i) => Math.max(0, i - 1));
+      if (e.key === "ArrowRight")
+        setSelectedIndex((i) => Math.min(totalEntries - 1, i + 1));
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [startNewCase, setScreen]);
+  }, [startNewCase, setScreen, totalEntries]);
+
+  if (totalEntries === 0) {
+    return (
+      <div className={styles.container}>
+        <div className={`panel-raised ${styles.window}`}>
+          <div className={styles.windowTitle}>
+            <span>
+              <Sprite name="briefcase" /> Career Dashboard
+            </span>
+          </div>
+          <div className={styles.windowContent}>
+            <h2 className={styles.heading}>No Runs Yet</h2>
+            <p style={{ textAlign: "center", fontSize: 13 }}>
+              Complete a run to see your performance history here.
+            </p>
+            <div className={styles.buttons}>
+              <button className="btn-raised" onClick={() => setScreen("menu")}>
+                <Sprite name="home" /> Main Menu{" "}
+                <span className="shortcut-hint">[M]</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.container}>
       <div className={`panel-raised ${styles.window}`}>
         <div className={styles.windowTitle}>
           <span>
-            <Sprite name="chart" /> Career Dashboard - Employee Performance
+            <Sprite name="briefcase" /> Career Dashboard - Employee Performance
             Record
           </span>
         </div>
         <div className={styles.windowContent}>
-          <h2 className={styles.heading}>Performance Summary</h2>
+          {/* Run selector */}
+          {totalEntries > 1 && (
+            <div className={styles.runSelector}>
+              <button
+                className="btn-raised"
+                disabled={selectedIndex === 0}
+                onClick={() => setSelectedIndex((i) => i - 1)}
+              >
+                ◀
+              </button>
+              <span className={styles.runLabel}>
+                {runLabel}
+                {displayRun && (
+                  <span className={styles.runDate}>
+                    {" "}
+                    — {new Date(displayRun.completedAt).toLocaleDateString()}
+                  </span>
+                )}
+              </span>
+              <button
+                className="btn-raised"
+                disabled={selectedIndex === totalEntries - 1}
+                onClick={() => setSelectedIndex((i) => i + 1)}
+              >
+                ▶
+              </button>
+            </div>
+          )}
+
+          <h2 className={styles.heading}>
+            {totalEntries <= 1 ? "Performance Summary" : runLabel}
+          </h2>
 
           <div className={`panel-sunken ${styles.statsGrid}`}>
             <div className={styles.stat}>
               <div className={styles.statLabel}>Total Resumes Processed</div>
               <div className={styles.statValue}>
-                {career.totalResumesProcessed}
+                {displayCareer.totalResumesProcessed}
               </div>
             </div>
             <div className={styles.stat}>
               <div className={styles.statLabel}>Total Score</div>
               <div className={styles.statValue}>
-                {career.totalScore.toLocaleString()}
+                {displayCareer.totalScore.toLocaleString()}
               </div>
             </div>
             <div className={styles.stat}>
               <div className={styles.statLabel}>Cases Completed</div>
               <div className={styles.statValue}>
-                {career.casesCompleted.length}
+                {displayCareer.casesCompleted.length}
               </div>
             </div>
             <div className={styles.stat}>
-              <div className={styles.statLabel}>Current Streak</div>
-              <div className={styles.statValue}>{career.currentCaseStreak}</div>
+              <div className={styles.statLabel}>
+                {isCurrentRun ? "Current Streak" : "Run Time"}
+              </div>
+              <div className={styles.statValue}>
+                {isCurrentRun
+                  ? displayCareer.currentCaseStreak
+                  : (elapsed ?? "—")}
+              </div>
             </div>
           </div>
 
+          {displayRun && (
+            <div className={styles.runMeta}>
+              <span>
+                Difficulty:{" "}
+                <strong>
+                  {DIFFICULTY_CONFIG[displayRun.difficulty].label}
+                </strong>
+              </span>
+              <span>
+                Strikes:{" "}
+                <strong>
+                  {displayRun.strikes}/{displayRun.maxStrikes}
+                </strong>
+              </span>
+              {elapsed && (
+                <span>
+                  <Sprite name="stopwatch" /> {elapsed}
+                </span>
+              )}
+            </div>
+          )}
+
           {/* Case history */}
-          {career.casesCompleted.length > 0 && (
+          {displayCareer.casesCompleted.length > 0 && (
             <div className={styles.historySection}>
               <h3 className={styles.subheading}>Case History</h3>
               <div className={`panel-sunken ${styles.table}`}>
@@ -67,7 +197,7 @@ export function DashboardView() {
                   <span>Accuracy</span>
                   <span>Score</span>
                 </div>
-                {career.casesCompleted.map((c) => (
+                {displayCareer.casesCompleted.map((c) => (
                   <div key={c.caseNumber} className={styles.tableRow}>
                     <span>#{c.caseNumber}</span>
                     <span className={styles[`rating${c.rating}`]}>
@@ -93,7 +223,10 @@ export function DashboardView() {
               Dear Employee #{String(Math.floor(Math.random() * 9000) + 1000)},
               <br />
               <br />
-              {getCareerReview(career.casesCompleted.length, career.totalScore)}
+              {getCareerReview(
+                displayCareer.casesCompleted.length,
+                displayCareer.totalScore,
+              )}
               <br />
               <br />
               Your continued employment is appreciated (and under review).
@@ -106,10 +239,12 @@ export function DashboardView() {
           </div>
 
           <div className={styles.buttons}>
-            <button className="btn-raised" onClick={startNewCase}>
-              <Sprite name="folder-open" /> Start Next Case{" "}
-              <span className="shortcut-hint">[S]</span>
-            </button>
+            {isCurrentRun && (
+              <button className="btn-raised" onClick={startNewCase}>
+                <Sprite name="folder-open" /> Start Next Case{" "}
+                <span className="shortcut-hint">[S]</span>
+              </button>
+            )}
             <button className="btn-raised" onClick={() => setScreen("menu")}>
               <Sprite name="home" /> Main Menu{" "}
               <span className="shortcut-hint">[M]</span>

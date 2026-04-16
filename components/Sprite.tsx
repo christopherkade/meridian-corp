@@ -22,6 +22,7 @@ export type SpriteName =
   | "coffee"
   | "stew"
   | "party"
+  | "briefcase"
   | "info";
 
 interface SpriteProps {
