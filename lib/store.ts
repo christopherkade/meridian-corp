@@ -51,6 +51,9 @@ interface GameState {
   showSuspicionMeter: boolean;
   showHourglassAnimation: boolean;
 
+  // Player identity (persisted)
+  playerName: string;
+
   // Actions
   startNewCase: () => void;
   startRun: (difficulty: Difficulty) => void;
@@ -58,6 +61,7 @@ interface GameState {
   nextResume: () => void;
   setSuspicionLevel: (level: SuspicionLevel) => void;
   setScreen: (screen: GameScreen) => void;
+  setPlayerName: (name: string) => void;
   toggleSuspicionMeter: () => void;
   toggleHourglassAnimation: () => void;
   timerExpired: () => void;
@@ -92,6 +96,7 @@ export const useGameStore = create<GameState>()(
       _gameEnteredAt: null,
       showSuspicionMeter: false,
       showHourglassAnimation: true,
+      playerName: "",
 
       startNewCase: () => {
         const state = get();
@@ -281,6 +286,10 @@ export const useGameStore = create<GameState>()(
 
       setScreen: (screen: GameScreen) => {
         set({ screen });
+      },
+
+      setPlayerName: (name: string) => {
+        set({ playerName: name.slice(0, 20) });
       },
 
       toggleSuspicionMeter: () => {

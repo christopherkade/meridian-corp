@@ -1,15 +1,22 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { useGameStore } from "@/lib/store";
 import { DIFFICULTY_CONFIG } from "@/lib/types";
 import { Sprite } from "./Sprite";
 import styles from "./TimerPanel.module.css";
 
+function useTimerDisabled() {
+  const searchParams = useSearchParams();
+  return process.env.NODE_ENV !== "production" && searchParams.has("noTimer");
+}
+
 function TimerPanelInner({ totalSeconds }: { totalSeconds: number }) {
   const screen = useGameStore((s) => s.screen);
   const timerExpired = useGameStore((s) => s.timerExpired);
   const showHourglassAnimation = useGameStore((s) => s.showHourglassAnimation);
+  const timerDisabled = useTimerDisabled();
 
   const [remaining, setRemaining] = useState(totalSeconds);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -17,6 +24,8 @@ function TimerPanelInner({ totalSeconds }: { totalSeconds: number }) {
 
   // Run countdown only on game screen
   useEffect(() => {
+    if (timerDisabled) return;
+
     if (screen !== "game") {
       if (intervalRef.current) clearInterval(intervalRef.current);
       return;
@@ -39,7 +48,7 @@ function TimerPanelInner({ totalSeconds }: { totalSeconds: number }) {
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [screen, timerExpired]);
+  }, [screen, timerExpired, timerDisabled]);
 
   const isLow = remaining <= 3;
 
@@ -63,7 +72,9 @@ function TimerPanelInner({ totalSeconds }: { totalSeconds: number }) {
             {remaining}s
           </span>
         </div>
-        <span className={styles.label}>Time Remaining</span>
+        <span className={styles.label}>
+          {timerDisabled ? "Timer Off" : "Time Remaining"}
+        </span>
       </div>
     </div>
   );

@@ -93,7 +93,8 @@ export type GameScreen =
   | "feedback"
   | "case-end"
   | "dashboard"
-  | "game-over";
+  | "game-over"
+  | "leaderboard";
 
 export type Difficulty = "easy" | "medium" | "hard";
 

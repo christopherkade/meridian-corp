@@ -64,7 +64,48 @@
   gap: 12px;
 }
 
-.buttons button {
+.buttons button,
+.buttons a {
   font-size: 14px;
   padding: 8px 24px;
+  text-decoration: none;
+  text-align: center;
+}
+
+/* Leaderboard submit */
+.submitSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.nameLabel {
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 60%;
+}
+
+.nameInput {
+  font-family: inherit;
+  font-size: 13px;
+  padding: 4px 8px;
+  border: 2px inset var(--border-sunken, #888);
+  background: var(--bg-content);
+}
+
+.submitError {
+  color: var(--color-flag);
+  font-size: 12px;
+  margin: 0;
+}
+
+.submitSuccess {
+  font-size: 13px;
+  color: var(--color-hire);
+  font-weight: bold;
+  margin: 0;
 }

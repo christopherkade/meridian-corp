@@ -1,7 +1,10 @@
 "use client";
 
+import { useState, useRef } from "react";
+import Link from "next/link";
 import { useGameStore } from "@/lib/store";
 import { DIFFICULTY_CONFIG } from "@/lib/types";
+import { submitScore } from "@/lib/leaderboard";
 import { Sprite } from "./Sprite";
 import styles from "./GameOver.module.css";
 
@@ -18,11 +21,40 @@ export function GameOver() {
   const strikes = useGameStore((s) => s.strikes);
   const difficulty = useGameStore((s) => s.difficulty);
   const resetGame = useGameStore((s) => s.resetGame);
+  const playerName = useGameStore((s) => s.playerName);
+  const setPlayerName = useGameStore((s) => s.setPlayerName);
+
+  const [submitState, setSubmitState] = useState<
+    "idle" | "submitting" | "submitted" | "error"
+  >("idle");
+  const firingReasonRef = useRef(
+    firingReasons[Math.floor(Math.random() * firingReasons.length)],
+  );
 
   const maxStrikes = difficulty ? DIFFICULTY_CONFIG[difficulty].maxStrikes : 0;
-  const firingReason =
-    firingReasons[Math.floor(Math.random() * firingReasons.length)];
   const elapsed = formatElapsed(career.runElapsedMs);
+  const canSubmit =
+    submitState === "idle" &&
+    playerName.trim().length > 0 &&
+    career.runElapsedMs != null &&
+    difficulty != null;
+
+  async function handleSubmit() {
+    if (!canSubmit) return;
+    setSubmitState("submitting");
+    try {
+      await submitScore({
+        playerName: playerName.trim(),
+        difficulty: difficulty!,
+        runElapsedMs: career.runElapsedMs!,
+        casesCompleted: career.casesCompleted.length,
+        totalScore: career.totalScore,
+      });
+      setSubmitState("submitted");
+    } catch {
+      setSubmitState("error");
+    }
+  }
 
   return (
     <div className={styles.container}>
@@ -47,7 +79,7 @@ export function GameOver() {
               </strong>{" "}
               strikes.
             </p>
-            <p className={styles.reason}>{firingReason}</p>
+            <p className={styles.reason}>{firingReasonRef.current}</p>
           </div>
 
           <div className={styles.stats}>
@@ -61,10 +93,47 @@ export function GameOver() {
             )}
           </div>
 
+          {submitState !== "submitted" && (
+            <div className={styles.submitSection}>
+              <label className={styles.nameLabel}>
+                Name for leaderboard:
+                <input
+                  className={styles.nameInput}
+                  type="text"
+                  maxLength={20}
+                  value={playerName}
+                  onChange={(e) => setPlayerName(e.target.value)}
+                  placeholder="Enter your name"
+                />
+              </label>
+              <button
+                className="btn-raised"
+                disabled={!canSubmit}
+                onClick={handleSubmit}
+              >
+                {submitState === "submitting"
+                  ? "Submitting..."
+                  : "Submit Score"}
+              </button>
+              {submitState === "error" && (
+                <p className={styles.submitError}>
+                  Failed to submit. Try again.
+                </p>
+              )}
+            </div>
+          )}
+
+          {submitState === "submitted" && (
+            <p className={styles.submitSuccess}>Score submitted!</p>
+          )}
+
           <div className={styles.buttons}>
             <button className="btn-raised" onClick={resetGame}>
               Try Again
             </button>
+            <Link href="/leaderboard" className="btn-raised">
+              <Sprite name="chart" /> Leaderboard
+            </Link>
           </div>
         </div>
       </div>

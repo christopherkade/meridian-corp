@@ -35,8 +35,8 @@ export const categoryAClues: AlienClue[] = [
   {
     category: "A",
     section: "contact",
-    description: "Implausible alien name",
-    apply: (d) => ({ ...d, name: pickRandom(alienNames) }),
+    description: "Suspicious name",
+    apply: (d) => ({ ...d, name: generateAlienName() }),
   },
   {
     category: "A",
@@ -58,6 +58,29 @@ export const categoryAClues: AlienClue[] = [
     section: "contact",
     description: "Location is a planet or star system",
     apply: (d) => ({ ...d, location: pickRandom(alienLocations) }),
+  },
+];
+
+// ============ CATEGORY A2 - Early Skills/Interests Tells ============
+
+export const categoryA2Clues: AlienClue[] = [
+  {
+    category: "A",
+    section: "skills",
+    description: "Oddly basic human skill listed",
+    apply: (d) => ({
+      ...d,
+      skills: [...(d.skills || []), pickRandom(earlyConfusedSkills)],
+    }),
+  },
+  {
+    category: "A",
+    section: "interests",
+    description: "Interest implies unfamiliarity with Earth",
+    apply: (d) => ({
+      ...d,
+      interests: [...(d.interests || []), pickRandom(earlyAlienInterests)],
+    }),
   },
 ];
 
@@ -161,39 +184,109 @@ export const categoryEClues: AlienClue[] = [
 
 // ============ DATA POOLS ============
 
-const alienNames = [
-  "Glorp Xanthium", "Zxq-47 Williams", "Blarvek Tnok", "Kreelix Monder",
-  "Zorb Glorb", "Thraxian P. Smith", "Qweenth Farblox", "Greetok Jones",
-  "Xylph Markosian", "Bleep Zorgon",
+const alienFirstNames = [
+  "Glorp",
+  "Zxq-47",
+  "Blarvek",
+  "Kreelix",
+  "Zorb",
+  "Thraxian",
+  "Qweenth",
+  "Greetok",
+  "Xylph",
+  "Bleep",
 ];
 
+const alienLastNames = [
+  "Xanthium",
+  "Tnok",
+  "Glorb",
+  "Farblox",
+  "Zorgon",
+  "Monder",
+  "Vexlis",
+  "Dranthu",
+  "Krellax",
+  "Plinth",
+];
+
+const humanFirstNames = [
+  "Sarah",
+  "James",
+  "Maria",
+  "David",
+  "Emily",
+  "Michael",
+  "Lisa",
+  "Robert",
+  "Jennifer",
+  "Andrew",
+];
+
+const humanLastNames = [
+  "Mitchell",
+  "Chen",
+  "Rodriguez",
+  "Kim",
+  "Thompson",
+  "O'Brien",
+  "Patel",
+  "Johnson",
+  "Wu",
+  "Martinez",
+];
+
+function generateAlienName(): string {
+  if (Math.random() > 0.5) {
+    return `${pickRandom(humanFirstNames)} ${pickRandom(alienLastNames)}`;
+  }
+  return `${pickRandom(alienFirstNames)} ${pickRandom(humanLastNames)}`;
+}
+
 const alienEmails = [
-  "glorpx@proxima.sol", "zxq47@andromeda.gal", "contact@kepler.sys",
-  "hr.ready@betelgeuse.star", "apply@centauri.net.gx",
+  "glorpx@proxima.sol",
+  "zxq47@andromeda.gal",
+  "contact@kepler.sys",
+  "hr.ready@betelgeuse.star",
+  "apply@centauri.net.gx",
 ];
 
 const alienPhones = [
-  "555-0123-4567-8901", "12-34", "0x3F7A-00B2",
-  "+999 000 0000 0000 0", "7",
+  "555-0123-4567-8901",
+  "12-34",
+  "0x3F7A-00B2",
+  "+999 000 0000 0000 0",
+  "7",
 ];
 
 const alienLocations = [
-  "Proxima Centauri b", "Kepler-442b", "Sector 7G, Andromeda",
-  "Betelgeuse Orbital Station", "Mars Colony 12",
-  "Gliese 667Cc", "Trappist-1e",
+  "Proxima Centauri b",
+  "Kepler-442b",
+  "Sector 7G, Andromeda",
+  "Betelgeuse Orbital Station",
+  "Mars Colony 12",
+  "Gliese 667Cc",
+  "Trappist-1e",
 ];
 
 const alienJobTitles = [
-  "Senior Oxygen Analyst", "Lead Human Observer",
-  "Coordinator of Mammalian Activities", "Junior Atmosphere Sampler",
-  "Chief Bipedal Locomotion Researcher", "Terran Integration Specialist",
-  "Gravity Adjustment Technician", "Planetary Infiltration Associate",
+  "Senior Oxygen Analyst",
+  "Lead Human Observer",
+  "Coordinator of Mammalian Activities",
+  "Junior Atmosphere Sampler",
+  "Chief Bipedal Locomotion Researcher",
+  "Terran Integration Specialist",
+  "Gravity Adjustment Technician",
+  "Planetary Infiltration Associate",
 ];
 
 const alienCompanies = [
-  "Galactic Resources Inc.", "Earth Branch Office - TBD",
-  "Xelnar Consolidated", "Human-Observing Solutions Ltd.",
-  "Proxima Ventures Earth Division", "Terran Assessment Bureau",
+  "Galactic Resources Inc.",
+  "Earth Branch Office - TBD",
+  "Xelnar Consolidated",
+  "Human-Observing Solutions Ltd.",
+  "Proxima Ventures Earth Division",
+  "Terran Assessment Bureau",
 ];
 
 const alienBullets = [
@@ -207,9 +300,12 @@ const alienBullets = [
 ];
 
 const alienUniversities = [
-  "University of Northern Proxima", "Galactic Institute of Applied Biology",
-  "Centauri Academy of Terran Studies", "Kepler School of Business",
-  "Betelgeuse Community College", "Andromeda State University",
+  "University of Northern Proxima",
+  "Galactic Institute of Applied Biology",
+  "Centauri Academy of Terran Studies",
+  "Kepler School of Business",
+  "Betelgeuse Community College",
+  "Andromeda State University",
 ];
 
 const alienDegrees = [
@@ -221,20 +317,27 @@ const alienDegrees = [
 ];
 
 const alienLanguages = [
-  "Fluent in Kzinti", "Conversational Grblchk",
-  "Native Xylophan", "Intermediate Thraxese",
+  "Fluent in Kzinti",
+  "Conversational Grblchk",
+  "Native Xylophan",
+  "Intermediate Thraxese",
   "Basic Zenthari Dialect",
 ];
 
 const alienSkills = [
-  "Xenoform data parsing", "Atmospheric recombination",
-  "Interstellar navigation (basic)", "Quantum field manipulation",
-  "Mass memory suppression", "Undetected movement",
+  "Xenoform data parsing",
+  "Atmospheric recombination",
+  "Interstellar navigation (basic)",
+  "Quantum field manipulation",
+  "Mass memory suppression",
+  "Undetected movement",
 ];
 
 const confusedSkills = [
-  "Breathing (Advanced)", "Bipedal walking (Proficient)",
-  "Consuming Earth food (Intermediate)", "Blinking at normal intervals",
+  "Breathing (Advanced)",
+  "Bipedal walking (Proficient)",
+  "Consuming Earth food (Intermediate)",
+  "Blinking at normal intervals",
   "Maintaining body temperature (Expert)",
 ];
 
@@ -252,6 +355,24 @@ const oddLocalSkills = [
   "Local atmospheric tolerance",
 ];
 
+const earlyConfusedSkills = [
+  "Handshaking (Certified)",
+  "Sitting in chairs (Proficient)",
+  "Using door handles",
+  "Verbal greeting protocols",
+  "Maintaining eye contact (Intermediate)",
+  "Water drinking (Advanced)",
+];
+
+const earlyAlienInterests = [
+  "learning about human holidays",
+  "exploring the concept of weekends",
+  "understanding currency exchange",
+  "trying different Earth beverages",
+  "researching domestic pet ownership",
+  "adjusting to seasonal weather patterns",
+];
+
 // ============ UTILITY ============
 
 function pickRandom<T>(arr: T[]): T {
@@ -260,7 +381,8 @@ function pickRandom<T>(arr: T[]): T {
 
 export function getCluesForTier(tier: number): AlienClue[] {
   const available: AlienClue[] = [];
-  if (tier >= 1) available.push(...categoryAClues, ...categoryBClues);
+  if (tier >= 1)
+    available.push(...categoryAClues, ...categoryA2Clues, ...categoryBClues);
   if (tier >= 2) available.push(...categoryCClues);
   if (tier >= 3) available.push(...categoryDClues);
   if (tier >= 4) available.push(...categoryEClues);
