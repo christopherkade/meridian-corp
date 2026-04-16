@@ -158,7 +158,11 @@ export function GameOver() {
             >
               Try Again
             </button>
-            <Link href="/leaderboard" className="btn-raised">
+            <Link
+              href="/leaderboard"
+              className="btn-raised"
+              onClick={() => playClick()}
+            >
               <Sprite name="chart" /> Leaderboard
             </Link>
           </div>

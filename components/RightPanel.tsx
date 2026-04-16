@@ -105,7 +105,10 @@ export function RightPanel() {
                         ? styles.meterHuman
                         : styles.meterNeutral
                   }`}
-                  onClick={() => setSuspicionLevel(level)}
+                  onClick={() => {
+                    playClick();
+                    setSuspicionLevel(level);
+                  }}
                 >
                   {suspicionLevel === level && "▸ "}
                   {label}

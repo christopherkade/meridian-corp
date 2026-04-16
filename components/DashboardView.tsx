@@ -124,7 +124,10 @@ export function DashboardView() {
               <button
                 className="btn-raised"
                 disabled={selectedIndex === 0}
-                onClick={() => setSelectedIndex((i) => i - 1)}
+                onClick={() => {
+                  playClick();
+                  setSelectedIndex((i) => i - 1);
+                }}
               >
                 ◀
               </button>
@@ -140,7 +143,10 @@ export function DashboardView() {
               <button
                 className="btn-raised"
                 disabled={selectedIndex === totalEntries - 1}
-                onClick={() => setSelectedIndex((i) => i + 1)}
+                onClick={() => {
+                  playClick();
+                  setSelectedIndex((i) => i + 1);
+                }}
               >
                 ▶
               </button>

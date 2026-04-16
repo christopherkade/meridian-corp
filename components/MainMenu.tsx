@@ -113,9 +113,10 @@ export function MainMenu() {
                 </span>
                 <button
                   className={styles.toastClose}
-                  onClick={() =>
-                    setToasts((prev) => prev.filter((_, j) => j !== i))
-                  }
+                  onClick={() => {
+                    playClick();
+                    setToasts((prev) => prev.filter((_, j) => j !== i));
+                  }}
                 >
                   ✕
                 </button>
@@ -183,7 +184,11 @@ export function MainMenu() {
                 <span className="shortcut-hint">[D]</span>
               </button>
             )}
-            <Link href="/leaderboard" className="btn-raised">
+            <Link
+              href="/leaderboard"
+              className="btn-raised"
+              onClick={() => playClick()}
+            >
               <Sprite name="chart" /> Leaderboard{" "}
               <span className="shortcut-hint">[L]</span>
             </Link>

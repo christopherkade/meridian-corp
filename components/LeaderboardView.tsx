@@ -80,7 +80,10 @@ export function LeaderboardView() {
               <button
                 key={d}
                 className={`${styles.tab} ${tab === d ? styles.tabActive : ""}`}
-                onClick={() => setTab(d)}
+                onClick={() => {
+                  playClick();
+                  setTab(d);
+                }}
               >
                 {DIFFICULTY_LABELS[d]}
               </button>
@@ -140,7 +143,7 @@ export function LeaderboardView() {
             >
               <Sprite name="party" /> Employee of the Day
             </Link>
-            <Link href="/" className="btn-raised">
+            <Link href="/" className="btn-raised" onClick={() => playClick()}>
               Back to Menu <span className="shortcut-hint">[M]</span>
             </Link>
           </div>
