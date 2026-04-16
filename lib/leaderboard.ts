@@ -59,12 +59,6 @@ export async function fetchLeaderboard(
     );
     throw new Error("Failed to fetch leaderboard.");
   }
-  console.log(
-    "[Leaderboard] Fetched",
-    data?.length ?? 0,
-    "entries for",
-    difficulty,
-  );
   const entries = data ?? [];
   leaderboardCache.set(difficulty, {
     data: entries,
@@ -104,33 +98,32 @@ export async function submitScore(params: {
     throw new Error("Invalid score.");
   }
 
-  const { data, error } = await getSupabase()
-    .from("leaderboard")
-    .insert({
-      player_name: trimmed,
-      difficulty,
-      run_elapsed_ms: Math.floor(runElapsedMs),
-      cases_completed: casesCompleted,
-      total_score: totalScore,
-    })
-    .select("id")
-    .single();
+  const payload = {
+    playerName: trimmed,
+    difficulty,
+    runElapsedMs: Math.floor(runElapsedMs),
+    casesCompleted,
+    totalScore,
+  };
 
-  if (error) {
-    console.error(
-      "[Leaderboard] Submit error:",
-      error.message,
-      error.code,
-      error.details,
-    );
-    throw new Error("Failed to submit score.");
+  const { data: fnData, error: fnError } = await getSupabase().functions.invoke(
+    "submit-score",
+    { body: payload },
+  );
+
+  if (fnError) {
+    console.error("[Leaderboard] Edge Function error:", fnError);
+    // fnError.context may contain the Response with status/body
+    throw new Error(fnError.message || "Failed to submit score.");
   }
+
+  const json = fnData;
 
   // Invalidate caches so the new score is visible immediately
   leaderboardCache.delete(difficulty);
   eotdCache = null;
 
-  return data.id;
+  return json.id;
 }
 
 export async function fetchEmployeesOfTheDay(): Promise<

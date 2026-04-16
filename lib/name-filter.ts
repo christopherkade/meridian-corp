@@ -22,12 +22,6 @@ export function validateName(name: string): string | null {
   }
 
   const hasMatch = matcher.hasMatch(name);
-  console.log(
-    "[name-filter] validateName:",
-    JSON.stringify(name),
-    "hasMatch:",
-    hasMatch,
-  );
 
   if (hasMatch) {
     return "That name contains inappropriate language.";
