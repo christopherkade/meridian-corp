@@ -41,7 +41,8 @@ export function LeaderboardView() {
     try {
       const data = await fetchLeaderboardData(difficulty);
       setEntries(data);
-    } catch {
+    } catch (err) {
+      console.error("[LeaderboardView] Load failed:", err);
       setError("Could not load leaderboard. Try again later.");
       setEntries([]);
     } finally {

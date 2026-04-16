@@ -27,7 +27,21 @@ export async function fetchLeaderboard(
     .order("run_elapsed_ms", { ascending: true })
     .limit(100);
 
-  if (error) throw new Error("Failed to fetch leaderboard.");
+  if (error) {
+    console.error(
+      "[Leaderboard] Fetch error:",
+      error.message,
+      error.code,
+      error.details,
+    );
+    throw new Error("Failed to fetch leaderboard.");
+  }
+  console.log(
+    "[Leaderboard] Fetched",
+    data?.length ?? 0,
+    "entries for",
+    difficulty,
+  );
   return data ?? [];
 }
 
@@ -70,6 +84,14 @@ export async function submitScore(params: {
     .select("id")
     .single();
 
-  if (error) throw new Error("Failed to submit score.");
+  if (error) {
+    console.error(
+      "[Leaderboard] Submit error:",
+      error.message,
+      error.code,
+      error.details,
+    );
+    throw new Error("Failed to submit score.");
+  }
   return data.id;
 }
