@@ -23,14 +23,9 @@ const easterEggs: EasterEgg[] = [
     icon: "paperclip",
     text: "It looks like you're procrastinating. Would you like help?",
   },
-  { icon: "lock", text: "Your session will expire in ∞ minutes." },
   {
     icon: "satellite",
     text: 'Signal received from Sector 7G: "Please hire me."',
-  },
-  {
-    icon: "clipboard",
-    text: "New policy: All résumés must be reviewed upside down on Tuesdays.",
   },
   {
     icon: "coffee",

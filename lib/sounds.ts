@@ -136,3 +136,28 @@ export function playNotification() {
   playTone(600, 0.08, "square", 0.08);
   playTone(900, 0.1, "square", 0.08, 0.07);
 }
+
+/** Tiny typewriter click — Win95 letter-by-letter text sound. */
+export function playTypeClick() {
+  if (isMuted()) return;
+  unlock();
+  const ctx = getCtx();
+  // Slight random pitch variation for natural feel
+  const freq = 1200 + Math.random() * 400;
+  playTone(freq, 0.02, "square", 0.04);
+  // Tiny noise burst layered on top
+  const bufferSize = Math.floor(ctx.sampleRate * 0.012);
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = Math.random() * 2 - 1;
+  }
+  const source = ctx.createBufferSource();
+  const gain = ctx.createGain();
+  source.buffer = buffer;
+  gain.gain.setValueAtTime(0.06, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.012);
+  source.connect(gain);
+  gain.connect(ctx.destination);
+  source.start();
+}

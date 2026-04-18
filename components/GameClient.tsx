@@ -9,19 +9,28 @@ import { FeedbackView } from "@/components/FeedbackView";
 import { CaseEndView } from "@/components/CaseEndView";
 import { DashboardView } from "@/components/DashboardView";
 import { GameOver } from "@/components/GameOver";
+import { Watercooler } from "@/components/Watercooler";
 
 export default function GameClient() {
   const screen = useGameStore((s) => s.screen);
+  const showWatercooler = useGameStore((s) => s.showWatercooler);
+  const dismissWatercooler = useGameStore((s) => s.dismissWatercooler);
 
   return (
     <DesktopShell>
-      {screen === "menu" && <MainMenu />}
-      {screen === "difficulty" && <DifficultySelect />}
-      {screen === "game" && <GameView />}
-      {screen === "feedback" && <FeedbackView />}
-      {screen === "case-end" && <CaseEndView />}
-      {screen === "dashboard" && <DashboardView />}
-      {screen === "game-over" && <GameOver />}
+      {showWatercooler ? (
+        <Watercooler onDismiss={dismissWatercooler} />
+      ) : (
+        <>
+          {screen === "menu" && <MainMenu />}
+          {screen === "difficulty" && <DifficultySelect />}
+          {screen === "game" && <GameView />}
+          {screen === "feedback" && <FeedbackView />}
+          {screen === "case-end" && <CaseEndView />}
+          {screen === "dashboard" && <DashboardView />}
+          {screen === "game-over" && <GameOver />}
+        </>
+      )}
     </DesktopShell>
   );
 }

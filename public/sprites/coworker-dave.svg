@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" shape-rendering="crispEdges">
+  <!-- Dave from Accounting: balding, glasses, tie, pocket protector -->
+  <!-- Hair (balding - thin strip on sides) -->
+  <rect x="10" y="4" width="2" height="3" fill="#8B6914"/>
+  <rect x="20" y="4" width="2" height="3" fill="#8B6914"/>
+  <!-- Head -->
+  <rect x="11" y="5" width="10" height="8" fill="#F5D0A9"/>
+  <rect x="10" y="6" width="1" height="6" fill="#F5D0A9"/>
+  <rect x="21" y="6" width="1" height="6" fill="#E8B88A"/>
+  <!-- Eyes -->
+  <rect x="13" y="7" width="2" height="2" fill="#FFFFFF"/>
+  <rect x="14" y="8" width="1" height="1" fill="#333333"/>
+  <rect x="17" y="7" width="2" height="2" fill="#FFFFFF"/>
+  <rect x="18" y="8" width="1" height="1" fill="#333333"/>
+  <!-- Glasses (thick frames) -->
+  <rect x="12" y="6" width="4" height="1" fill="#333333"/>
+  <rect x="12" y="7" width="1" height="2" fill="#333333"/>
+  <rect x="15" y="7" width="2" height="1" fill="#333333"/>
+  <rect x="16" y="6" width="4" height="1" fill="#333333"/>
+  <rect x="19" y="7" width="1" height="2" fill="#333333"/>
+  <rect x="12" y="9" width="4" height="1" fill="#333333"/>
+  <rect x="16" y="9" width="4" height="1" fill="#333333"/>
+  <!-- Mouth (small smile) -->
+  <rect x="14" y="11" width="4" height="1" fill="#C07060"/>
+  <!-- Neck -->
+  <rect x="14" y="13" width="4" height="2" fill="#F5D0A9"/>
+  <!-- Shirt collar -->
+  <rect x="12" y="15" width="3" height="2" fill="#FFFFFF"/>
+  <rect x="17" y="15" width="3" height="2" fill="#FFFFFF"/>
+  <!-- Tie (boring brown) -->
+  <rect x="15" y="15" width="2" height="1" fill="#6B4226"/>
+  <rect x="15" y="16" width="2" height="1" fill="#6B4226"/>
+  <rect x="15" y="17" width="2" height="4" fill="#6B4226"/>
+  <rect x="15" y="21" width="2" height="1" fill="#4A2E17"/>
+  <!-- Shirt body (light blue dress shirt) -->
+  <rect x="8" y="17" width="7" height="10" fill="#C8D8F0"/>
+  <rect x="17" y="17" width="7" height="10" fill="#B0C0D8"/>
+  <!-- Shoulders -->
+  <rect x="6" y="18" width="2" height="8" fill="#C8D8F0"/>
+  <rect x="24" y="18" width="2" height="8" fill="#B0C0D8"/>
+  <!-- Pocket protector with pens -->
+  <rect x="18" y="19" width="4" height="4" fill="#A8B8D0"/>
+  <rect x="19" y="17" width="1" height="3" fill="#333399"/>
+  <rect x="20" y="18" width="1" height="2" fill="#CC0000"/>
+  <rect x="21" y="17" width="1" height="3" fill="#006600"/>
+  <!-- Bottom -->
+  <rect x="6" y="26" width="20" height="6" fill="#C8D8F0"/>
+</svg>

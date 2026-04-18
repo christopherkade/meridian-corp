@@ -24,6 +24,7 @@ export type SpriteName =
   | "party"
   | "briefcase"
   | "info"
+  | "coworker"
   | "trophy-gold"
   | "trophy-silver"
   | "trophy-bronze";

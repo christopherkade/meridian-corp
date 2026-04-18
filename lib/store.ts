@@ -62,6 +62,9 @@ interface GameState {
   // Score submission tracking
   scoreSubmitted: boolean;
 
+  // Watercooler (shown at start of each case)
+  showWatercooler: boolean;
+
   // Actions
   startNewCase: () => void;
   startRun: (difficulty: Difficulty) => void;
@@ -74,6 +77,7 @@ interface GameState {
   toggleHourglassAnimation: () => void;
   toggleSound: () => void;
   timerExpired: () => void;
+  dismissWatercooler: () => void;
   resetRun: () => void;
   resetAllProgress: () => void;
   markScoreSubmitted: () => void;
@@ -111,6 +115,7 @@ export const useGameStore = create<GameState>()(
       playerName: "",
       runHistory: [],
       scoreSubmitted: false,
+      showWatercooler: false,
 
       startNewCase: () => {
         const state = get();
@@ -122,7 +127,6 @@ export const useGameStore = create<GameState>()(
         const nextCase = state.career.casesCompleted.length + 1;
         const resumes = generateCase(nextCase);
         set({
-          screen: "game",
           caseNumber: nextCase,
           resumes,
           currentResumeIndex: 0,
@@ -130,7 +134,7 @@ export const useGameStore = create<GameState>()(
           suspicionLevel: "unclear",
           lastResult: null,
           lastCaseResult: null,
-          _gameEnteredAt: Date.now(),
+          showWatercooler: true,
         });
       },
 
@@ -149,6 +153,7 @@ export const useGameStore = create<GameState>()(
           lastCaseResult: null,
           career: { ...initialCareer },
           runActiveMs: 0,
+          showWatercooler: false,
           _gameEnteredAt: Date.now(),
         });
       },
@@ -304,6 +309,14 @@ export const useGameStore = create<GameState>()(
         }
       },
 
+      dismissWatercooler: () => {
+        set({
+          showWatercooler: false,
+          screen: "game",
+          _gameEnteredAt: Date.now(),
+        });
+      },
+
       setSuspicionLevel: (level: SuspicionLevel) => {
         set({ suspicionLevel: level });
       },
@@ -409,6 +422,7 @@ export const useGameStore = create<GameState>()(
           _gameEnteredAt: null,
           showSuspicionMeter: false,
           scoreSubmitted: false,
+          showWatercooler: false,
         });
       },
 
@@ -431,6 +445,7 @@ export const useGameStore = create<GameState>()(
           scoreSubmitted: false,
           runHistory: [],
           playerName: "",
+          showWatercooler: false,
         });
       },
 

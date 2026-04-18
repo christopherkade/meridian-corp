@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" shape-rendering="crispEdges">
+  <!-- Linda from Legal: shoulder-length dark hair, pearl earrings, blazer -->
+  <!-- Hair -->
+  <rect x="10" y="2" width="12" height="3" fill="#1A1A2E"/>
+  <rect x="9" y="3" width="1" height="10" fill="#1A1A2E"/>
+  <rect x="22" y="3" width="1" height="10" fill="#1A1A2E"/>
+  <rect x="8" y="8" width="1" height="7" fill="#1A1A2E"/>
+  <rect x="23" y="8" width="1" height="7" fill="#1A1A2E"/>
+  <!-- Head -->
+  <rect x="11" y="5" width="10" height="8" fill="#D4A574"/>
+  <rect x="10" y="6" width="1" height="6" fill="#D4A574"/>
+  <rect x="21" y="6" width="1" height="6" fill="#C08B5C"/>
+  <!-- Eyes -->
+  <rect x="13" y="7" width="2" height="2" fill="#FFFFFF"/>
+  <rect x="14" y="8" width="1" height="1" fill="#2C5F2D"/>
+  <rect x="17" y="7" width="2" height="2" fill="#FFFFFF"/>
+  <rect x="18" y="8" width="1" height="1" fill="#2C5F2D"/>
+  <!-- Eyelashes -->
+  <rect x="13" y="7" width="2" height="1" fill="#1A1A2E"/>
+  <rect x="17" y="7" width="2" height="1" fill="#1A1A2E"/>
+  <rect x="13" y="8" width="1" height="1" fill="#FFFFFF"/>
+  <rect x="17" y="8" width="1" height="1" fill="#FFFFFF"/>
+  <!-- Mouth (lipstick) -->
+  <rect x="14" y="11" width="4" height="1" fill="#CC4444"/>
+  <!-- Pearl earrings -->
+  <rect x="10" y="10" width="1" height="1" fill="#FFFDD0"/>
+  <rect x="21" y="10" width="1" height="1" fill="#FFFDD0"/>
+  <!-- Neck -->
+  <rect x="14" y="13" width="4" height="2" fill="#D4A574"/>
+  <!-- Blazer (dark navy) -->
+  <rect x="8" y="15" width="7" height="12" fill="#2C2C54"/>
+  <rect x="17" y="15" width="7" height="12" fill="#222244"/>
+  <!-- Shoulders -->
+  <rect x="6" y="16" width="2" height="10" fill="#2C2C54"/>
+  <rect x="24" y="16" width="2" height="10" fill="#222244"/>
+  <!-- Blouse (white V-neck visible) -->
+  <rect x="14" y="15" width="4" height="3" fill="#FFFFFF"/>
+  <rect x="15" y="18" width="2" height="2" fill="#FFFFFF"/>
+  <!-- Lapels -->
+  <rect x="13" y="15" width="1" height="4" fill="#3C3C6C"/>
+  <rect x="18" y="15" width="1" height="4" fill="#3C3C6C"/>
+  <!-- Bottom -->
+  <rect x="6" y="26" width="20" height="6" fill="#2C2C54"/>
+</svg>

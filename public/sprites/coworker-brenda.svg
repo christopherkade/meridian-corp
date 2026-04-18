@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" shape-rendering="crispEdges">
+  <!-- Brenda from Marketing: curly blonde hair, bright blouse, big smile -->
+  <!-- Curly hair (voluminous) -->
+  <rect x="9" y="1" width="14" height="2" fill="#E8C840"/>
+  <rect x="8" y="2" width="2" height="4" fill="#E8C840"/>
+  <rect x="22" y="2" width="2" height="4" fill="#E8C840"/>
+  <rect x="10" y="3" width="12" height="2" fill="#D4B830"/>
+  <rect x="8" y="6" width="2" height="4" fill="#E8C840"/>
+  <rect x="22" y="6" width="2" height="4" fill="#E8C840"/>
+  <rect x="7" y="4" width="1" height="3" fill="#E8C840"/>
+  <rect x="24" y="4" width="1" height="3" fill="#E8C840"/>
+  <!-- Head -->
+  <rect x="11" y="5" width="10" height="8" fill="#FFDCB5"/>
+  <rect x="10" y="6" width="1" height="6" fill="#FFDCB5"/>
+  <rect x="21" y="6" width="1" height="6" fill="#E8C8A0"/>
+  <!-- Eyes -->
+  <rect x="13" y="7" width="2" height="2" fill="#FFFFFF"/>
+  <rect x="14" y="8" width="1" height="1" fill="#6B4226"/>
+  <rect x="17" y="7" width="2" height="2" fill="#FFFFFF"/>
+  <rect x="18" y="8" width="1" height="1" fill="#6B4226"/>
+  <!-- Eyelashes -->
+  <rect x="13" y="7" width="2" height="1" fill="#6B4226"/>
+  <rect x="17" y="7" width="2" height="1" fill="#6B4226"/>
+  <rect x="13" y="8" width="1" height="1" fill="#FFFFFF"/>
+  <rect x="17" y="8" width="1" height="1" fill="#FFFFFF"/>
+  <!-- Big smile -->
+  <rect x="13" y="11" width="6" height="1" fill="#CC5555"/>
+  <rect x="14" y="12" width="4" height="1" fill="#FFFFFF"/>
+  <!-- Blush -->
+  <rect x="11" y="10" width="2" height="1" fill="#FFB8B8"/>
+  <rect x="19" y="10" width="2" height="1" fill="#FFB8B8"/>
+  <!-- Neck -->
+  <rect x="14" y="13" width="4" height="2" fill="#FFDCB5"/>
+  <!-- Bright blouse (coral/pink) -->
+  <rect x="8" y="15" width="7" height="12" fill="#FF6B6B"/>
+  <rect x="17" y="15" width="7" height="12" fill="#E85555"/>
+  <!-- Shoulders -->
+  <rect x="6" y="16" width="2" height="10" fill="#FF6B6B"/>
+  <rect x="24" y="16" width="2" height="10" fill="#E85555"/>
+  <!-- Neckline -->
+  <rect x="14" y="15" width="4" height="2" fill="#FFDCB5"/>
+  <rect x="15" y="17" width="2" height="1" fill="#FF6B6B"/>
+  <!-- Necklace -->
+  <rect x="13" y="15" width="1" height="1" fill="#FFD700"/>
+  <rect x="18" y="15" width="1" height="1" fill="#FFD700"/>
+  <rect x="15" y="17" width="1" height="1" fill="#FFD700"/>
+  <!-- Bottom -->
+  <rect x="6" y="26" width="20" height="6" fill="#FF6B6B"/>
+</svg>
