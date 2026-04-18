@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useGameStore } from "@/lib/store";
-import { SuspicionLevel, DIFFICULTY_CONFIG } from "@/lib/types";
-import { playClick } from "@/lib/sounds";
+import { Decision, SuspicionLevel, DIFFICULTY_CONFIG } from "@/lib/types";
+import { playClick, playTimerWarning } from "@/lib/sounds";
 import { Sprite } from "./Sprite";
 import styles from "./RightPanel.module.css";
 
@@ -15,36 +15,110 @@ const suspicionLevels: { level: SuspicionLevel; label: string }[] = [
   { level: "definitely-alien", label: "Definitely Alien" },
 ];
 
-export function RightPanel() {
+interface RightPanelProps {
+  onDecision?: (decision: Decision) => void;
+  disabled?: boolean;
+}
+
+/** Compact mobile-only timer that mirrors TimerPanel countdown. */
+function MobileInfoBar() {
+  const difficulty = useGameStore((s) => s.difficulty);
+  const screen = useGameStore((s) => s.screen);
+  const currentIndex = useGameStore((s) => s.currentResumeIndex);
+  const resumes = useGameStore((s) => s.resumes);
+  const caseNumber = useGameStore((s) => s.caseNumber);
+  const timerExpired = useGameStore((s) => s.timerExpired);
+
+  const totalSeconds = difficulty
+    ? DIFFICULTY_CONFIG[difficulty].timerSeconds
+    : 10;
+
+  const [remaining, setRemaining] = useState(totalSeconds);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const expiredRef = useRef(false);
+
+  // Reset timer when resume changes
+  useEffect(() => {
+    setRemaining(totalSeconds);
+    expiredRef.current = false;
+  }, [currentIndex, totalSeconds]);
+
+  useEffect(() => {
+    if (screen !== "game") {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      return;
+    }
+
+    intervalRef.current = setInterval(() => {
+      setRemaining((prev) => {
+        if (prev <= 1) {
+          if (intervalRef.current) clearInterval(intervalRef.current);
+          if (!expiredRef.current) {
+            expiredRef.current = true;
+            setTimeout(() => timerExpired(), 0);
+          }
+          return 0;
+        }
+        if (prev === 4) playTimerWarning();
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+  }, [screen, timerExpired, currentIndex]);
+
+  const isLow = remaining <= 3;
+
+  return (
+    <div className={styles.mobileInfo}>
+      <span className={styles.mobileCase}>
+        Case #{caseNumber} — {currentIndex + 1}/{resumes.length}
+      </span>
+      <span
+        className={`${styles.mobileTimer} ${isLow ? styles.mobileTimerLow : ""}`}
+      >
+        <Sprite name="stopwatch" /> {remaining}s
+      </span>
+    </div>
+  );
+}
+
+export function RightPanel({ onDecision, disabled }: RightPanelProps) {
   const makeDecision = useGameStore((s) => s.makeDecision);
   const resumes = useGameStore((s) => s.resumes);
   const currentIndex = useGameStore((s) => s.currentResumeIndex);
-  const caseResults = useGameStore((s) => s.caseResults);
-  const strikes = useGameStore((s) => s.strikes);
-  const difficulty = useGameStore((s) => s.difficulty);
 
-  const maxStrikes = difficulty ? DIFFICULTY_CONFIG[difficulty].maxStrikes : 0;
-  const correctCount = caseResults.filter((r) => r.correct).length;
+  const handleDecision = (decision: Decision) => {
+    if (disabled) return;
+    if (onDecision) {
+      onDecision(decision);
+    } else {
+      playClick();
+      makeDecision(decision);
+    }
+  };
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (disabled) return;
       if (
         e.target instanceof HTMLTextAreaElement ||
         e.target instanceof HTMLInputElement
       )
         return;
       if (e.key === "h" || e.key === "H") {
-        playClick();
-        makeDecision("hire");
+        handleDecision("hire");
       }
       if (e.key === "f" || e.key === "F") {
-        playClick();
-        makeDecision("flag");
+        handleDecision("flag");
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [makeDecision]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [makeDecision, onDecision, disabled]);
 
   return (
     <div className={`panel-raised ${styles.container}`}>
@@ -55,53 +129,20 @@ export function RightPanel() {
       </div>
 
       <div className={styles.content}>
-        {/* Score so far */}
-        <div className={styles.scoreBox}>
-          <div className={styles.scoreLabel}>Accuracy</div>
-          <div className={styles.scoreValue}>
-            {currentIndex > 0
-              ? `${correctCount}/${currentIndex} (${Math.round((correctCount / currentIndex) * 100)}%)`
-              : "-"}
-          </div>
-        </div>
-
-        {/* Strikes */}
-        {difficulty && (
-          <div className={styles.strikesBox}>
-            <div className={styles.scoreLabel}>Strikes</div>
-            <div className={styles.strikesVisual}>
-              {Array.from({ length: maxStrikes }).map((_, i) => (
-                <span
-                  key={i}
-                  className={`${styles.strikeIcon} ${i < strikes ? styles.strikeUsed : ""}`}
-                >
-                  {i < strikes ? "✕" : "○"}
-                </span>
-              ))}
-            </div>
-            <div className={styles.strikesCount}>
-              {strikes}/{maxStrikes}
-            </div>
-          </div>
-        )}
-
+        <MobileInfoBar />
         {/* Decision Buttons */}
         <div className={styles.decisions}>
           <button
             className={`${styles.hireButton}`}
-            onClick={() => {
-              playClick();
-              makeDecision("hire");
-            }}
+            disabled={disabled}
+            onClick={() => handleDecision("hire")}
           >
             HIRE <span className="shortcut-hint">[H]</span>
           </button>
           <button
             className={`${styles.flagButton}`}
-            onClick={() => {
-              playClick();
-              makeDecision("flag");
-            }}
+            disabled={disabled}
+            onClick={() => handleDecision("flag")}
           >
             FLAG AS ALIEN <span className="shortcut-hint">[F]</span>
           </button>

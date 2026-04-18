@@ -196,12 +196,6 @@ export function DashboardView() {
                   {DIFFICULTY_CONFIG[displayRun.difficulty].label}
                 </strong>
               </span>
-              <span>
-                Strikes:{" "}
-                <strong>
-                  {displayRun.strikes}/{displayRun.maxStrikes}
-                </strong>
-              </span>
               {elapsed && (
                 <span>
                   <Sprite name="stopwatch" /> {elapsed}

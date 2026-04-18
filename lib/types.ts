@@ -90,8 +90,6 @@ export interface RunRecord {
   id: number;
   difficulty: Difficulty;
   career: CareerStats;
-  strikes: number;
-  maxStrikes: number;
   completedAt: string; // ISO timestamp
 }
 
@@ -110,28 +108,24 @@ export type Difficulty = "easy" | "medium" | "hard";
 export const DIFFICULTY_CONFIG: Record<
   Difficulty,
   {
-    maxStrikes: number;
     timerSeconds: number;
     label: string;
     description: string;
   }
 > = {
   easy: {
-    maxStrikes: 10,
     timerSeconds: 15,
     label: "Easy",
-    description: "10 strikes · 15s per resume",
+    description: "15s per resume",
   },
   medium: {
-    maxStrikes: 5,
     timerSeconds: 10,
     label: "Medium",
-    description: "5 strikes · 10s per resume",
+    description: "10s per resume",
   },
   hard: {
-    maxStrikes: 3,
     timerSeconds: 5,
     label: "Hard",
-    description: "3 strikes · 5s per resume",
+    description: "5s per resume",
   },
 };

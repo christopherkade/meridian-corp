@@ -1,23 +1,32 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useGameStore } from "@/lib/store";
-import { playSuccess, playClick } from "@/lib/sounds";
+import { playRatingSound, playClick } from "@/lib/sounds";
 import { Sprite } from "./Sprite";
+import { ResumeViewer } from "./ResumeViewer";
 import styles from "./CaseEndView.module.css";
 
 export function CaseEndView() {
   const lastCaseResult = useGameStore((s) => s.lastCaseResult);
   const career = useGameStore((s) => s.career);
+  const resumes = useGameStore((s) => s.resumes);
   const startNewCase = useGameStore((s) => s.startNewCase);
   const setScreen = useGameStore((s) => s.setScreen);
+  const [viewingResumeId, setViewingResumeId] = useState<string | null>(null);
+  const reviewRef = useRef(
+    lastCaseResult
+      ? getPerformanceReview(lastCaseResult.rating, lastCaseResult.caseNumber)
+      : "",
+  );
 
-  // Play success chime when case end screen appears
+  // Play rating-appropriate sound when case end screen appears
   useEffect(() => {
-    if (lastCaseResult) playSuccess();
+    if (lastCaseResult) playRatingSound(lastCaseResult.rating);
   }, [lastCaseResult]);
 
   useEffect(() => {
+    if (viewingResumeId) return; // disable shortcuts when viewing resume
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "s" || e.key === "S") {
         playClick();
@@ -34,22 +43,52 @@ export function CaseEndView() {
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [startNewCase, setScreen]);
+  }, [startNewCase, setScreen, viewingResumeId]);
 
   if (!lastCaseResult) return null;
 
   const { caseNumber, results, totalScore, accuracy, rating } = lastCaseResult;
   const correctCount = results.filter((r) => r.correct).length;
-  const falsePositives = results.filter(
-    (r) => !r.correct && r.decision === "flag",
-  ).length;
-  const falseNegatives = results.filter(
-    (r) => !r.correct && r.decision === "hire",
-  ).length;
   const elapsed = formatElapsed(career.runElapsedMs);
+
+  const viewingResume = viewingResumeId
+    ? resumes.find((r) => r.id === viewingResumeId)
+    : null;
 
   return (
     <div className={styles.container}>
+      {/* Resume viewer modal */}
+      {viewingResume && (
+        <div
+          className={styles.resumeModal}
+          onClick={() => setViewingResumeId(null)}
+        >
+          <div
+            className={styles.resumeModalInner}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={styles.resumeModalTitle}>
+              <span>
+                <Sprite name="clipboard" /> {viewingResume.data.contact.name}
+                &apos;s Resume
+              </span>
+              <button
+                className="btn-raised"
+                onClick={() => {
+                  playClick();
+                  setViewingResumeId(null);
+                }}
+              >
+                ✕
+              </button>
+            </div>
+            <div className={styles.resumeModalBody}>
+              <ResumeViewer resume={viewingResume} hideHeader />
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className={`panel-raised ${styles.window}`}>
         <div className={styles.windowTitle}>
           <span>
@@ -66,13 +105,65 @@ export function CaseEndView() {
             </div>
           </div>
 
+          {/* Per-resume results list */}
+          <div className={`panel-sunken ${styles.resultsList}`}>
+            <div className={styles.resultsHeader}>
+              <span className={styles.resultsColName}>Candidate</span>
+              <span className={styles.resultsColStamp}>Your Decision</span>
+              <span className={styles.resultsColResult}>Result</span>
+              <span className={styles.resultsColAction}></span>
+            </div>
+            {results.map((result, i) => {
+              const resume = resumes.find((r) => r.id === result.resumeId);
+              const candidateName =
+                resume?.data.contact.name ?? `Resume #${i + 1}`;
+              return (
+                <div
+                  key={i}
+                  className={`${styles.resultRow} ${result.correct ? "" : styles.resultRowWrong}`}
+                >
+                  <span className={styles.resultsColName}>{candidateName}</span>
+                  <span className={styles.resultsColStamp}>
+                    <span
+                      className={
+                        result.decision === "hire"
+                          ? styles.stampHire
+                          : styles.stampFlag
+                      }
+                    >
+                      {result.decision === "hire" ? "HIRED" : "FLAGGED"}
+                    </span>
+                  </span>
+                  <span className={styles.resultsColResult}>
+                    <span
+                      className={
+                        result.correct
+                          ? styles.resultCorrect
+                          : styles.resultWrong
+                      }
+                    >
+                      {result.correct ? "✓" : "✗"}
+                    </span>
+                  </span>
+                  <span className={styles.resultsColAction}>
+                    <button
+                      className="btn-raised"
+                      onClick={() => {
+                        playClick();
+                        setViewingResumeId(result.resumeId);
+                      }}
+                    >
+                      View
+                    </button>
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+
           <div className={`panel-sunken ${styles.statsGrid}`}>
             <div className={styles.stat}>
-              <div className={styles.statLabel}>Resumes Processed</div>
-              <div className={styles.statValue}>{results.length}</div>
-            </div>
-            <div className={styles.stat}>
-              <div className={styles.statLabel}>Correct Decisions</div>
+              <div className={styles.statLabel}>Correct</div>
               <div className={styles.statValue}>
                 {correctCount}/{results.length}
               </div>
@@ -84,28 +175,16 @@ export function CaseEndView() {
               </div>
             </div>
             <div className={styles.stat}>
-              <div className={styles.statLabel}>Total Score</div>
+              <div className={styles.statLabel}>Score</div>
               <div className={styles.statValue}>
                 {totalScore >= 0 ? "+" : ""}
                 {totalScore}
               </div>
             </div>
-            <div className={styles.stat}>
-              <div className={styles.statLabel}>False Positives</div>
-              <div className={styles.statValue}>{falsePositives}</div>
-            </div>
-            <div className={styles.stat}>
-              <div className={styles.statLabel}>False Negatives</div>
-              <div
-                className={`${styles.statValue} ${falseNegatives > 0 ? styles.danger : ""}`}
-              >
-                {falseNegatives}
-              </div>
-            </div>
             {elapsed && (
-              <div className={`${styles.stat} ${styles.fullWidth}`}>
+              <div className={styles.stat}>
                 <div className={styles.statLabel}>
-                  <Sprite name="stopwatch" /> Run Time
+                  <Sprite name="stopwatch" /> Time
                 </div>
                 <div className={styles.statValue}>{elapsed}</div>
               </div>
@@ -117,9 +196,7 @@ export function CaseEndView() {
             <p className={styles.reviewHeader}>
               <strong>PERFORMANCE REVIEW - INTERNAL MEMO</strong>
             </p>
-            <p className={styles.reviewText}>
-              {getPerformanceReview(rating, caseNumber)}
-            </p>
+            <p className={styles.reviewText}>{reviewRef.current}</p>
             <p className={styles.reviewSignature}>
               - HR Performance Review Bot v2.4
             </p>

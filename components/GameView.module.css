@@ -14,6 +14,8 @@
 .centerPanel {
   flex: 1;
   min-width: 0;
+  position: relative;
+  overflow: hidden;
 }
 
 .rightPanel {
@@ -26,6 +28,133 @@
 @media (max-width: 768px) {
   .layout {
     flex-direction: column;
+    padding-bottom: 64px;
+  }
+
+  .leftPanel {
+    display: none;
+  }
+
+  .centerPanel {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  .rightPanel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    min-width: unset;
+    z-index: 50;
+  }
+}
+
+/* ── Resume animation wrapper ─────────────── */
+
+.resumeWrapper {
+  height: 100%;
+  position: relative;
+}
+
+/* Slide in from the left (from the pile) */
+.resumeEntering {
+  animation: slideInFromLeft 0.35s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-110%) rotate(-2deg);
+    opacity: 0;
+  }
+  70% {
+    transform: translateX(2%) rotate(0.3deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+/* Stamp: slight shake when stamp lands */
+.resumeStamping {
+  animation: stampShake 0.6s ease forwards;
+}
+
+@keyframes stampShake {
+  0%   { transform: translateX(0); }
+  15%  { transform: translateX(-4px); }
+  30%  { transform: translateX(4px); }
+  45%  { transform: translateX(-2px); }
+  60%  { transform: translateX(0); }
+  100% { transform: translateX(0); }
+}
+
+/* ── Stamp overlay ────────────────────────── */
+
+.stampOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.stamp {
+  font-size: 48px;
+  font-weight: 900;
+  font-family: "Courier New", monospace;
+  border-width: 6px;
+  border-style: solid;
+  padding: 8px 24px;
+  transform: rotate(-15deg);
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.7);
+  animation: stampDown 0.15s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  animation-delay: 0.05s;
+  opacity: 0;
+}
+
+.stampFlag {
+  color: #cc2200;
+  border-color: #cc2200;
+}
+
+.stampHire {
+  color: #1a7a1a;
+  border-color: #1a7a1a;
+}
+
+@keyframes stampDown {
+  0% {
+    transform: rotate(-15deg) scale(3);
+    opacity: 0;
+  }
+  60% {
+    transform: rotate(-15deg) scale(0.95);
+    opacity: 1;
+  }
+  80% {
+    transform: rotate(-15deg) scale(1.02);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(-15deg) scale(1);
+    opacity: 1;
+  }
+}
+
+/* ── Mobile ───────────────────────────────── */
+
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
     overflow-y: auto;
   }
 
@@ -33,6 +162,7 @@
     order: -2;
     width: 100%;
     flex-shrink: 0;
+    overflow: visible;
   }
 
   .leftPanel,

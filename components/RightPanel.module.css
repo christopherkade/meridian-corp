@@ -154,22 +154,69 @@
   transition: filter 0.1s;
 }
 
+/* Mobile info bar (hidden on desktop) */
+.mobileInfo {
+  display: none;
+}
+
 @media (max-width: 768px) {
+  .mobileInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 2px 0;
+    font-size: 11px;
+    color: var(--text-secondary);
+  }
+
+  .mobileCase {
+    font-weight: bold;
+  }
+
+  .mobileTimer {
+    font-family: "Courier New", monospace;
+    font-weight: bold;
+    font-size: 13px;
+  }
+
+  .mobileTimerLow {
+    color: #cc2200;
+    animation: mobileTimerPulse 0.5s infinite alternate;
+  }
+
+  @keyframes mobileTimerPulse {
+    from { opacity: 1; }
+    to { opacity: 0.4; }
+  }
+
+  .header {
+    display: none;
+  }
+
   .content {
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 6px 8px;
+    gap: 6px;
   }
 
   .decisions {
     flex-direction: row;
-    order: -1;
-    width: 100%;
+    flex: 1;
     margin-top: 0;
+    gap: 6px;
   }
 
   .hireButton,
   .flagButton {
     flex: 1;
+    padding: 10px 8px;
+    font-size: 13px;
+  }
+
+  .progress {
+    display: none;
   }
 }
 
@@ -199,6 +246,13 @@
 
 .flagButton:active {
   border-color: #881100 #ff4422 #ff4422 #881100;
+}
+
+.hireButton:disabled,
+.flagButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: none;
 }
 
 /* Progress */

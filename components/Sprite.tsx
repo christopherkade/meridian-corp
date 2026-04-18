@@ -46,7 +46,11 @@ export function Sprite({ name, size = 16, className }: SpriteProps) {
       width={size}
       height={size}
       className={className}
-      style={{ imageRendering: "pixelated", flexShrink: 0 }}
+      style={{
+        imageRendering: "pixelated",
+        flexShrink: 0,
+        verticalAlign: "middle",
+      }}
     />
   );
 }

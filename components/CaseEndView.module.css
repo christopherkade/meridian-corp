@@ -7,7 +7,7 @@
 }
 
 .window {
-  width: 580px;
+  width: 620px;
   max-width: 95%;
   margin: auto 0;
 }
@@ -65,6 +65,100 @@
   color: #cc2200;
 }
 
+/* ── Per-resume results list ─────────────── */
+.resultsList {
+  width: 100%;
+  padding: 0;
+}
+
+.resultsHeader {
+  display: flex;
+  align-items: center;
+  padding: 6px 10px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  border-bottom: 1px solid #999;
+  background: var(--bg-content);
+}
+
+.resultRow {
+  display: flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-bottom: 1px solid #ddd;
+  background: var(--bg-content);
+  font-size: 13px;
+}
+
+.resultRow:last-child {
+  border-bottom: none;
+}
+
+.resultRowWrong {
+  background: #fff0f0;
+}
+
+.resultsColName {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.resultsColStamp {
+  width: 90px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.resultsColResult {
+  width: 50px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.resultsColAction {
+  width: 50px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.resultsColAction button {
+  font-size: 11px;
+  padding: 2px 8px;
+}
+
+.stampHire {
+  font-family: "Courier New", monospace;
+  font-weight: 900;
+  font-size: 11px;
+  color: #1a7a1a;
+  letter-spacing: 1px;
+}
+
+.stampFlag {
+  font-family: "Courier New", monospace;
+  font-weight: 900;
+  font-size: 11px;
+  color: #cc2200;
+  letter-spacing: 1px;
+}
+
+.resultCorrect {
+  color: #1a7a1a;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.resultWrong {
+  color: #cc2200;
+  font-size: 18px;
+  font-weight: bold;
+}
+
 /* Stats */
 .statsGrid {
   display: flex;
@@ -73,8 +167,8 @@
 }
 
 .stat {
-  flex: 1 1 calc(33.333% - 2px);
-  min-width: calc(33.333% - 2px);
+  flex: 1 1 25%;
+  min-width: 25%;
   background: var(--bg-content);
   padding: 10px;
   text-align: center;
@@ -95,19 +189,10 @@
   font-family: "Courier New", monospace;
 }
 
-.danger {
-  color: var(--color-flag);
-}
-
-.fullWidth {
-  flex: 1 1 100%;
-  min-width: 100%;
-}
-
 @media (max-width: 500px) {
   .stat {
-    flex: 1 1 100%;
-    min-width: 100%;
+    flex: 1 1 50%;
+    min-width: 50%;
   }
 }
 
@@ -149,4 +234,47 @@
 .buttons button {
   font-size: 13px;
   padding: 8px 20px;
+}
+
+/* ── Resume viewer modal ─────────────────── */
+.resumeModal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.resumeModalInner {
+  width: 580px;
+  max-width: 95vw;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+}
+
+.resumeModalTitle {
+  background: var(--bg-titlebar);
+  color: var(--bg-titlebar-text);
+  padding: 4px 8px;
+  font-weight: bold;
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.resumeModalTitle button {
+  font-size: 11px;
+  padding: 1px 6px;
+  line-height: 1;
+}
+
+.resumeModalBody {
+  flex: 1;
+  overflow-y: auto;
+  background: var(--bg-content);
 }

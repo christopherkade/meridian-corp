@@ -9,7 +9,7 @@ import styles from "./FeedbackView.module.css";
 
 export function FeedbackView() {
   const lastResult = useGameStore((s) => s.lastResult);
-  const nextResume = useGameStore((s) => s.nextResume);
+  const nextResume = useGameStore((s) => s.advanceResume);
   const resumes = useGameStore((s) => s.resumes);
   const currentIndex = useGameStore((s) => s.currentResumeIndex);
   const [showResume, setShowResume] = useState(false);

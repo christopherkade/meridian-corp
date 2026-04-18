@@ -13,7 +13,6 @@ import {
   Rating,
   Difficulty,
   RunRecord,
-  DIFFICULTY_CONFIG,
 } from "./types";
 import { generateCase } from "./resume-generator";
 import { calculateScore, getExplanation, calculateRating } from "./scoring";
@@ -22,9 +21,8 @@ interface GameState {
   // Navigation
   screen: GameScreen;
 
-  // Difficulty & strikes
+  // Difficulty
   difficulty: Difficulty | null;
-  strikes: number;
 
   // Current case
   caseNumber: number;
@@ -69,7 +67,7 @@ interface GameState {
   startNewCase: () => void;
   startRun: (difficulty: Difficulty) => void;
   makeDecision: (decision: Decision) => void;
-  nextResume: () => void;
+  advanceResume: () => void;
   setSuspicionLevel: (level: SuspicionLevel) => void;
   setScreen: (screen: GameScreen) => void;
   setPlayerName: (name: string) => void;
@@ -98,7 +96,6 @@ export const useGameStore = create<GameState>()(
     (set, get) => ({
       screen: "menu",
       difficulty: null,
-      strikes: 0,
       caseNumber: 0,
       resumes: [],
       currentResumeIndex: 0,
@@ -142,7 +139,6 @@ export const useGameStore = create<GameState>()(
         const resumes = generateCase(1);
         set({
           difficulty,
-          strikes: 0,
           screen: "game",
           caseNumber: 1,
           resumes,
@@ -190,52 +186,20 @@ export const useGameStore = create<GameState>()(
         };
 
         const newResults = [...state.caseResults, result];
-        const newStrikes = isCorrect ? state.strikes : state.strikes + 1;
-
-        // Check if strikes hit the limit
-        const maxStrikes = state.difficulty
-          ? DIFFICULTY_CONFIG[state.difficulty].maxStrikes
-          : Infinity;
         const activeMs = state._gameEnteredAt
           ? state.runActiveMs + (Date.now() - state._gameEnteredAt)
           : state.runActiveMs;
 
-        if (newStrikes >= maxStrikes) {
-          const updatedCareer = { ...state.career, runElapsedMs: activeMs };
-          const runRecord: RunRecord = {
-            id: state.runHistory.length + 1,
-            difficulty: state.difficulty!,
-            career: updatedCareer,
-            strikes: newStrikes,
-            maxStrikes,
-            completedAt: new Date().toISOString(),
-          };
-          set({
-            screen: "game-over",
-            lastResult: result,
-            caseResults: newResults,
-            strikes: newStrikes,
-            suspicionLevel: "unclear",
-            runActiveMs: activeMs,
-            _gameEnteredAt: null,
-            career: updatedCareer,
-            runHistory: [...state.runHistory, runRecord],
-          });
-          return;
-        }
-
         set({
-          screen: "feedback",
           lastResult: result,
           caseResults: newResults,
-          strikes: newStrikes,
           suspicionLevel: "unclear",
           runActiveMs: activeMs,
           _gameEnteredAt: null,
         });
       },
 
-      nextResume: () => {
+      advanceResume: () => {
         const state = get();
         const nextIndex = state.currentResumeIndex + 1;
 
@@ -301,7 +265,6 @@ export const useGameStore = create<GameState>()(
           });
         } else {
           set({
-            screen: "game",
             currentResumeIndex: nextIndex,
             lastResult: null,
             _gameEnteredAt: Date.now(),
@@ -348,11 +311,6 @@ export const useGameStore = create<GameState>()(
         const resume = state.resumes[state.currentResumeIndex];
         if (!resume) return;
 
-        const newStrikes = state.strikes + 1;
-        const maxStrikes = state.difficulty
-          ? DIFFICULTY_CONFIG[state.difficulty].maxStrikes
-          : Infinity;
-
         const explanation =
           "⏰ Time ran out! The resume was not reviewed in time. At Meridian Corp, we value efficiency. Please try to make your decisions faster to avoid penalties.";
         const result: ResumeResult = {
@@ -370,46 +328,22 @@ export const useGameStore = create<GameState>()(
           ? state.runActiveMs + (Date.now() - state._gameEnteredAt)
           : state.runActiveMs;
 
-        if (newStrikes >= maxStrikes) {
-          const updatedCareer = { ...state.career, runElapsedMs: activeMs };
-          const runRecord: RunRecord = {
-            id: state.runHistory.length + 1,
-            difficulty: state.difficulty!,
-            career: updatedCareer,
-            strikes: newStrikes,
-            maxStrikes,
-            completedAt: new Date().toISOString(),
-          };
-          set({
-            screen: "game-over",
-            lastResult: result,
-            caseResults: newResults,
-            strikes: newStrikes,
-            suspicionLevel: "unclear",
-            runActiveMs: activeMs,
-            _gameEnteredAt: null,
-            career: updatedCareer,
-            runHistory: [...state.runHistory, runRecord],
-          });
-          return;
-        }
-
         set({
-          screen: "feedback",
           lastResult: result,
           caseResults: newResults,
-          strikes: newStrikes,
           suspicionLevel: "unclear",
           runActiveMs: activeMs,
           _gameEnteredAt: null,
         });
+
+        // Advance to next resume or case-end
+        get().advanceResume();
       },
 
       resetRun: () => {
         set({
           screen: "menu",
           difficulty: null,
-          strikes: 0,
           caseNumber: 0,
           resumes: [],
           currentResumeIndex: 0,
@@ -430,7 +364,6 @@ export const useGameStore = create<GameState>()(
         set({
           screen: "menu",
           difficulty: null,
-          strikes: 0,
           caseNumber: 0,
           resumes: [],
           currentResumeIndex: 0,

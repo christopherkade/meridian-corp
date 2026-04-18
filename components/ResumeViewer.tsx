@@ -6,18 +6,21 @@ import styles from "./ResumeViewer.module.css";
 
 interface ResumeViewerProps {
   resume: Resume;
+  hideHeader?: boolean;
 }
 
-export function ResumeViewer({ resume }: ResumeViewerProps) {
+export function ResumeViewer({ resume, hideHeader }: ResumeViewerProps) {
   const { contact, experience, education, skills, interests } = resume.data;
 
   return (
     <div className={`panel-raised ${styles.container}`}>
-      <div className={styles.header}>
-        <span>
-          <Sprite name="document" /> Resume - {contact.name}
-        </span>
-      </div>
+      {!hideHeader && (
+        <div className={styles.header}>
+          <span>
+            <Sprite name="document" /> Resume - {contact.name}
+          </span>
+        </div>
+      )}
       <div className={`panel-sunken ${styles.scrollArea}`}>
         <div className={styles.resume}>
           {/* Contact Info */}

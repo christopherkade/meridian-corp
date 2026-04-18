@@ -3,7 +3,6 @@
 import { useState, useRef } from "react";
 import Link from "next/link";
 import { useGameStore } from "@/lib/store";
-import { DIFFICULTY_CONFIG } from "@/lib/types";
 import { submitScore } from "@/lib/leaderboard";
 import { validateName } from "@/lib/name-filter";
 import { playGameOver, playClick } from "@/lib/sounds";
@@ -20,7 +19,6 @@ const firingReasons = [
 
 export function GameOver() {
   const career = useGameStore((s) => s.career);
-  const strikes = useGameStore((s) => s.strikes);
   const difficulty = useGameStore((s) => s.difficulty);
   const resetRun = useGameStore((s) => s.resetRun);
   const playerName = useGameStore((s) => s.playerName);
@@ -41,7 +39,6 @@ export function GameOver() {
     playGameOver();
   }
 
-  const maxStrikes = difficulty ? DIFFICULTY_CONFIG[difficulty].maxStrikes : 0;
   const elapsed = formatElapsed(career.runElapsedMs);
   const nameError = validateName(playerName.trim());
   const canSubmit =
@@ -91,13 +88,6 @@ export function GameOver() {
           <h2 className={styles.heading}>You&apos;ve Been Fired</h2>
 
           <div className={`panel-sunken ${styles.notice}`}>
-            <p>
-              You accumulated{" "}
-              <strong>
-                {strikes}/{maxStrikes}
-              </strong>{" "}
-              strikes.
-            </p>
             <p className={styles.reason}>{firingReasonRef.current}</p>
           </div>
 
