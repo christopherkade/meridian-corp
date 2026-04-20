@@ -189,6 +189,15 @@
   font-family: "Courier New", monospace;
 }
 
+.statFail {
+  color: #cc0000;
+}
+
+.reviewFail {
+  border: 2px solid #cc0000;
+  background: #fff0f0;
+}
+
 @media (max-width: 500px) {
   .stat {
     flex: 1 1 50%;

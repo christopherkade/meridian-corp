@@ -1,6 +1,6 @@
 // Scoring system for Meridian Corp
 
-import { Decision, Rating, SuspicionLevel, Tier } from "./types";
+import { Decision, Difficulty, Rating, SuspicionLevel, Tier } from "./types";
 
 interface ScoreInput {
   isAlien: boolean;
@@ -42,7 +42,7 @@ export function calculateScore(input: ScoreInput): number {
 
 function getConfidenceBonus(
   decision: Decision,
-  suspicionLevel: SuspicionLevel
+  suspicionLevel: SuspicionLevel,
 ): number {
   const alienLevels: SuspicionLevel[] = ["probably-alien", "definitely-alien"];
   const humanLevels: SuspicionLevel[] = ["probably-human", "definitely-human"];
@@ -56,7 +56,11 @@ function getConfidenceBonus(
   return 1;
 }
 
-export function getExplanation(isAlien: boolean, decision: Decision, clues: { description: string }[]): string {
+export function getExplanation(
+  isAlien: boolean,
+  decision: Decision,
+  clues: { description: string }[],
+): string {
   const correct =
     (isAlien && decision === "flag") || (!isAlien && decision === "hire");
 
@@ -72,10 +76,24 @@ export function getExplanation(isAlien: boolean, decision: Decision, clues: { de
   return "False alarm! This was a real human candidate. Be more careful with your flagging.";
 }
 
-export function calculateRating(accuracy: number, hasFalseNegatives: boolean): Rating {
+export function getAccuracyThreshold(difficulty: Difficulty): number {
+  switch (difficulty) {
+    case "easy":
+      return 0.5;
+    case "medium":
+      return 0.6;
+    case "hard":
+      return 0.7;
+  }
+}
+
+export function calculateRating(
+  accuracy: number,
+  hasFalseNegatives: boolean,
+): Rating {
   if (accuracy >= 0.95 && !hasFalseNegatives) return "S";
   if (accuracy >= 0.85) return "A";
-  if (accuracy >= 0.70) return "B";
-  if (accuracy >= 0.50) return "C";
+  if (accuracy >= 0.7) return "B";
+  if (accuracy >= 0.5) return "C";
   return "F";
 }

@@ -15,7 +15,12 @@ import {
   RunRecord,
 } from "./types";
 import { generateCase } from "./resume-generator";
-import { calculateScore, getExplanation, calculateRating } from "./scoring";
+import {
+  calculateScore,
+  getExplanation,
+  calculateRating,
+  getAccuracyThreshold,
+} from "./scoring";
 
 interface GameState {
   // Navigation
@@ -252,7 +257,8 @@ export const useGameStore = create<GameState>()(
               incorrectFlags.length / totalFlags.length;
           }
 
-          if (accuracy >= 0.7) {
+          const threshold = getAccuracyThreshold(state.difficulty!);
+          if (accuracy >= threshold) {
             career.currentCaseStreak += 1;
           } else {
             career.currentCaseStreak = 0;

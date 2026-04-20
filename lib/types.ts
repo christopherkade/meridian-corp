@@ -116,16 +116,16 @@ export const DIFFICULTY_CONFIG: Record<
   easy: {
     timerSeconds: 15,
     label: "Easy",
-    description: "15s per resume",
+    description: "15s per resume · 50% accuracy required",
   },
   medium: {
     timerSeconds: 10,
     label: "Medium",
-    description: "10s per resume",
+    description: "10s per resume · 60% accuracy required",
   },
   hard: {
     timerSeconds: 5,
     label: "Hard",
-    description: "5s per resume",
+    description: "5s per resume · 70% accuracy required",
   },
 };

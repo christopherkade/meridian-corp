@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useGameStore } from "@/lib/store";
 import { playRatingSound, playClick } from "@/lib/sounds";
+import { getAccuracyThreshold } from "@/lib/scoring";
 import { Sprite } from "./Sprite";
 import { ResumeViewer } from "./ResumeViewer";
 import styles from "./CaseEndView.module.css";
@@ -10,9 +11,11 @@ import styles from "./CaseEndView.module.css";
 export function CaseEndView() {
   const lastCaseResult = useGameStore((s) => s.lastCaseResult);
   const career = useGameStore((s) => s.career);
+  const difficulty = useGameStore((s) => s.difficulty);
   const resumes = useGameStore((s) => s.resumes);
   const startNewCase = useGameStore((s) => s.startNewCase);
   const setScreen = useGameStore((s) => s.setScreen);
+  const threshold = difficulty ? getAccuracyThreshold(difficulty) : 0.7;
   const [viewingResumeId, setViewingResumeId] = useState<string | null>(null);
   const reviewRef = useRef(
     lastCaseResult
@@ -30,7 +33,11 @@ export function CaseEndView() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "s" || e.key === "S") {
         playClick();
-        startNewCase();
+        if (lastCaseResult && lastCaseResult.accuracy < threshold) {
+          setScreen("game-over");
+        } else {
+          startNewCase();
+        }
       }
       if (e.key === "d" || e.key === "D") {
         playClick();
@@ -43,7 +50,7 @@ export function CaseEndView() {
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [startNewCase, setScreen, viewingResumeId]);
+  }, [startNewCase, setScreen, viewingResumeId, lastCaseResult, threshold]);
 
   if (!lastCaseResult) return null;
 
@@ -103,6 +110,35 @@ export function CaseEndView() {
             >
               {rating}
             </div>
+          </div>
+
+          {/* Corporate review */}
+          <div
+            className={`panel-sunken ${styles.review} ${accuracy < threshold ? styles.reviewFail : ""}`}
+          >
+            {accuracy < threshold ? (
+              <>
+                <p className={styles.reviewHeader}>
+                  <strong>⚠ NOTICE OF PERFORMANCE TERMINATION</strong>
+                </p>
+                <p className={styles.reviewText}>
+                  Your accuracy of {Math.round(accuracy * 100)}% has fallen
+                  below the minimum threshold of {Math.round(threshold * 100)}%.
+                  Per company policy, your employment has been terminated
+                  effective immediately.
+                </p>
+              </>
+            ) : (
+              <>
+                <p className={styles.reviewHeader}>
+                  <strong>PERFORMANCE REVIEW - INTERNAL MEMO</strong>
+                </p>
+                <p className={styles.reviewText}>{reviewRef.current}</p>
+              </>
+            )}
+            <p className={styles.reviewSignature}>
+              - HR Performance Review Bot v2.4
+            </p>
           </div>
 
           {/* Per-resume results list */}
@@ -170,7 +206,9 @@ export function CaseEndView() {
             </div>
             <div className={styles.stat}>
               <div className={styles.statLabel}>Accuracy</div>
-              <div className={styles.statValue}>
+              <div
+                className={`${styles.statValue} ${accuracy < threshold ? styles.statFail : ""}`}
+              >
                 {Math.round(accuracy * 100)}%
               </div>
             </div>
@@ -191,28 +229,30 @@ export function CaseEndView() {
             )}
           </div>
 
-          {/* Corporate review */}
-          <div className={`panel-sunken ${styles.review}`}>
-            <p className={styles.reviewHeader}>
-              <strong>PERFORMANCE REVIEW - INTERNAL MEMO</strong>
-            </p>
-            <p className={styles.reviewText}>{reviewRef.current}</p>
-            <p className={styles.reviewSignature}>
-              - HR Performance Review Bot v2.4
-            </p>
-          </div>
-
           <div className={styles.buttons}>
-            <button
-              className="btn-raised"
-              onClick={() => {
-                playClick();
-                startNewCase();
-              }}
-            >
-              <Sprite name="folder-open" /> Start Next Case{" "}
-              <span className="shortcut-hint">[S]</span>
-            </button>
+            {accuracy >= threshold ? (
+              <button
+                className="btn-raised"
+                onClick={() => {
+                  playClick();
+                  startNewCase();
+                }}
+              >
+                <Sprite name="folder-open" /> Start Next Case{" "}
+                <span className="shortcut-hint">[S]</span>
+              </button>
+            ) : (
+              <button
+                className="btn-raised"
+                onClick={() => {
+                  playClick();
+                  setScreen("game-over");
+                }}
+              >
+                <Sprite name="warning" /> Accept Termination{" "}
+                <span className="shortcut-hint">[S]</span>
+              </button>
+            )}
             <button
               className="btn-raised"
               onClick={() => {
