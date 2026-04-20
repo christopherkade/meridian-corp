@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useGameStore } from "@/lib/store";
 import { submitScore } from "@/lib/leaderboard";
 import { validateName } from "@/lib/name-filter";
@@ -25,6 +26,7 @@ export function GameOver() {
   const setPlayerName = useGameStore((s) => s.setPlayerName);
   const scoreSubmitted = useGameStore((s) => s.scoreSubmitted);
   const markScoreSubmitted = useGameStore((s) => s.markScoreSubmitted);
+  const router = useRouter();
 
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | false>(false);
@@ -41,6 +43,27 @@ export function GameOver() {
 
   const elapsed = formatElapsed(career.runElapsedMs);
   const nameError = validateName(playerName.trim());
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (
+        e.target instanceof HTMLInputElement ||
+        e.target instanceof HTMLTextAreaElement
+      )
+        return;
+      if (e.key === "t" || e.key === "T") {
+        playClick();
+        resetRun();
+      }
+      if (e.key === "l" || e.key === "L") {
+        playClick();
+        router.push("/leaderboard");
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [resetRun, router]);
+
   const canSubmit =
     !scoreSubmitted &&
     !submitting &&
@@ -146,14 +169,15 @@ export function GameOver() {
                 resetRun();
               }}
             >
-              Try Again
+              Try Again <span className="shortcut-hint">[T]</span>
             </button>
             <Link
               href="/leaderboard"
               className="btn-raised"
               onClick={() => playClick()}
             >
-              <Sprite name="chart" /> Leaderboard
+              <Sprite name="chart" /> Leaderboard{" "}
+              <span className="shortcut-hint">[L]</span>
             </Link>
           </div>
         </div>

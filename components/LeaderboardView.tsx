@@ -59,6 +59,10 @@ export function LeaderboardView() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape" || e.key === "m" || e.key === "M")
         router.push("/");
+      if (e.key === "e" || e.key === "E") {
+        playClick();
+        router.push("/employee-of-the-day");
+      }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
@@ -141,7 +145,8 @@ export function LeaderboardView() {
               className="btn-raised"
               onClick={() => playClick()}
             >
-              <Sprite name="party" /> Employee of the Day
+              <Sprite name="party" /> Employee of the Day{" "}
+              <span className="shortcut-hint">[E]</span>
             </Link>
             <Link href="/" className="btn-raised" onClick={() => playClick()}>
               Back to Menu <span className="shortcut-hint">[M]</span>
