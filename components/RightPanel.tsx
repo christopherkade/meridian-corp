@@ -70,6 +70,7 @@ function MobileInfoBar() {
   }, [screen, timerExpired, currentIndex]);
 
   const isLow = remaining <= 3;
+  const reduceAnimations = useGameStore((s) => s.reduceAnimations);
 
   return (
     <div className={styles.mobileInfo}>
@@ -77,7 +78,7 @@ function MobileInfoBar() {
         Case #{caseNumber} — {currentIndex + 1}/{resumes.length}
       </span>
       <span
-        className={`${styles.mobileTimer} ${isLow ? styles.mobileTimerLow : ""}`}
+        className={`${styles.mobileTimer} ${isLow && !reduceAnimations ? styles.mobileTimerLow : ""}`}
       >
         <Sprite name="stopwatch" /> {remaining}s
       </span>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" shape-rendering="crispEdges">
+  <!-- Arrow shaft -->
+  <rect x="7" y="1" width="2" height="8" fill="#000080"/>
+  <!-- Arrow head -->
+  <rect x="5" y="3" width="2" height="1" fill="#000080"/>
+  <rect x="3" y="4" width="2" height="1" fill="#000080"/>
+  <rect x="9" y="3" width="2" height="1" fill="#000080"/>
+  <rect x="11" y="4" width="2" height="1" fill="#000080"/>
+  <!-- Box (open top) -->
+  <rect x="2" y="7" width="2" height="7" fill="#808080"/>
+  <rect x="12" y="7" width="2" height="7" fill="#808080"/>
+  <rect x="2" y="13" width="12" height="2" fill="#808080"/>
+  <!-- Box interior -->
+  <rect x="4" y="9" width="8" height="4" fill="#C0C0C0"/>
+</svg>

@@ -21,20 +21,27 @@ export function GameView() {
   const currentIndex = useGameStore((s) => s.currentResumeIndex);
   const makeDecision = useGameStore((s) => s.makeDecision);
   const advanceResume = useGameStore((s) => s.advanceResume);
+  const reduceAnimations = useGameStore((s) => s.reduceAnimations);
   const currentResume = resumes[currentIndex];
 
-  const [animState, setAnimState] = useState<AnimState>("entering");
+  const [animState, setAnimState] = useState<AnimState>(
+    reduceAnimations ? "idle" : "entering",
+  );
   const [stampType, setStampType] = useState<Decision | null>(null);
   const pendingDecisionRef = useRef<Decision | null>(null);
 
   // Resume slide-in when index changes
   useEffect(() => {
+    if (reduceAnimations) {
+      const timer = setTimeout(() => setAnimState("idle"), 0);
+      return () => clearTimeout(timer);
+    }
     const timer = setTimeout(() => {
       playPaperLand();
       setAnimState("idle");
     }, ENTER_DURATION);
     return () => clearTimeout(timer);
-  }, [currentIndex]);
+  }, [currentIndex, reduceAnimations]);
 
   // Freeze the run timer so stamp animation time doesn't count
   const freezeTimer = useCallback(() => {
@@ -52,9 +59,17 @@ export function GameView() {
     (decision: Decision) => {
       if (animState !== "idle") return;
       pendingDecisionRef.current = decision;
+      freezeTimer();
+
+      if (reduceAnimations) {
+        playClick();
+        makeDecision(decision);
+        advanceResume();
+        return;
+      }
+
       setStampType(decision);
       setAnimState("stamping");
-      freezeTimer();
 
       setTimeout(() => {
         playStamp();
@@ -70,7 +85,7 @@ export function GameView() {
         }
       }, STAMP_HOLD);
     },
-    [animState, makeDecision, advanceResume, freezeTimer],
+    [animState, makeDecision, advanceResume, freezeTimer, reduceAnimations],
   );
 
   if (!currentResume) return null;

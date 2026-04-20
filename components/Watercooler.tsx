@@ -141,11 +141,9 @@ export function Watercooler({ onDismiss }: WatercoolerProps) {
           </div>
 
           {/* Continue hint */}
-          {done && (
-            <div className={styles.continueHint}>
-              Click or press Enter to continue
-            </div>
-          )}
+          <div className={styles.continueHint}>
+            Click or press Enter to continue
+          </div>
         </div>
       </div>
     </div>

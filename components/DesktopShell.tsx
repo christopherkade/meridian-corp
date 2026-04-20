@@ -15,9 +15,10 @@ interface DesktopShellProps {
 const fakeMenus: Record<string, string[]> = {
   File: ["__disabled:Print Resume"],
   Edit: ["__disabled:Undo Decision", "---", "__disabled:Find Anomaly"],
-  View: [
+  Settings: [
     "__toggle:showHourglassAnimation:Hourglass Animation",
     "__toggle:soundEnabled:Sound Effects",
+    "__toggle:reduceAnimations:Reduce Animations",
   ],
   Help: ["__about:About TalentBridge Pro 3.2"],
 };
@@ -53,6 +54,8 @@ export function DesktopShell({ children }: DesktopShellProps) {
   );
   const soundEnabled = useGameStore((s) => s.soundEnabled);
   const toggleSound = useGameStore((s) => s.toggleSound);
+  const reduceAnimations = useGameStore((s) => s.reduceAnimations);
+  const toggleReduceAnimations = useGameStore((s) => s.toggleReduceAnimations);
 
   const toggleMap: Record<string, { active: boolean; toggle: () => void }> = {
     showHourglassAnimation: {
@@ -62,6 +65,10 @@ export function DesktopShell({ children }: DesktopShellProps) {
     soundEnabled: {
       active: soundEnabled,
       toggle: toggleSound,
+    },
+    reduceAnimations: {
+      active: reduceAnimations,
+      toggle: toggleReduceAnimations,
     },
   };
 
@@ -419,12 +426,6 @@ export function DesktopShell({ children }: DesktopShellProps) {
                   - strange skills, unusual locations, odd job titles, or
                   suspicious personal details. The higher your tier, the harder
                   the clues become to spot.
-                </p>
-                <p className={styles.dialogText} style={{ textAlign: "left" }}>
-                  <strong>Keyboard shortcuts:</strong>{" "}
-                  <span className="shortcut-hint">H</span> = Hire,{" "}
-                  <span className="shortcut-hint">F</span> = Flag,{" "}
-                  <span className="shortcut-hint">Enter</span> = Continue
                 </p>
                 <hr
                   style={{

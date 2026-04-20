@@ -26,6 +26,7 @@
   flex-direction: column;
   gap: 20px;
   background: var(--bg-panel);
+  position: relative;
 }
 
 /* Poster heading — office bulletin board style */
@@ -251,4 +252,88 @@
   padding: 16px;
   color: var(--color-flag);
   font-size: 13px;
+}
+
+/* Elements to hide during screenshot capture */
+.hideOnCapture {
+  /* visible normally; hidden via JS during capture */
+}
+
+/* ── Share button & popup ────────────────── */
+.shareWrapper {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+}
+
+.shareButton {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid;
+  border-color: #dfdfdf #808080 #808080 #dfdfdf;
+  background: var(--bg-panel);
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: filter 0.1s;
+  font-family: inherit;
+  line-height: 1;
+}
+
+.shareButton:hover {
+  filter: brightness(0.95);
+}
+
+.shareButton:active {
+  border-color: #808080 #dfdfdf #dfdfdf #808080;
+}
+
+.shareButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sharePopup {
+  position: absolute;
+  bottom: 48px;
+  right: 0;
+  background: var(--bg-panel);
+  border: 2px solid;
+  border-color: #dfdfdf #808080 #808080 #dfdfdf;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  min-width: 180px;
+  z-index: 20;
+}
+
+.shareOption {
+  display: block;
+  width: 100%;
+  padding: 8px 14px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  font-size: 12px;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.shareOption:hover {
+  background: var(--bg-titlebar);
+  color: var(--bg-titlebar-text);
+}
+
+.shareOption:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.shareOption:disabled:hover {
+  background: transparent;
+  color: inherit;
 }

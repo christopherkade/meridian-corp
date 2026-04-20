@@ -27,7 +27,8 @@ export type SpriteName =
   | "coworker"
   | "trophy-gold"
   | "trophy-silver"
-  | "trophy-bronze";
+  | "trophy-bronze"
+  | "share";
 
 interface SpriteProps {
   name: SpriteName;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Difficulty } from "@/lib/types";
@@ -90,6 +90,10 @@ export function EmployeeOfTheDay() {
   > | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [shareOpen, setShareOpen] = useState(false);
+  const [capturing, setCapturing] = useState(false);
+  const captureRef = useRef<HTMLDivElement>(null);
+  const shareMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -113,12 +117,119 @@ export function EmployeeOfTheDay() {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape" || e.key === "b" || e.key === "B") {
         playClick();
-        router.push("/leaderboard");
+        if (shareOpen) {
+          setShareOpen(false);
+        } else {
+          router.push("/leaderboard");
+        }
       }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [router]);
+  }, [router, shareOpen]);
+
+  // Close share menu when clicking outside
+  useEffect(() => {
+    if (!shareOpen) return;
+    const handleClick = (e: MouseEvent) => {
+      if (
+        shareMenuRef.current &&
+        !shareMenuRef.current.contains(e.target as Node)
+      ) {
+        setShareOpen(false);
+      }
+    };
+    window.addEventListener("click", handleClick);
+    return () => window.removeEventListener("click", handleClick);
+  }, [shareOpen]);
+
+  const captureImage = useCallback(async (): Promise<Blob | null> => {
+    if (!captureRef.current) return null;
+    // Close the share menu first so React removes it from the DOM
+    setShareOpen(false);
+    setCapturing(true);
+    // Wait a frame for React to re-render without the popup
+    await new Promise((r) => requestAnimationFrame(r));
+    try {
+      const { default: html2canvas } = await import("html2canvas-pro");
+      // Temporarily hide buttons and share wrapper
+      const hideEls = captureRef.current.querySelectorAll<HTMLElement>(
+        `.${styles.hideOnCapture}`,
+      );
+      hideEls.forEach((el) => (el.style.display = "none"));
+      const canvas = await html2canvas(captureRef.current, {
+        backgroundColor: "#c0c0c0",
+        scale: 2,
+      });
+      hideEls.forEach((el) => (el.style.display = ""));
+      return await new Promise<Blob | null>((resolve) =>
+        canvas.toBlob(resolve, "image/png"),
+      );
+    } finally {
+      setCapturing(false);
+    }
+  }, []);
+
+  const handleDownload = useCallback(async () => {
+    playClick();
+    const blob = await captureImage();
+    if (!blob) return;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "employee-of-the-day.png";
+    a.click();
+    URL.revokeObjectURL(url);
+    setShareOpen(false);
+  }, [captureImage]);
+
+  const getShareText = () => {
+    return "Check out today's Employee of the Day at Meridian Corp! 🏆";
+  };
+
+  const handleNativeShare = useCallback(async () => {
+    playClick();
+    const blob = await captureImage();
+    if (!blob) return;
+    const file = new File([blob], "employee-of-the-day.png", {
+      type: "image/png",
+    });
+    try {
+      await navigator.share({
+        text: getShareText(),
+        files: [file],
+      });
+    } catch {
+      // User cancelled or share failed silently
+    }
+    setShareOpen(false);
+  }, [captureImage]);
+
+  const handleTwitter = useCallback(async () => {
+    playClick();
+    const text = encodeURIComponent(getShareText());
+    const url = encodeURIComponent(window.location.href);
+    window.open(
+      `https://twitter.com/intent/tweet?text=${text}&url=${url}`,
+      "_blank",
+      "noopener,noreferrer",
+    );
+    setShareOpen(false);
+  }, []);
+
+  const handleLinkedIn = useCallback(async () => {
+    playClick();
+    const url = encodeURIComponent(window.location.href);
+    window.open(
+      `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+      "_blank",
+      "noopener,noreferrer",
+    );
+    setShareOpen(false);
+  }, []);
+
+  const supportsNativeShare =
+    typeof navigator !== "undefined" && !!navigator.share;
 
   const today = new Date().toLocaleDateString("en-US", {
     weekday: "long",
@@ -129,7 +240,7 @@ export function EmployeeOfTheDay() {
 
   return (
     <div className={styles.container}>
-      <div className={`panel-raised ${styles.window}`}>
+      <div ref={captureRef} className={`panel-raised ${styles.window}`}>
         <div className={styles.windowTitle}>
           <span>
             <Sprite name="party" /> Employee of the Day — Recognition Board
@@ -164,7 +275,7 @@ export function EmployeeOfTheDay() {
             employee to any raise, promotion, or additional break time.
           </p>
 
-          <div className={styles.buttons}>
+          <div className={`${styles.buttons} ${styles.hideOnCapture}`}>
             <Link
               href="/leaderboard"
               className="btn-raised"
@@ -172,6 +283,51 @@ export function EmployeeOfTheDay() {
             >
               ← Back to Leaderboard <span className="shortcut-hint">[B]</span>
             </Link>
+          </div>
+
+          {/* Share button */}
+          <div
+            ref={shareMenuRef}
+            className={`${styles.shareWrapper} ${styles.hideOnCapture}`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {shareOpen && (
+              <div className={styles.sharePopup}>
+                <button
+                  className={styles.shareOption}
+                  onClick={handleDownload}
+                  disabled={capturing}
+                >
+                  📥 Download PNG
+                </button>
+                {supportsNativeShare && (
+                  <button
+                    className={styles.shareOption}
+                    onClick={handleNativeShare}
+                    disabled={capturing}
+                  >
+                    📤 Share...
+                  </button>
+                )}
+                <button className={styles.shareOption} onClick={handleTwitter}>
+                  Post on X
+                </button>
+                <button className={styles.shareOption} onClick={handleLinkedIn}>
+                  Share on Facebook
+                </button>
+              </div>
+            )}
+            <button
+              className={styles.shareButton}
+              onClick={() => {
+                playClick();
+                setShareOpen((v) => !v);
+              }}
+              title="Share"
+              disabled={capturing}
+            >
+              {capturing ? "…" : <Sprite name="share" />}
+            </button>
           </div>
         </div>
       </div>

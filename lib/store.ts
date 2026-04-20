@@ -55,6 +55,7 @@ interface GameState {
   showSuspicionMeter: boolean;
   showHourglassAnimation: boolean;
   soundEnabled: boolean;
+  reduceAnimations: boolean;
 
   // Player identity (persisted)
   playerName: string;
@@ -79,6 +80,7 @@ interface GameState {
   toggleSuspicionMeter: () => void;
   toggleHourglassAnimation: () => void;
   toggleSound: () => void;
+  toggleReduceAnimations: () => void;
   timerExpired: () => void;
   dismissWatercooler: () => void;
   resetRun: () => void;
@@ -114,6 +116,7 @@ export const useGameStore = create<GameState>()(
       showSuspicionMeter: false,
       showHourglassAnimation: true,
       soundEnabled: true,
+      reduceAnimations: false,
       playerName: "",
       runHistory: [],
       scoreSubmitted: false,
@@ -310,6 +313,10 @@ export const useGameStore = create<GameState>()(
 
       toggleSound: () => {
         set((state) => ({ soundEnabled: !state.soundEnabled }));
+      },
+
+      toggleReduceAnimations: () => {
+        set((state) => ({ reduceAnimations: !state.reduceAnimations }));
       },
 
       timerExpired: () => {
