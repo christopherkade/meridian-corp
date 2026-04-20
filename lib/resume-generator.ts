@@ -1,11 +1,27 @@
 // Resume generation engine
 // Assembles resumes from content pools based on tier and alien/human status
 
-import { Resume, ResumeData, ClueInfo, Tier, ContactInfo, WorkExperience, Education } from "./types";
 import {
-  humanNames, humanEmails, humanLocations, humanJobTitles,
-  humanCompanies, humanBullets, humanDegrees, humanUniversities,
-  humanSkills, humanInterests, humanLanguages,
+  Resume,
+  ResumeData,
+  ClueInfo,
+  Tier,
+  ContactInfo,
+  WorkExperience,
+  Education,
+} from "./types";
+import {
+  humanNames,
+  humanEmails,
+  humanLocations,
+  humanJobTitles,
+  humanCompanies,
+  humanBullets,
+  humanDegrees,
+  humanUniversities,
+  humanSkills,
+  humanInterests,
+  humanLanguages,
 } from "./data/human-content";
 import { getCluesForTier, AlienClue } from "./data/alien-content";
 
@@ -28,13 +44,54 @@ function generatePhone(): string {
 }
 
 function generateEmail(name: string): string {
-  const parts = name.toLowerCase().split(" ");
+  // Strip any nickname in quotes for email generation
+  const cleanName = name.replace(/\s*"[^"]*"\s*/g, " ").trim();
+  const parts = cleanName.toLowerCase().split(" ");
   const domain = pickRandom(humanEmails);
   return `${parts[0]}.${parts[parts.length - 1]}@${domain}`;
 }
 
+const humanNicknames = [
+  "The Rock",
+  "Ace",
+  "Sparky",
+  "The Machine",
+  "Big Red",
+  "Tiny",
+  "Champ",
+  "Flash",
+  "Doc",
+  "The Professor",
+  "Hawk",
+  "Slim",
+  "Tank",
+  "Zippy",
+  "Turbo",
+  "Chief",
+  "Wheels",
+  "Maverick",
+  "Blaze",
+  "Frosty",
+  "Knuckles",
+  "T-Bone",
+  "Radar",
+  "Skippy",
+  "Pickles",
+  "Wombat",
+  "The Hammer",
+  "Sunshine",
+  "Noodles",
+  "Boss",
+];
+
 function generateHumanContact(): ContactInfo {
-  const name = pickRandom(humanNames);
+  let name = pickRandom(humanNames);
+  // ~10% chance to add a nickname
+  if (Math.random() < 0.1) {
+    const parts = name.split(" ");
+    const nickname = pickRandom(humanNicknames);
+    name = `${parts[0]} "${nickname}" ${parts.slice(1).join(" ")}`;
+  }
   return {
     name,
     email: generateEmail(name),
@@ -64,11 +121,13 @@ function generateHumanExperience(count: number): WorkExperience[] {
 
 function generateHumanEducation(): Education[] {
   const gradYear = Math.floor(Math.random() * 10) + 2010;
-  return [{
-    degree: pickRandom(humanDegrees),
-    institution: pickRandom(humanUniversities),
-    graduationYear: gradYear,
-  }];
+  return [
+    {
+      degree: pickRandom(humanDegrees),
+      institution: pickRandom(humanUniversities),
+      graduationYear: gradYear,
+    },
+  ];
 }
 
 function generateHumanSkills(): string[] {
@@ -105,21 +164,31 @@ const redHerringContent = [
 
 function getTellCountForTier(tier: Tier): number {
   switch (tier) {
-    case 1: return Math.floor(Math.random() * 3) + 3; // 3-5
-    case 2: return Math.floor(Math.random() * 2) + 2; // 2-3
-    case 3: return Math.floor(Math.random() * 2) + 1; // 1-2
-    case 4: return Math.floor(Math.random() * 2) + 1; // 1-2
-    case 5: return 1;                                   // 1
+    case 1:
+      return Math.floor(Math.random() * 3) + 3; // 3-5
+    case 2:
+      return Math.floor(Math.random() * 3) + 2; // 2-4
+    case 3:
+      return Math.floor(Math.random() * 2) + 2; // 2-3
+    case 4:
+      return Math.floor(Math.random() * 2) + 1; // 1-2
+    case 5:
+      return 1; // 1
   }
 }
 
 function getRedHerringCountForTier(tier: Tier): number {
   switch (tier) {
-    case 1: return 0;
-    case 2: return Math.floor(Math.random() * 2);       // 0-1
-    case 3: return Math.floor(Math.random() * 2) + 1;   // 1-2
-    case 4: return Math.floor(Math.random() * 2) + 1;   // 1-2
-    case 5: return Math.floor(Math.random() * 2) + 2;   // 2-3
+    case 1:
+      return 0;
+    case 2:
+      return 0;
+    case 3:
+      return Math.floor(Math.random() * 2); // 0-1
+    case 4:
+      return Math.floor(Math.random() * 2) + 1; // 1-2
+    case 5:
+      return Math.floor(Math.random() * 2) + 2; // 2-3
   }
 }
 
@@ -218,15 +287,11 @@ interface CaseConfig {
 }
 
 function getCaseConfig(caseNumber: number): CaseConfig {
-  if (caseNumber <= 3) {
-    return { tier: 1, resumeCount: 8 };
-  } else if (caseNumber <= 6) {
-    return { tier: Math.random() > 0.5 ? 1 : 2 as Tier, resumeCount: 10 };
-  } else if (caseNumber <= 12) {
-    return { tier: Math.random() > 0.5 ? 2 : 3 as Tier, resumeCount: 12 };
-  } else if (caseNumber <= 20) {
-    return { tier: Math.random() > 0.5 ? 3 : 4 as Tier, resumeCount: 14 };
-  } else {
-    return { tier: Math.random() > 0.5 ? 4 : 5 as Tier, resumeCount: 15 };
-  }
+  if (caseNumber <= 1) return { tier: 1, resumeCount: 8 };
+  if (caseNumber <= 2) return { tier: 2, resumeCount: 8 };
+  if (caseNumber <= 3) return { tier: 3, resumeCount: 10 };
+  if (caseNumber <= 4) return { tier: 4, resumeCount: 10 };
+  // Case 5+: all categories, gradually more resumes
+  const resumeCount = Math.min(15, 10 + Math.floor((caseNumber - 4) / 2));
+  return { tier: 5 as Tier, resumeCount };
 }
