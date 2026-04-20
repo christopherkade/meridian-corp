@@ -347,6 +347,17 @@ export const useGameStore = create<GameState>()(
       },
 
       resetRun: () => {
+        const state = get();
+        // Archive the completed run into history
+        if (state.difficulty && state.career.casesCompleted.length > 0) {
+          const record: RunRecord = {
+            id: Date.now(),
+            difficulty: state.difficulty,
+            career: { ...state.career },
+            completedAt: new Date().toISOString(),
+          };
+          set({ runHistory: [...state.runHistory, record] });
+        }
         set({
           screen: "menu",
           difficulty: null,
