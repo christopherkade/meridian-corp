@@ -1,6 +1,6 @@
 .container {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   height: 100%;
   overflow-y: auto;
@@ -152,4 +152,28 @@
   padding: 8px 24px;
   text-decoration: none;
   text-align: center;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 8px 0;
+  }
+
+  .tableHeader,
+  .tableRow {
+    grid-template-columns: 32px 1fr 60px;
+  }
+
+  .time {
+    display: none;
+  }
+
+  .buttons {
+    flex-direction: column;
+  }
+
+  .buttons button,
+  .buttons a {
+    width: 100%;
+  }
 }
