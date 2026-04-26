@@ -100,7 +100,10 @@ export function EmployeeOfTheDay() {
     async function load() {
       try {
         const data = await fetchEmployeesOfTheDay();
-        if (!cancelled) setEmployees(data);
+        if (!cancelled)
+          setEmployees({
+            ...data,
+          });
       } catch {
         if (!cancelled) setError("Could not load today's employees.");
       } finally {

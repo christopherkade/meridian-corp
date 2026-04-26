@@ -61,6 +61,8 @@
 /* Table */
 .table {
   font-size: 12px;
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 .tableHeader {
