@@ -197,9 +197,14 @@ export function MainMenu() {
             </Link>
           </div>
 
-          <p className={styles.version}>
-            TalentBridge Pro v3.2.1 - Build 20260411
-          </p>
+          <div className={styles.footer}>
+            <p className={styles.version}>
+              TalentBridge Pro v3.2.1 - Build 20260411
+            </p>
+            <p className={styles.mobileHint}>
+              This software is best experienced on desktop.
+            </p>
+          </div>
         </div>
       </div>
     </div>
